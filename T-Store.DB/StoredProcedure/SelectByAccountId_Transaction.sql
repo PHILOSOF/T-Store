@@ -3,5 +3,5 @@
 AS
 	BEGIN
 	SELECT * FROM [dbo].[Transaction]
-	where AccountId = @AccountId
+	WHERE AccountId = @AccountId
 	END

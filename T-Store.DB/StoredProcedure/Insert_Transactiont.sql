@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Insert_Transactiont]
 	@AccountId int,
-	@Date datetime2,
 	@TransactionType tinyint,
 	@Amount decimal,
 	@Currency smallint
@@ -15,6 +14,6 @@ AS
 	[Currency]
 	)
 	VALUES 
-	(@AccountId,@Date,@TransactionType,@Amount,@Currency)
-	SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY]
+	(@AccountId,DateTime.Now,@TransactionType,@Amount,@Currency)
+	SELECT SCOPE_IDENTITY() 
 	END
