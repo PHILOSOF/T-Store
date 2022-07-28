@@ -13,7 +13,7 @@ namespace T_Strore.Data
                       param: new
                       {
                           transaction.AccountId,
-                          transaction.Type,
+                          transaction.TransactionType,
                           transaction.Amount,
                           transaction.Currency
                       },

@@ -3,17 +3,21 @@
 	@TransactionType tinyint,
 	@Amount decimal,
 	@Currency smallint
+
 AS
-	BEGIN 
+BEGIN 
+
 	INSERT INTO [dbo].[Transaction] 
 	(
-	[AccountId],
-	[Date],
-	[TransactionType],
-	[Amount],
-	[Currency]
+		[AccountId],
+		[Date],
+		[TransactionType],
+		[Amount],
+		[Currency]
 	)
+
 	VALUES 
 	(@AccountId,getdate(),@TransactionType,@Amount,@Currency)
+
 	SELECT SCOPE_IDENTITY() 
-	END
+END

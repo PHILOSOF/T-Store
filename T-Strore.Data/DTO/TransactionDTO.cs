@@ -6,7 +6,7 @@ namespace T_Strore.Data
         public int Id { get; set; }
         public int AccountId { get; set; }
         public DateTime Date { get; set; }
-        public TransactionType Type { get; set; }
+        public TransactionType TransactionType { get; set; }
         public decimal Amount { get; set; }
         public Currency Currency { get; set; }
 
@@ -17,7 +17,7 @@ namespace T_Strore.Data
                 Id == dto.Id &&
                 AccountId == dto.AccountId &&
                 Date == dto.Date &&
-                Type == dto.Type &&
+                TransactionType == dto.TransactionType &&
                 Amount == dto.Amount &&
                 Currency == dto.Currency;
         }
