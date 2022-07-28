@@ -1,82 +1,57 @@
 ﻿using Dapper;
-using System.Data.SqlClient;
+
 
 namespace T_Strore.Data
 {
-    public class TransactionRepository
+    public class TransactionRepository : ServerConnection
     {
-        public string connectionString = @"Server=.;Database=T-Store.DB;Trusted_Connection=True;";
 
         public int AddTransaction(TransactionDTO transaction)
         {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-               var id = connection.QuerySingle<int>(
-                     TransactionStoredProcedure.Insert_Transactiont,
-                     param: new
-                     {
-                         transaction.AccountId,
-                         transaction.Type,
-                         transaction.Amount,    
-                         transaction.Currency
-                        
-                     },
-                     commandType: System.Data.CommandType.StoredProcedure);
-                return id;
-            }
-        }
-        public decimal GetBalanceByAccountId(int id)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var balance = connection.QuerySingle<decimal>(
-                      TransactionStoredProcedure.Select_BalanceByAccountId,
-                      param: new
-                      {                   
-                          id
-                      },
-                      commandType: System.Data.CommandType.StoredProcedure);
-                return balance;
-            }
-        }
-
-        public List<TransactionDTO> GetTransactionsByAccountId(int id)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var Transactions = connection.Query<TransactionDTO>(
-                      TransactionStoredProcedure.Select_BalanceByAccountId,
+            var id = ConString.QuerySingle<int>(
+                      TransactionStoredProcedure.Insert_Transactiont,
                       param: new
                       {
-                          id
+                          transaction.AccountId,
+                          transaction.Type,
+                          transaction.Amount,
+                          transaction.Currency
                       },
-                      commandType: System.Data.CommandType.StoredProcedure).ToList();
-                return Transactions;
-            }
+                      commandType: System.Data.CommandType.StoredProcedure);
+
+            return id;
         }
+
+
+        public decimal GetBalanceByAccountId(int accountId)
+        {
+            var balance = ConString.QuerySingle<decimal>(
+                     TransactionStoredProcedure.Select_BalanceByAccountId,
+                     param: new { accountId },
+                     commandType: System.Data.CommandType.StoredProcedure);
+            return balance;
+        }
+
+
+        public List<TransactionDTO> GetTransactionsByAccountId(int accountId)
+        {
+            var transaction = ConString.Query<TransactionDTO>(
+                      TransactionStoredProcedure.SelectByAccountId_Transaction,
+                      param: new { accountId },
+                      commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            return transaction;
+        }
+
 
         public TransactionDTO GetTransactionById(int id)
         {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
+            var transaction = ConString.QuerySingle<TransactionDTO>(
+                     TransactionStoredProcedure.SelectById_Transaction,
+                     param: new { id },
+                     commandType: System.Data.CommandType.StoredProcedure);
 
-                var transaction = connection.QuerySingle<TransactionDTO>(
-                      TransactionStoredProcedure.Select_BalanceByAccountId,
-                      param: new
-                      {
-                          id
-                      },
-                      commandType: System.Data.CommandType.StoredProcedure);
-                return transaction;
-            }
+            return transaction;
         }
     }
-
 }
