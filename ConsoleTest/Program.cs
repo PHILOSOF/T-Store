@@ -1,10 +1,22 @@
 ﻿using T_Strore.Data;
 
-var a = new TransactionRepository();
+var testRep = new TransactionRepository();
 
 
-//a.GetBalanceByAccountId(1);
 
-var b = a.GetBalanceByAccountId(2);
 
-Console.WriteLine(a.GetTransactionById(1));
+
+
+var testDto = new TransactionDTO()
+{
+
+    AccountId = 3,
+
+    TransactionType = TransactionType.Transfer,
+    Amount = 100,
+    Currency = Currency.USD,
+};
+
+var testMethod = testRep.AddTransaction(testDto);
+
+Console.WriteLine();

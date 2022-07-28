@@ -1,7 +1,11 @@
 ﻿CREATE PROCEDURE [dbo].[SelectByAccountId_Transaction]
 	@AccountId int
+
 AS
-	BEGIN
+BEGIN
+
 	SELECT * FROM [dbo].[Transaction]
+
 	WHERE AccountId = @AccountId
-	END
+
+END
