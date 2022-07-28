@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store", "T-Store\T-Store.
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T-Store.DB", "T-Store.DB\T-Store.DB.sqlproj", "{17B73570-E0A9-4541-AD51-4DD64B1811E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Strore.Data", "T-Strore.Data\T-Strore.Data.csproj", "{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Data", "T-Strore.Data\T-Strore.Data.csproj", "{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{079D8AD7-A5C3-4E41-889C-BA917C59DC6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{079D8AD7-A5C3-4E41-889C-BA917C59DC6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{079D8AD7-A5C3-4E41-889C-BA917C59DC6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{079D8AD7-A5C3-4E41-889C-BA917C59DC6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{079D8AD7-A5C3-4E41-889C-BA917C59DC6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

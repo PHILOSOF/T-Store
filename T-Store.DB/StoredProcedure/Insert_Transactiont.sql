@@ -14,6 +14,6 @@ AS
 	[Currency]
 	)
 	VALUES 
-	(@AccountId,DateTime.Now,@TransactionType,@Amount,@Currency)
+	(@AccountId,getdate(),@TransactionType,@Amount,@Currency)
 	SELECT SCOPE_IDENTITY() 
 	END
