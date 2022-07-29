@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[Transaction_Insert]
 	@AccountId int,
 	@TransactionType tinyint,
-	@Amount decimal,
+	@Amount decimal (10,3),
 	@Currency smallint
 
 AS

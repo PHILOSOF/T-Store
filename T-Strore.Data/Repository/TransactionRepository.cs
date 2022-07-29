@@ -53,5 +53,26 @@ namespace T_Strore.Data
 
             return transaction;
         }
+
+        public List<int> AddTransferTransactions(TransactionDTO transactionSender, TransactionDTO recipient)
+        {
+            var id = ConString.Query<int>(
+                      TransactionStoredProcedure.Transaction_Transfer,
+                      param: new
+                      {
+
+                          AccountIdSender = transactionSender.AccountId,
+                          AccountIdRecipient= recipient.AccountId,
+                          Amount= transactionSender.Amount,
+                          AmountConverted= recipient.Amount,
+                          CurrencySender= transactionSender.Currency,
+                          CurrencyRecipient= recipient.Currency,
+                          TransactionType= transactionSender.TransactionType
+                      },
+                      commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            return id;
+        }
+
     }
 }
