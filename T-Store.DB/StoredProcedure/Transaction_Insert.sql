@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Insert_Transactiont]
+﻿CREATE PROCEDURE [dbo].[Transaction_Insert]
 	@AccountId int,
 	@TransactionType tinyint,
 	@Amount decimal,
