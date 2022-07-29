@@ -26,7 +26,7 @@ BEGIN
 
 			(@AccountIdSender,@Date,@TransactionType,@Amount,@CurrencySender)
 
-			SELECT SCOPE_IDENTITY() 
+			DECLARE @senderId int= SCOPE_IDENTITY() 
 
 
 
@@ -43,5 +43,5 @@ BEGIN
 				VALUES 
 				(@AccountIdRecipient,@Date,@TransactionType,@AmountConverted,@CurrencyRecipient)
 
-				SELECT SCOPE_IDENTITY() 
+				SELECT @senderId, SCOPE_IDENTITY()
 END
