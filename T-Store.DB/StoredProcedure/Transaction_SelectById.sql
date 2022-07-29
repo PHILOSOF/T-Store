@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[SelectById_Transaction]
+﻿CREATE PROCEDURE [dbo].[Transaction_SelectById]
 	@Id int
 
 AS

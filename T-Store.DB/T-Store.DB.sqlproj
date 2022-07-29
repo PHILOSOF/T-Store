@@ -64,10 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Transaction.sql" />
-    <Build Include="StoredProcedure\Insert_Transactiont.sql" />
-    <Build Include="StoredProcedure\SelectById_Transaction.sql" />
-    <Build Include="StoredProcedure\SelectByAccountId_Transaction.sql" />
-    <Build Include="StoredProcedure\Select_BalanceByAccountId.sql" />
+    <Build Include="StoredProcedure\Transaction_Insert.sql" />
+    <Build Include="StoredProcedure\Transaction_SelectById.sql" />
+    <Build Include="StoredProcedure\Transaction_SelectByAccountId.sql" />
+    <Build Include="StoredProcedure\Transaction_SelectBalanceByAccountId.sql" />
+    <Build Include="StoredProcedure\Transaction_Transfer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="T-Store.DB.refactorlog" />

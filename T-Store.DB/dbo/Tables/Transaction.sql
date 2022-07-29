@@ -3,7 +3,7 @@
     [AccountId]       INT           NOT NULL,
     [Date]        DATETIME2 (7) NOT NULL,
     [TransactionType] TINYINT       NOT NULL,
-    [Amount]          DECIMAL (18)  NOT NULL,
+    [Amount]          DECIMAL (10, 3)  NOT NULL,
     [Currency]        SMALLINT      NOT NULL, 
     CONSTRAINT [PK_Transaction] PRIMARY KEY ([Id])
 );
