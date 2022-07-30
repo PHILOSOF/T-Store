@@ -4,8 +4,14 @@
 AS
 BEGIN
 
-	SELECT * FROM [dbo].[Transaction]
+	SELECT [Id],
+		   [AccountId],
+		   [Date],
+		   [TransactionType],
+		   [Amount],
+		   [Currency]
+	FROM [dbo].[Transaction]
 
-	WHERE Id = @Id
+	WHERE [Id] = @Id
 
 END

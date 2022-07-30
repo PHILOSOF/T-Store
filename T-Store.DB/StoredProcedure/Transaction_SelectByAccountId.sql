@@ -1,11 +1,17 @@
-﻿CREATE PROCEDURE [dbo].[Transaction_SelectByAccountId]
+﻿create procedure [dbo].[Transaction_SelectByAccountId]
 	@AccountId int
 
-AS
-BEGIN
+as
+begin
 
-	SELECT * FROM [dbo].[Transaction]
+	select [Id],
+		   [AccountId],
+		   [Date],
+		   [TransactionType],
+		   [Amount],
+		   [Currency]
+	from [dbo].[Transaction]
 
-	WHERE AccountId = @AccountId
+	where [AccountId] = @AccountId
 
-END
+end

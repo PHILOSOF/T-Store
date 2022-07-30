@@ -3,12 +3,12 @@
 
 namespace T_Strore.Data
 {
-    public class TransactionRepository : ServerConnection
+    public class TransactionRepository : BaseRepository
     {
 
         public int AddTransaction(TransactionDTO transaction)
         {
-            var id = ConString.QuerySingle<int>(
+            var id = ConString.QueryFirstOrDefault<int>(
                       TransactionStoredProcedure.Transaction_Insert,
                       param: new
                       {
@@ -25,10 +25,11 @@ namespace T_Strore.Data
 
         public decimal GetBalanceByAccountId(int accountId)
         {
-            var balance = ConString.QuerySingle<decimal>(
+            var balance = ConString.QueryFirstOrDefault<decimal>(
                      TransactionStoredProcedure.Transaction_SelectBalanceByAccountId,
                      param: new { accountId },
                      commandType: System.Data.CommandType.StoredProcedure);
+
             return balance;
         }
 
@@ -46,7 +47,7 @@ namespace T_Strore.Data
 
         public TransactionDTO GetTransactionById(int id)
         {
-            var transaction = ConString.QuerySingle<TransactionDTO>(
+            var transaction = ConString.QueryFirstOrDefault<TransactionDTO>(
                      TransactionStoredProcedure.Transaction_SelectById,
                      param: new { id },
                      commandType: System.Data.CommandType.StoredProcedure);
@@ -54,13 +55,13 @@ namespace T_Strore.Data
             return transaction;
         }
 
+
         public List<int> AddTransferTransactions(TransactionDTO transactionSender, TransactionDTO recipient)
         {
             var id = ConString.Query<int>(
                       TransactionStoredProcedure.Transaction_Transfer,
                       param: new
                       {
-
                           AccountIdSender = transactionSender.AccountId,
                           AccountIdRecipient= recipient.AccountId,
                           Amount= transactionSender.Amount,
@@ -72,6 +73,17 @@ namespace T_Strore.Data
                       commandType: System.Data.CommandType.StoredProcedure).ToList();
 
             return id;
+        }
+
+
+        public List<TransactionDTO> GetTransfersByAccountId(int accountId)
+        {
+            var transfers = ConString.Query<TransactionDTO>(
+                      TransactionStoredProcedure.Transaction_GetAllTransfersByAccountId,
+                      param: new { accountId },
+                      commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            return transfers;
         }
 
     }
