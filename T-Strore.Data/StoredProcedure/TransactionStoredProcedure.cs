@@ -8,6 +8,7 @@ namespace T_Strore.Data
         public const string Transaction_SelectBalanceByAccountId = "Select_BalanceByAccountId";
         public const string Transaction_SelectByAccountId = "SelectByAccountId_Transaction";
         public const string Transaction_SelectById = "SelectById_Transaction";
-        public const string Transaction_Transfer = "Transaction_Transfer"; 
+        public const string Transaction_Transfer = "Transaction_Transfer";
+        public const string Transaction_GetAllTransfersByAccountId = "Transaction_GetAllTransfersByAccountId"; 
     }
 }

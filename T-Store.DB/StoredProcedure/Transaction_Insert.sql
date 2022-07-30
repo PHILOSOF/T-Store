@@ -1,13 +1,13 @@
-﻿CREATE PROCEDURE [dbo].[Transaction_Insert]
+﻿create procedure [dbo].[Transaction_Insert]
 	@AccountId int,
 	@TransactionType tinyint,
-	@Amount decimal (10,3),
+	@Amount decimal (11,4),
 	@Currency smallint
 
-AS
-BEGIN 
+as
+begin 
 
-	INSERT INTO [dbo].[Transaction] 
+	insert into [dbo].[Transaction]
 	(
 		[AccountId],
 		[Date],
@@ -16,8 +16,7 @@ BEGIN
 		[Currency]
 	)
 
-	VALUES 
-	(@AccountId,getdate(),@TransactionType,@Amount,@Currency)
+	values (@AccountId, sysdatetime(), @TransactionType, @Amount, @Currency)
 
-	SELECT SCOPE_IDENTITY() 
-END
+	select scope_identity() 
+end

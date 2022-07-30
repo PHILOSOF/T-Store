@@ -4,7 +4,9 @@
 AS
 BEGIN
 
-	SELECT SUM(Amount) FROM [dbo].[Transaction]
+	SELECT sum(Amount)
+	FROM [dbo].[Transaction]
 
 	WHERE AccountId = @AccountId
+
 END
