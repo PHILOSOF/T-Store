@@ -68,7 +68,7 @@
     <Build Include="StoredProcedure\Transaction_SelectById.sql" />
     <Build Include="StoredProcedure\Transaction_SelectByAccountId.sql" />
     <Build Include="StoredProcedure\Transaction_SelectBalanceByAccountId.sql" />
-    <Build Include="StoredProcedure\Transaction_Transfer.sql" />
+    <Build Include="StoredProcedure\Transaction_InsertTransfer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="T-Store.DB.refactorlog" />

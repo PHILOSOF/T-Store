@@ -19,7 +19,14 @@ begin
 		[Amount], 
 		[Currency]
 	)
-	values (@AccountIdSender, @Date, @TransactionType, @Amount, @CurrencySender)
+	values 
+	(
+		@AccountIdSender,
+		@Date,
+		@TransactionType,
+		@Amount,
+		@CurrencySender
+	)
 
 	declare @SenderId int= scope_identity() 
 
@@ -31,7 +38,14 @@ begin
 		[Amount], 
 		[Currency]
 	)
-	values (@AccountIdRecipient, @Date, @TransactionType, @AmountConverted, @CurrencyRecipient)
+	values
+	(
+		@AccountIdRecipient, 
+		@Date, 
+		@TransactionType, 
+		@AmountConverted, 
+		@CurrencyRecipient
+	)
 
 	select @SenderId, scope_identity()
 

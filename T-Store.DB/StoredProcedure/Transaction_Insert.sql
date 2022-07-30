@@ -16,7 +16,14 @@ begin
 		[Currency]
 	)
 
-	values (@AccountId, sysdatetime(), @TransactionType, @Amount, @Currency)
+	values 
+	(
+		@AccountId, 
+		sysdatetime(), 
+		@TransactionType, 
+		@Amount, 
+		@Currency
+	)
 
 	select scope_identity() 
 end
