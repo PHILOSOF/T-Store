@@ -1,12 +1,11 @@
-﻿namespace T_Strore.Data.Repository.Interfaces
+﻿namespace T_Strore.Data.Repository.Interfaces;
+
+public interface ITransactionRepository
 {
-    public interface ITransactionRepository
-    {
-        int AddTransaction(TransactionDTO transaction);
-        List<int> AddTransferTransactions(TransactionDTO transactionSender, TransactionDTO recipient);
-        decimal GetBalanceByAccountId(int accountId);
-        TransactionDTO GetTransactionById(int id);
-        List<TransactionDTO> GetTransactionsByAccountId(int accountId);
-        List<TransactionDTO> GetTransfersByAccountId(int accountId);
-    }
+    public int AddTransaction(TransactionDto transaction);
+    public List<int> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient);
+    public decimal GetBalanceByAccountId(int accountId);
+    public TransactionDto? GetTransactionById(int id);
+    public List<TransactionDto> GetTransactionsByAccountId(int accountId);
+    public List<TransactionDto> GetTransfersByAccountId(int accountId);
 }

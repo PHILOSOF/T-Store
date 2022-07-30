@@ -1,14 +1,13 @@
 ﻿
-namespace T_Strore.Data
+namespace T_Strore.Data;
+
+public enum Currency
 {
-    public enum Currency
-    {
-        EUR = 1,
-        RUB,
-        USD,
-        JPY,
-        AMD,
-        BGN,
-        RSD
-    }
+    EUR = 1,
+    RUB,
+    USD,
+    JPY,
+    AMD,
+    BGN,
+    RSD
 }

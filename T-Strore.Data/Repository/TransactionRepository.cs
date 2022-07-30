@@ -1,13 +1,12 @@
 ﻿using Dapper;
-
+using T_Strore.Data.Repository.Interfaces;
 
 namespace T_Strore.Data;
 
-public class TransactionRepository : ITransactionRepository
-//: BaseRepository
+public class TransactionRepository : BaseRepository, ITransactionRepository
 {
 
-    public int AddTransaction(TransactionDTO transaction)
+    public int AddTransaction(TransactionDto transaction)
     {
         var id = ConString.QueryFirstOrDefault<int>(
                   TransactionStoredProcedure.Transaction_Insert,
@@ -35,9 +34,9 @@ public class TransactionRepository : ITransactionRepository
     }
 
 
-    public List<TransactionDTO> GetTransactionsByAccountId(int accountId)
+    public List<TransactionDto> GetTransactionsByAccountId(int accountId)
     {
-        var transaction = ConString.Query<TransactionDTO>(
+        var transaction = ConString.Query<TransactionDto>(
                   TransactionStoredProcedure.Transaction_SelectByAccountId,
                   param: new { accountId },
                   commandType: System.Data.CommandType.StoredProcedure).ToList();
@@ -46,9 +45,9 @@ public class TransactionRepository : ITransactionRepository
     }
 
 
-    public TransactionDTO GetTransactionById(int id)
+    public TransactionDto? GetTransactionById(int id)
     {
-        var transaction = ConString.QueryFirstOrDefault<TransactionDTO>(
+        var transaction = ConString.QueryFirstOrDefault<TransactionDto>(
                  TransactionStoredProcedure.Transaction_SelectById,
                  param: new { id },
                  commandType: System.Data.CommandType.StoredProcedure);
@@ -57,10 +56,10 @@ public class TransactionRepository : ITransactionRepository
     }
 
 
-    public List<int> AddTransferTransactions(TransactionDTO transactionSender, TransactionDTO recipient)
+    public List<int> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient)
     {
         var id = ConString.Query<int>(
-                  TransactionStoredProcedure.Transaction_Transfer,
+                  TransactionStoredProcedure.Transaction_InsertTransfer,
                   param: new
                   {
                       AccountIdSender = transactionSender.AccountId,
@@ -69,7 +68,6 @@ public class TransactionRepository : ITransactionRepository
                       AmountConverted = recipient.Amount,
                       CurrencySender = transactionSender.Currency,
                       CurrencyRecipient = recipient.Currency,
-                      TransactionType = transactionSender.TransactionType
                   },
                   commandType: System.Data.CommandType.StoredProcedure).ToList();
 
@@ -77,9 +75,9 @@ public class TransactionRepository : ITransactionRepository
     }
 
 
-    public List<TransactionDTO> GetTransfersByAccountId(int accountId)
+    public List<TransactionDto> GetTransfersByAccountId(int accountId)
     {
-        var transfers = ConString.Query<TransactionDTO>(
+        var transfers = ConString.Query<TransactionDto>(
                   TransactionStoredProcedure.Transaction_GetAllTransfersByAccountId,
                   param: new { accountId },
                   commandType: System.Data.CommandType.StoredProcedure).ToList();

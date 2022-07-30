@@ -11,9 +11,4 @@
     <ProjectReference Include="..\T-Strore.Data\T-Strore.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Exception\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
