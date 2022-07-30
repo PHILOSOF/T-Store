@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>T_Strore.Business</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\T-Strore.Data\T-Strore.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exception\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+</Project>

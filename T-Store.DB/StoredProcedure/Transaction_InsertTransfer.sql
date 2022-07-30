@@ -9,7 +9,7 @@ as
 begin 	
 
 	declare @Date datetime2(7) = sysdatetime()
-	declare @TransactionType int = 3
+	declare @TransactionTransfer int = 3
 
 	insert into [dbo].[Transaction]
 	(
@@ -23,7 +23,7 @@ begin
 	(
 		@AccountIdSender,
 		@Date,
-		@TransactionType,
+		@TransactionTransfer,
 		@Amount,
 		@CurrencySender
 	)
@@ -42,7 +42,7 @@ begin
 	(
 		@AccountIdRecipient, 
 		@Date, 
-		@TransactionType, 
+		@TransactionTransfer, 
 		@AmountConverted, 
 		@CurrencyRecipient
 	)

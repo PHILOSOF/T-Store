@@ -4,9 +4,9 @@
 as
 begin
 
-	select sum(Amount)
+	select sum([Amount])
 	from [dbo].[Transaction]
 
-	where AccountId = @AccountId
+	where [AccountId] = @AccountId
 
 end
