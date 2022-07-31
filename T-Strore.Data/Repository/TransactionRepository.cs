@@ -85,4 +85,24 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         return transfers;
     }
 
+    public int GetCurrencyByAccountId(int accountId)
+    {
+        var currency = ConString.QueryFirstOrDefault<int>(
+                 TransactionStoredProcedure.Transaction_GetCurrencyByAccountId,
+                 param: new { accountId },
+                 commandType: System.Data.CommandType.StoredProcedure);
+
+        return currency;
+    }
+
+    public bool CheckExistenceAccountId(int accountId)
+    {
+        var cheked = ConString.QueryFirstOrDefault<bool>(
+                 TransactionStoredProcedure.Transaction_CheckExistenceAccountId,
+                 param: new { accountId },
+                 commandType: System.Data.CommandType.StoredProcedure);
+
+        return cheked;
+    }
+
 }

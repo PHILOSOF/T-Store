@@ -22,8 +22,7 @@ public class TransactionController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost]
-    [Route("add-deposit")]
+    [HttpPost("add-deposit")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> AddDeposit([FromBody] TransactionRequest transaction)
@@ -32,8 +31,7 @@ public class TransactionController : ControllerBase
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
-    [HttpPost]
-    [Route("withdraw-deposit")]
+    [HttpPost("withdraw-deposit")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> WithdrawDeposit([FromBody] TransactionRequest transaction)
@@ -42,26 +40,37 @@ public class TransactionController : ControllerBase
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
-    [HttpPost]
-    [Route("add-transfer")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+
+    [HttpGet("{id}/get-balance")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel )
+    public ActionResult<int> GetBalanceByAccountId([FromRoute] int id)
     {
-        TransactionDto sender = new()
-        {
-            AccountId = transferModel.AccountId,
-            Amount = transferModel.Amount,
-        };
-
-        TransactionDto recipient = new()
-        {
-           Currency= transferModel.CurrencyRecipient,
-           AccountId = transferModel.AccountIdRecipient,
-        };
-
-
-        var id = _transactionServices.AddTransfer(sender, recipient);
-        return Created($"{this.GetRequestPath()}/{1}", 1);
+         
+        return Ok(_transactionServices.GetBalanceByAccountId(id));
     }
+    //[HttpPost]
+    //[Route("add-transfer")]
+    //[ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    //[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    //public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel )
+    //{
+    //    TransactionDto sender = new()
+    //    {
+    //        AccountId = transferModel.AccountId,
+    //        Amount = transferModel.Amount,
+    //        Currency=transferModel.Currency,
+    //    };
+
+    //    TransactionDto recipient = new()
+    //    {
+    //       AccountId = transferModel.AccountIdRecipient,
+    //       Currency= transferModel.CurrencyRecipient,
+    //    };
+
+
+    //    var id = _transactionServices.AddTransfer(sender, recipient);
+    //    return Created($"{this.GetRequestPath()}/{id}", id);
+    //}
 }

@@ -8,4 +8,7 @@ public interface ITransactionRepository
     public TransactionDto? GetTransactionById(int id);
     public List<TransactionDto> GetTransactionsByAccountId(int accountId);
     public List<TransactionDto> GetTransfersByAccountId(int accountId);
+    public int GetCurrencyByAccountId(int accountId);
+    public bool CheckExistenceAccountId(int accountId);
+   
 }

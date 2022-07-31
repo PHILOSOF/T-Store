@@ -1,5 +1,6 @@
 ﻿using T_Strore.Business.Exceptions;
 using T_Strore.Business.Services.Interfaces;
+using T_Strore.Business.ServicesExtensions;
 using T_Strore.Data;
 using T_Strore.Data.Repository.Interfaces;
 
@@ -18,6 +19,17 @@ public class TransactionServices : ITransactionServices
 
     public int AddDeposit(TransactionDto transaction)
     {
+        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
+        if (currency != 0 && currency != ((int)transaction.Currency))
+        {
+            throw new BadRequestException($"Account currency does not match the transaction currency");
+        }
+
+        if (transaction.Amount <=0)
+        {
+            throw new BadRequestException($"Amount cannot be less than zero");
+        }
+
         transaction.TransactionType = TransactionType.Deposit;
 
         return _transactionRepository.AddTransaction(transaction);
@@ -26,6 +38,17 @@ public class TransactionServices : ITransactionServices
 
     public int WithdrawDeposit(TransactionDto transaction)
     {
+        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
+        if (currency != 0 && currency != ((int)transaction.Currency))
+        {
+            throw new BadRequestException($"Account currency does not match the transaction currency");
+        }
+
+        if (transaction.Amount <= 0)
+        {
+            
+            throw new BadRequestException($"Amount cannot be less than zero");
+        }
         transaction.TransactionType = TransactionType.Withdraw;
 
         return _transactionRepository.AddTransaction(transaction);
@@ -34,13 +57,25 @@ public class TransactionServices : ITransactionServices
 
     public List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient)
     {
-   
+        //Dictionary<Currency, decimal> aDictionary = new()
 
 
-        transactionSender.TransactionType=TransactionType.Transfer;
-        transactionRecipient.TransactionType= TransactionType.Transfer;
+        var сurrencyDictionary = typeof(Currency).EnumToDictionary();
 
-        transactionRecipient.Amount = transactionSender.Amount * 100;// курс
+        var currency = _transactionRepository.GetCurrencyByAccountId(transactionRecipient.AccountId);
+        if (currency != 0 && currency != ((int)transactionRecipient.Currency))
+        {
+            throw new BadRequestException($"Account currency does not match the transaction currency");
+        }
+        Currency eb = (Currency)currency;
+        //var curr = сurrencyDictionary[eb.ToString()];
+
+
+        transactionSender.TransactionType = TransactionType.Transfer;
+        transactionRecipient.TransactionType = TransactionType.Transfer;
+
+        //transactionRecipient.Amount = transactionSender.Amount * Decimal.Parse(curr);// курс
+        transactionSender.Amount = -transactionSender.Amount;
 
         return _transactionRepository.AddTransferTransactions(transactionSender, transactionRecipient);
     }
@@ -48,6 +83,12 @@ public class TransactionServices : ITransactionServices
 
     public decimal GetBalanceByAccountId(int accountId)
     {
+        var cheked= _transactionRepository.CheckExistenceAccountId(accountId);
+
+        if(!cheked)
+        {
+            throw new EntityNotFoundException($"Account {accountId} not found");
+        }
 
         return _transactionRepository.GetBalanceByAccountId(accountId);
     }
@@ -76,4 +117,6 @@ public class TransactionServices : ITransactionServices
         return _transactionRepository.GetTransfersByAccountId(accountId);
     }
 
+
+    
 }

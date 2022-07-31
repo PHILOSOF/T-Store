@@ -70,6 +70,8 @@
     <Build Include="StoredProcedure\Transaction_SelectBalanceByAccountId.sql" />
     <Build Include="StoredProcedure\Transaction_InsertTransfer.sql" />
     <Build Include="StoredProcedure\Transaction_GetAllTransfersByAccountId.sql" />
+    <Build Include="StoredProcedure\Transaction_GetCurrencyByAccountId.sql" />
+    <Build Include="StoredProcedure\Transaction_CheckExistenceAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="T-Store.DB.refactorlog" />
