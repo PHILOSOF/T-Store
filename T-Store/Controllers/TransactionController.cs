@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using T_Store.Extensions;
 using T_Store.Models.Requests;
+using T_Store.Models.Responses;
 using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
 
@@ -22,6 +23,7 @@ public class TransactionController : ControllerBase
         _mapper = mapper;
     }
 
+
     [HttpPost("add-deposit")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -30,6 +32,7 @@ public class TransactionController : ControllerBase
         var id = _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
+
 
     [HttpPost("withdraw-deposit")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -50,6 +53,42 @@ public class TransactionController : ControllerBase
          
         return Ok(_transactionServices.GetBalanceByAccountId(id));
     }
+
+
+    [HttpGet("{id}/get-transaction")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public ActionResult<TransactionResponse> GetTransactionById([FromRoute] int id)
+    {
+        var transaction = _transactionServices.GetTransactionById(id);
+        return Ok(_mapper.Map<TransactionResponse>(transaction));
+    }
+
+
+    [HttpGet("{accountId}/transactions")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public ActionResult<List<TransactionResponse>> GetTransactionsByAccountId([FromRoute] int accountId)
+    {
+
+        var transactions = _transactionServices.GetTransactionsByAccountId(accountId);
+        return Ok(_mapper.Map<List<TransactionResponse>>(transactions));
+    }
+
+
+    [HttpGet("{accountId}/transactions-with-transfers")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public ActionResult<List<TransactionResponse>> GetTransfersByAccountId([FromRoute] int accountId)
+    {
+        var transactionsTransfers = _transactionServices.GetTransfersByAccountId(accountId);
+        return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
+    }
+
+
     //[HttpPost]
     //[Route("add-transfer")]
     //[ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
