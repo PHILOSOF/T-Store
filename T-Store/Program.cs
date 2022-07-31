@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using T_Store;
+using T_Store.Middleware;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
@@ -37,6 +38,8 @@ builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 
 
 var app = builder.Build();
+
+app.UseCustomExceptionHandler();
 
 app.UseSwagger();
 app.UseSwaggerUI();
