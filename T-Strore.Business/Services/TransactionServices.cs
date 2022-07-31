@@ -1,6 +1,5 @@
 ﻿using T_Strore.Business.Exceptions;
 using T_Strore.Business.Services.Interfaces;
-using T_Strore.Business.ServicesExtensions;
 using T_Strore.Data;
 using T_Strore.Data.Repository.Interfaces;
 
@@ -11,6 +10,8 @@ public class TransactionServices : ITransactionServices
 
     private readonly ITransactionRepository _transactionRepository;
 
+
+
     public TransactionServices(ITransactionRepository transactionRepository)
     {
         _transactionRepository = transactionRepository;
@@ -19,16 +20,7 @@ public class TransactionServices : ITransactionServices
 
     public int AddDeposit(TransactionDto transaction)
     {
-        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
-        if (currency != 0 && currency != ((int)transaction.Currency))
-        {
-            throw new BadRequestException($"Account currency does not match the transaction currency");
-        }
-
-        if (transaction.Amount <=0)
-        {
-            throw new BadRequestException($"Amount cannot be less than zero");
-        }
+        CheckAccountByTypeCurrency(transaction);
 
         transaction.TransactionType = TransactionType.Deposit;
 
@@ -38,43 +30,46 @@ public class TransactionServices : ITransactionServices
 
     public int WithdrawDeposit(TransactionDto transaction)
     {
-        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
-        if (currency != 0 && currency != ((int)transaction.Currency))
-        {
-            throw new BadRequestException($"Account currency does not match the transaction currency");
-        }
+        CheckAccountByTypeCurrency(transaction);
+        CheckBalance(transaction);
 
-        if (transaction.Amount <= 0)
-        {
-            
-            throw new BadRequestException($"Amount cannot be less than zero");
-        }
         transaction.TransactionType = TransactionType.Withdraw;
-
+        transaction.Amount = -transaction.Amount;
         return _transactionRepository.AddTransaction(transaction);
     }
 
 
     public List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient)
     {
-        //Dictionary<Currency, decimal> aDictionary = new()
+        var currencyRates = GetCurrencyRate();
+        CheckAccount(transactionSender.AccountId);
+        CheckAccountByTypeCurrency(transactionRecipient);
+        CheckBalance(transactionSender);
 
+        transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
 
-        var сurrencyDictionary = typeof(Currency).EnumToDictionary();
-
-        var currency = _transactionRepository.GetCurrencyByAccountId(transactionRecipient.AccountId);
-        if (currency != 0 && currency != ((int)transactionRecipient.Currency))
+        if (transactionSender.Currency != Currency.USD && transactionRecipient.Currency != Currency.USD)
         {
-            throw new BadRequestException($"Account currency does not match the transaction currency");
-        }
-        Currency eb = (Currency)currency;
-        //var curr = сurrencyDictionary[eb.ToString()];
+            var currencyUsd = currencyRates[(Currency.USD, (Currency)transactionSender.Currency)];
+            var tmpTransferUsd = transactionSender.Amount * currencyUsd;
 
+            if(transactionSender.Currency != Currency.USD)
+            transactionRecipient.Amount = tmpTransferUsd / currencyRates[(Currency.USD,(Currency)transactionRecipient.Currency)];
+
+            else
+                transactionRecipient.Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+        }
+        else
+        {
+            if(transactionSender.Currency != Currency.USD)
+            transactionRecipient.Amount = transactionSender.Amount / currencyRates[(Currency.USD,(Currency)transactionSender.Currency)];
+
+            else
+                transactionRecipient.Amount = transactionSender.Amount * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+        }
 
         transactionSender.TransactionType = TransactionType.Transfer;
         transactionRecipient.TransactionType = TransactionType.Transfer;
-
-        //transactionRecipient.Amount = transactionSender.Amount * Decimal.Parse(curr);// курс
         transactionSender.Amount = -transactionSender.Amount;
 
         return _transactionRepository.AddTransferTransactions(transactionSender, transactionRecipient);
@@ -117,7 +112,31 @@ public class TransactionServices : ITransactionServices
     }
 
 
+    private Dictionary<(Currency, Currency), decimal> GetCurrencyRate() =>
+        Enum.GetValues(typeof(Currency))
+        .Cast<Currency>()
+               .ToDictionary(t => (Currency.USD, t), t => (decimal)t * 10);    // while we dont have service currency rate
 
+
+    private void CheckBalance(TransactionDto transaction)
+    {
+        var balance = _transactionRepository.GetBalanceByAccountId(transaction.AccountId);
+        if (transaction.Amount > balance)
+        {
+            throw new BadRequestException($"You have not a enough money on balance");
+        }
+    }
+
+
+    private void CheckAccountByTypeCurrency(TransactionDto transaction)
+    {
+        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
+
+        if (currency != 0 && currency != ((int)transaction.Currency))
+        {
+            throw new BadRequestException($"Account currency does not match the transaction currency");
+        }
+    }
 
 
     private void CheckAccount(int accountId)

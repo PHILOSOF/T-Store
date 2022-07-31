@@ -28,7 +28,7 @@ begin
 		@CurrencySender
 	)
 
-	declare @SenderId int= scope_identity() 
+	select scope_identity() 
 
 	insert into [dbo].[Transaction]
 	( 
@@ -47,6 +47,6 @@ begin
 		@CurrencyRecipient
 	)
 
-	select @SenderId, scope_identity()
+	select scope_identity()
 
 end

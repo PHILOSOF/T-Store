@@ -89,27 +89,25 @@ public class TransactionController : ControllerBase
     }
 
 
-    //[HttpPost]
-    //[Route("add-transfer")]
-    //[ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    //[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    //public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel )
-    //{
-    //    TransactionDto sender = new()
-    //    {
-    //        AccountId = transferModel.AccountId,
-    //        Amount = transferModel.Amount,
-    //        Currency=transferModel.Currency,
-    //    };
+    [HttpPost("add-transfer")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel)
+    {
+        TransactionDto sender = new()
+        {
+            AccountId = transferModel.AccountIdSender,
+            Amount = transferModel.Amount,
+        };
 
-    //    TransactionDto recipient = new()
-    //    {
-    //       AccountId = transferModel.AccountIdRecipient,
-    //       Currency= transferModel.CurrencyRecipient,
-    //    };
+        TransactionDto recipient = new()
+        {
+            AccountId = transferModel.AccountIdRecipient,
+            Currency = transferModel.CurrencyRecipient,
+        };
 
 
-    //    var id = _transactionServices.AddTransfer(sender, recipient);
-    //    return Created($"{this.GetRequestPath()}/{id}", id);
-    //}
+        var id = _transactionServices.AddTransfer(sender, recipient);
+        return Created($"{this.GetRequestPath()}/{id}", id);
+    }
 }

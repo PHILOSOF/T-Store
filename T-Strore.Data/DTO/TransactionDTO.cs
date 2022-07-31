@@ -10,17 +10,17 @@ public class TransactionDto
     public decimal Amount { get; set; }
     public Currency Currency { get; set; }
 
-    public override bool Equals(object? obj)
-    {
+    //public override bool Equals(object? obj)
+    //{
 
-        return obj is TransactionDto dto &&
-            Id == dto.Id &&
-            AccountId == dto.AccountId &&
-            Date == dto.Date &&
-            TransactionType == dto.TransactionType &&
-            Amount == dto.Amount &&
-            Currency == dto.Currency;
-    }
+    //    return obj is TransactionDto dto &&
+    //        Id == dto.Id &&
+    //        AccountId == dto.AccountId &&
+    //        Date == dto.Date &&
+    //        TransactionType == dto.TransactionType &&
+    //        Amount == dto.Amount &&
+    //        Currency == dto.Currency;
+    //}
 }
 
 
