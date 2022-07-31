@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[Transaction_CheckExistenceAccountId]
-	@AccountId int
+	@AccountId bigint
 
 as
 begin

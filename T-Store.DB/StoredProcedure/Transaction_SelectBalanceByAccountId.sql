@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[Transaction_SelectBalanceByAccountId]
-	@AccountId int
+	@AccountId bigint
 
 as
 begin
