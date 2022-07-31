@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Transaction] (
-    [Id]              INT           NOT NULL IDENTITY,
-    [AccountId]       INT           NOT NULL,
+    [Id]              BIGINT           NOT NULL IDENTITY,
+    [AccountId]       BIGINT           NOT NULL,
     [Date]        DATETIME2 (7) NOT NULL,
     [TransactionType] TINYINT       NOT NULL,
     [Amount]          DECIMAL (10, 3)  NOT NULL,

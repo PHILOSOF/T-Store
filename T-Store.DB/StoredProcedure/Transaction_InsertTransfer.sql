@@ -1,6 +1,6 @@
 ﻿create procedure [dbo].[Transaction_InsertTransfer]
-	@AccountIdSender int,
-	@AccountIdRecipient int,
+	@AccountIdSender bigint,
+	@AccountIdRecipient bigint,
 	@Amount decimal (11,4),
 	@AmountConverted decimal (11,4),
 	@CurrencySender smallint,
@@ -28,7 +28,7 @@ begin
 		@CurrencySender
 	)
 
-	select scope_identity() 
+	declare @SenderId int= scope_identity() 
 
 	insert into [dbo].[Transaction]
 	( 
@@ -47,6 +47,9 @@ begin
 		@CurrencyRecipient
 	)
 
-	select scope_identity()
+	declare @RecipientId int= scope_identity()
 
+	select [Id] 
+	from [dbo].[Transaction]
+	where Id=@SenderId or Id=@RecipientId 
 end
