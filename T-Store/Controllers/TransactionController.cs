@@ -44,14 +44,14 @@ public class TransactionController : ControllerBase
     }
 
 
-    [HttpGet("{id}/get-balance")]
+    [HttpGet("{accountId}/get-balance")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<int> GetBalanceByAccountId([FromRoute] int id)
+    public ActionResult<int> GetBalanceByAccountId([FromRoute] int accountId)
     {
          
-        return Ok(_transactionServices.GetBalanceByAccountId(id));
+        return Ok(_transactionServices.GetBalanceByAccountId(accountId));
     }
 
 
@@ -82,7 +82,7 @@ public class TransactionController : ControllerBase
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransfersByAccountId([FromRoute] int accountId)
+    public ActionResult<List<TransactionResponse>> GetTransactionsWithTransfersByAccountId([FromRoute] int accountId)
     {
         var transactionsTransfers = _transactionServices.GetTransfersByAccountId(accountId);
         return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));

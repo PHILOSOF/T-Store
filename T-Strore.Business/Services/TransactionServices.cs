@@ -83,12 +83,7 @@ public class TransactionServices : ITransactionServices
 
     public decimal GetBalanceByAccountId(int accountId)
     {
-        var cheked= _transactionRepository.CheckExistenceAccountId(accountId);
-
-        if(!cheked)
-        {
-            throw new EntityNotFoundException($"Account {accountId} not found");
-        }
+        CheckAccount(accountId);
 
         return _transactionRepository.GetBalanceByAccountId(accountId);
     }
@@ -108,15 +103,31 @@ public class TransactionServices : ITransactionServices
 
     public List<TransactionDto> GetTransactionsByAccountId(int accountId)
     {
+        CheckAccount(accountId);
+
         return _transactionRepository.GetTransactionsByAccountId(accountId);
     }
 
 
     public List<TransactionDto> GetTransfersByAccountId(int accountId)
     {
+        CheckAccount(accountId);
+
         return _transactionRepository.GetTransfersByAccountId(accountId);
     }
 
 
+
+
+
+    private void CheckAccount(int accountId)
+    {
+        var cheked = _transactionRepository.CheckExistenceAccountId(accountId);
+
+        if (!cheked)
+        {
+            throw new EntityNotFoundException($"Account {accountId} not found");
+        }
+    }
     
 }
