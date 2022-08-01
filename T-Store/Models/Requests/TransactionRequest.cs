@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using T_Strore.Data;
 
-namespace T_Store.Models.Requests;
+namespace T_Store.Models;
 
 public class TransactionRequest
 {

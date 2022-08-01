@@ -1,6 +1,6 @@
 ﻿using T_Strore.Data;
 
-namespace T_Store.Models.Responses;
+namespace T_Store.Models;
 
 public class TransactionResponse
 {

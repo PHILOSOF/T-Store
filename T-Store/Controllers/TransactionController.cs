@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using T_Store.Extensions;
-using T_Store.Models.Requests;
-using T_Store.Models.Responses;
-using T_Strore.Business.Services.Interfaces;
+using T_Store.Models;
+using T_Strore.Business.Services;
 using T_Strore.Data;
 
 namespace T_Store.Controllers;
