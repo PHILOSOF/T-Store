@@ -1,6 +1,6 @@
 ﻿using T_Strore.Data;
 
-namespace T_Strore.Business.Services.Interfaces;
+namespace T_Strore.Business.Services;
 
 public interface ITransactionServices
 {

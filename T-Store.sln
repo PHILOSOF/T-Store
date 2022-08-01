@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store", "T-Store\T-Store.csproj", "{58C28D79-169D-4569-B7E5-933F02B7F72F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store.API", "T-Store\T-Store.API.csproj", "{58C28D79-169D-4569-B7E5-933F02B7F72F}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T-Store.DB", "T-Store.DB\T-Store.DB.sqlproj", "{17B73570-E0A9-4541-AD51-4DD64B1811E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Data", "T-Strore.Data\T-Strore.Data.csproj", "{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Strore.Business", "T-Strore.Business\T-Strore.Business.csproj", "{479FF136-5E4B-493F-9535-4308CBA7F79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Business", "T-Strore.Business\T-Strore.Business.csproj", "{479FF136-5E4B-493F-9535-4308CBA7F79C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Store.API.Test", "T-Store.API.Test\T-Store.API.Test.csproj", "{A13CFC11-3B93-429B-85B7-EC26C425C50B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A13CFC11-3B93-429B-85B7-EC26C425C50B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13CFC11-3B93-429B-85B7-EC26C425C50B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A13CFC11-3B93-429B-85B7-EC26C425C50B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A13CFC11-3B93-429B-85B7-EC26C425C50B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
