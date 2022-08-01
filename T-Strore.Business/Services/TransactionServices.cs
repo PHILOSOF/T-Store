@@ -19,7 +19,6 @@ public class TransactionServices : ITransactionServices
 
     public int AddDeposit(TransactionDto transaction)
     {
-        CheckAccountByTypeCurrency(transaction);
 
         transaction.TransactionType = TransactionType.Deposit;
 
@@ -29,7 +28,6 @@ public class TransactionServices : ITransactionServices
 
     public int WithdrawDeposit(TransactionDto transaction)
     {
-        CheckAccountByTypeCurrency(transaction);
         CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
@@ -77,8 +75,7 @@ public class TransactionServices : ITransactionServices
 
     public decimal GetBalanceByAccountId(int accountId)
     {
-        CheckAccount(accountId);
-
+        
         return _transactionRepository.GetBalanceByAccountId(accountId);
     }
 
@@ -95,19 +92,12 @@ public class TransactionServices : ITransactionServices
     }
 
 
+
     public List<TransactionDto> GetTransactionsByAccountId(int accountId)
     {
-        CheckAccount(accountId);
-
-        return _transactionRepository.GetTransactionsByAccountId(accountId);
-    }
 
 
-    public List<TransactionDto> GetTransfersByAccountId(int accountId)
-    {
-        CheckAccount(accountId);
-
-        return _transactionRepository.GetTransfersByAccountId(accountId);
+        return _transactionRepository.GetAllTransactionsByAccountId(accountId);
     }
 
 
@@ -126,26 +116,4 @@ public class TransactionServices : ITransactionServices
         }
     }
 
-
-    private void CheckAccountByTypeCurrency(TransactionDto transaction)
-    {
-        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
-
-        if (currency != 0 && currency != ((int)transaction.Currency))
-        {
-            throw new BadRequestException($"Account currency does not match the transaction currency");
-        }
-    }
-
-
-    private void CheckAccount(int accountId)
-    {
-        var cheked = _transactionRepository.CheckExistenceAccountId(accountId);
-
-        if (!cheked)
-        {
-            throw new EntityNotFoundException($"Account {accountId} not found");
-        }
-    }
-    
 }
