@@ -3,7 +3,7 @@ using T_Store.CustomAttributesValidations;
 using T_Store.Infrastructure;
 using T_Strore.Data;
 
-namespace T_Store.Models.Requests;
+namespace T_Store.Models;
 
 public class TransactionRequest
 {
