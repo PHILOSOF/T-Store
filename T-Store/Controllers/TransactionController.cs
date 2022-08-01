@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using T_Store.Extensions;
 using T_Store.Models;
 using T_Strore.Business.Services;
@@ -29,6 +28,29 @@ public class TransactionController : ControllerBase
     public ActionResult<int> AddDeposit([FromBody] TransactionRequest transaction)
     {
         var id = _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
+        return Created($"{this.GetRequestPath()}/{id}", id);
+    }
+
+
+    [HttpPost("add-transfer")]
+    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel)
+    {
+        TransactionDto sender = new()
+        {
+            AccountId = transferModel.AccountIdSender,
+            Amount = transferModel.Amount,
+        };
+
+        TransactionDto recipient = new()
+        {
+            AccountId = transferModel.AccountIdRecipient,
+            Currency = transferModel.CurrencyRecipient,
+        };
+
+
+        var id = _transactionServices.AddTransfer(sender, recipient);
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
@@ -85,28 +107,5 @@ public class TransactionController : ControllerBase
     {
         var transactionsTransfers = _transactionServices.GetTransfersByAccountId(accountId);
         return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
-    }
-
-
-    [HttpPost("add-transfer")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel)
-    {
-        TransactionDto sender = new()
-        {
-            AccountId = transferModel.AccountIdSender,
-            Amount = transferModel.Amount,
-        };
-
-        TransactionDto recipient = new()
-        {
-            AccountId = transferModel.AccountIdRecipient,
-            Currency = transferModel.CurrencyRecipient,
-        };
-
-
-        var id = _transactionServices.AddTransfer(sender, recipient);
-        return Created($"{this.GetRequestPath()}/{id}", id);
     }
 }
