@@ -9,6 +9,5 @@ public interface ITransactionServices
     decimal GetBalanceByAccountId(int accountId);
     TransactionDto? GetTransactionById(int id);
     List<TransactionDto> GetTransactionsByAccountId(int accountId);
-    List<TransactionDto> GetTransfersByAccountId(int accountId);
     int WithdrawDeposit(TransactionDto transaction);
 }

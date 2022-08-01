@@ -39,11 +39,11 @@ public class TransactionServices : ITransactionServices
     public List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient)
     {
         var currencyRates = GetCurrencyRate();
-        CheckAccount(transactionSender.AccountId);
-        CheckAccountByTypeCurrency(transactionRecipient);
+        
+        //CheckAccountByTypeCurrency(transactionRecipient);
         CheckBalance(transactionSender);
 
-        transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
+        //transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
 
         if (transactionSender.Currency != Currency.USD && transactionRecipient.Currency != Currency.USD)
         {

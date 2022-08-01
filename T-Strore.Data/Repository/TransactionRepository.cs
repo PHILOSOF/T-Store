@@ -34,17 +34,6 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
 
-    public List<TransactionDto> GetTransactionsByAccountId(int accountId)
-    {
-        var transaction = ConString.Query<TransactionDto>(
-                  TransactionStoredProcedure.Transaction_SelectByAccountId,
-                  param: new { accountId },
-                  commandType: System.Data.CommandType.StoredProcedure).ToList();
-
-        return transaction;
-    }
-
-
     public TransactionDto? GetTransactionById(int id)
     {
         var transaction = ConString.QueryFirstOrDefault<TransactionDto>(
@@ -75,34 +64,13 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
 
-    public List<TransactionDto> GetTransfersByAccountId(int accountId)
+    public List<TransactionDto> GetAllTransactionsByAccountId(int accountId)
     {
         var transfers = ConString.Query<TransactionDto>(
-                  TransactionStoredProcedure.Transaction_GetAllTransfersByAccountId,
+                  TransactionStoredProcedure.Transaction_GetAllTransactionsByAccountId,
                   param: new { accountId },
                   commandType: System.Data.CommandType.StoredProcedure).ToList();
 
         return transfers;
     }
-
-    public int GetCurrencyByAccountId(int accountId)
-    {
-        var currency = ConString.QueryFirstOrDefault<int>(
-                 TransactionStoredProcedure.Transaction_GetCurrencyByAccountId,
-                 param: new { accountId },
-                 commandType: System.Data.CommandType.StoredProcedure);
-
-        return currency;
-    }
-
-    public bool CheckExistenceAccountId(int accountId)
-    {
-        var cheked = ConString.QueryFirstOrDefault<bool>(
-                 TransactionStoredProcedure.Transaction_CheckExistenceAccountId,
-                 param: new { accountId },
-                 commandType: System.Data.CommandType.StoredProcedure);
-
-        return cheked;
-    }
-
 }

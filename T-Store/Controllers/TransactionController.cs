@@ -37,21 +37,15 @@ public class TransactionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
-        TransactionDto sender = new()
-        {
-            AccountId = transferModel.AccountIdSender,
-            Amount = transferModel.Amount,
-        };
+       
+        
+     
 
-        TransactionDto recipient = new()
-        {
-            AccountId = transferModel.AccountIdRecipient,
-            Currency = transferModel.CurrencyRecipient,
-        };
+        
+        var recipient = _mapper.Map<List<TransactionDto>>(transferModel);
 
-
-        var id = _transactionServices.AddTransfer(sender, recipient);
-        return Created($"{this.GetRequestPath()}/{id}", id);
+       // var id = _transactionServices.AddTransfer(recipient, recipient);
+        return Created($"{this.GetRequestPath()}/{1}", 1);
     }
 
 
@@ -87,25 +81,14 @@ public class TransactionController : ControllerBase
     }
 
 
-    [HttpGet("{accountId}/transactions")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransactionsByAccountId([FromRoute] int accountId)
-    {
-
-        var transactions = _transactionServices.GetTransactionsByAccountId(accountId);
-        return Ok(_mapper.Map<List<TransactionResponse>>(transactions));
-    }
-
 
     [HttpGet("{accountId}/transactions-with-transfers")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransactionsWithTransfersByAccountId([FromRoute] int accountId)
+    public ActionResult<List<TransactionResponse>> GetTransactionsByAccountId([FromRoute] int accountId)
     {
-        var transactionsTransfers = _transactionServices.GetTransfersByAccountId(accountId);
+        var transactionsTransfers = _transactionServices.GetTransactionById(accountId);
         return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
     }
 }
