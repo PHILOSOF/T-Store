@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[Transaction_GetAllTransfersByAccountId]
-	@AccountId int
+	@AccountId bigint
 
 as
 begin

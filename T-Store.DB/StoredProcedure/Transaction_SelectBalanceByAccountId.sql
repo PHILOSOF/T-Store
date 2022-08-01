@@ -1,12 +1,12 @@
-﻿CREATE PROCEDURE [dbo].[Transaction_SelectBalanceByAccountId]
-	@AccountId int
+﻿create procedure [dbo].[Transaction_SelectBalanceByAccountId]
+	@AccountId bigint
 
-AS
-BEGIN
+as
+begin
 
-	SELECT sum(Amount)
-	FROM [dbo].[Transaction]
+	select sum([Amount])
+	from [dbo].[Transaction]
 
-	WHERE AccountId = @AccountId
+	where [AccountId] = @AccountId
 
-END
+end

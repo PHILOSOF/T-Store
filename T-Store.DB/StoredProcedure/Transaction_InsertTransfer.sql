@@ -1,6 +1,6 @@
 ﻿create procedure [dbo].[Transaction_InsertTransfer]
-	@AccountIdSender int,
-	@AccountIdRecipient int,
+	@AccountIdSender bigint,
+	@AccountIdRecipient bigint,
 	@Amount decimal (11,4),
 	@AmountConverted decimal (11,4),
 	@CurrencySender smallint,
@@ -9,7 +9,7 @@ as
 begin 	
 
 	declare @Date datetime2(7) = sysdatetime()
-	declare @TransactionType int = 3
+	declare @TransactionTransfer int = 3
 
 	insert into [dbo].[Transaction]
 	(
@@ -19,7 +19,14 @@ begin
 		[Amount], 
 		[Currency]
 	)
-	values (@AccountIdSender, @Date, @TransactionType, @Amount, @CurrencySender)
+	values 
+	(
+		@AccountIdSender,
+		@Date,
+		@TransactionTransfer,
+		@Amount,
+		@CurrencySender
+	)
 
 	declare @SenderId int= scope_identity() 
 
@@ -31,8 +38,18 @@ begin
 		[Amount], 
 		[Currency]
 	)
-	values (@AccountIdRecipient, @Date, @TransactionType, @AmountConverted, @CurrencyRecipient)
+	values
+	(
+		@AccountIdRecipient, 
+		@Date, 
+		@TransactionTransfer, 
+		@AmountConverted, 
+		@CurrencyRecipient
+	)
 
-	select @SenderId, scope_identity()
+	declare @RecipientId int= scope_identity()
 
+	select [Id] 
+	from [dbo].[Transaction]
+	where Id=@SenderId or Id=@RecipientId 
 end

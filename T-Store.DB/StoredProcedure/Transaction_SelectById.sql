@@ -1,17 +1,17 @@
-﻿CREATE PROCEDURE [dbo].[Transaction_SelectById]
-	@Id int
+﻿create procedure [dbo].[Transaction_SelectById]
+	@Id bigint
 
-AS
-BEGIN
+as
+begin
 
-	SELECT [Id],
+	select [Id],
 		   [AccountId],
 		   [Date],
 		   [TransactionType],
 		   [Amount],
 		   [Currency]
-	FROM [dbo].[Transaction]
+	from [dbo].[Transaction]
 
-	WHERE [Id] = @Id
+	where [Id] = @Id
 
-END
+end

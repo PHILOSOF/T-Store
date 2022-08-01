@@ -1,14 +1,15 @@
 ﻿
 
-namespace T_Strore.Data
+namespace T_Strore.Data;
+
+public class TransactionStoredProcedure
 {
-    public class TransactionStoredProcedure
-    {
-        public const string Transaction_Insert = "Insert_Transactiont";
-        public const string Transaction_SelectBalanceByAccountId = "Select_BalanceByAccountId";
-        public const string Transaction_SelectByAccountId = "SelectByAccountId_Transaction";
-        public const string Transaction_SelectById = "SelectById_Transaction";
-        public const string Transaction_Transfer = "Transaction_Transfer";
-        public const string Transaction_GetAllTransfersByAccountId = "Transaction_GetAllTransfersByAccountId"; 
-    }
+    public const string Transaction_Insert = "Transaction_Insert";
+    public const string Transaction_SelectBalanceByAccountId = "Transaction_SelectBalanceByAccountId";
+    public const string Transaction_SelectByAccountId = "Transaction_SelectByAccountId";
+    public const string Transaction_SelectById = "Transaction_SelectById";
+    public const string Transaction_InsertTransfer = "Transaction_InsertTransfer";
+    public const string Transaction_GetAllTransfersByAccountId = "Transaction_GetAllTransfersByAccountId";
+    public const string Transaction_GetCurrencyByAccountId = "Transaction_GetCurrencyByAccountId";
+    public const string Transaction_CheckExistenceAccountId = "Transaction_CheckExistenceAccountId";
 }

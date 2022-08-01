@@ -1,5 +1,5 @@
 ﻿create procedure [dbo].[Transaction_Insert]
-	@AccountId int,
+	@AccountId bigint,
 	@TransactionType tinyint,
 	@Amount decimal (11,4),
 	@Currency smallint
@@ -16,7 +16,14 @@ begin
 		[Currency]
 	)
 
-	values (@AccountId, sysdatetime(), @TransactionType, @Amount, @Currency)
+	values 
+	(
+		@AccountId, 
+		sysdatetime(), 
+		@TransactionType, 
+		@Amount, 
+		@Currency
+	)
 
 	select scope_identity() 
 end
