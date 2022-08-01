@@ -9,7 +9,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T-Store.DB", "T-Store.DB\T-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Data", "T-Strore.Data\T-Strore.Data.csproj", "{C1BB3AB0-55A9-4DC3-8B72-9DB884939111}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Strore.Business", "T-Strore.Business\T-Strore.Business.csproj", "{479FF136-5E4B-493F-9535-4308CBA7F79C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Business", "T-Strore.Business\T-Strore.Business.csproj", "{479FF136-5E4B-493F-9535-4308CBA7F79C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Store.Business.Tests", "T-Store.Business.Tests\T-Store.Business.Tests.csproj", "{8240D9D2-E152-472A-849F-C5D90789F26C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{479FF136-5E4B-493F-9535-4308CBA7F79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8240D9D2-E152-472A-849F-C5D90789F26C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8240D9D2-E152-472A-849F-C5D90789F26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8240D9D2-E152-472A-849F-C5D90789F26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8240D9D2-E152-472A-849F-C5D90789F26C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
