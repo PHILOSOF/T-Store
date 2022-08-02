@@ -25,10 +25,10 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<decimal> GetBalanceByAccountId([FromRoute] int id)
+    public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] int id)
     {
 
-        return Ok(_transactionServices.GetBalanceByAccountId(id));
+        return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 
 
@@ -36,9 +36,9 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransactionsByAccountId([FromRoute] int id)
+    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountId([FromRoute] int id)
     {
-        var transactionsTransfers = _transactionServices.GetTransactionsByAccountId(id);
+        var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
         return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
     }
 }
