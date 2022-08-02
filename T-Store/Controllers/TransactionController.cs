@@ -42,10 +42,10 @@ public class TransactionController : ControllerBase
      
 
         
-        var recipient = _mapper.Map<List<TransactionDto>>(transferModel);
+        var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
 
-       // var id = _transactionServices.AddTransfer(recipient, recipient);
-        return Created($"{this.GetRequestPath()}/{1}", 1);
+        var id = _transactionServices.AddTransfer(transferModels);
+        return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
 

@@ -36,40 +36,40 @@ public class TransactionServices : ITransactionServices
     }
 
 
-    public List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient)
+    public List<int> AddTransfer(List<TransactionDto> transferModels)
     {
         var currencyRates = GetCurrencyRate();
-        
+
         //CheckAccountByTypeCurrency(transactionRecipient);
-        CheckBalance(transactionSender);
+        CheckBalance(transferModels[0]);
 
         //transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
 
-        if (transactionSender.Currency != Currency.USD && transactionRecipient.Currency != Currency.USD)
+        if (transferModels[0].Currency != Currency.USD && transferModels[1].Currency != Currency.USD)
         {
-            var currencyUsd = currencyRates[(Currency.USD, (Currency)transactionSender.Currency)];
-            var tmpTransferUsd = transactionSender.Amount * currencyUsd;
+            var currencyUsd = currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
+            var tmpTransferUsd = transferModels[0].Amount * currencyUsd;
 
-            if(transactionSender.Currency != Currency.USD)
-            transactionRecipient.Amount = tmpTransferUsd / currencyRates[(Currency.USD,(Currency)transactionRecipient.Currency)];
+            if (transferModels[0].Currency != Currency.USD)
+                transferModels[1].Amount = tmpTransferUsd / currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
 
             else
-                transactionRecipient.Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+                transferModels[1].Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
         }
         else
         {
-            if(transactionSender.Currency != Currency.USD)
-            transactionRecipient.Amount = transactionSender.Amount / currencyRates[(Currency.USD,(Currency)transactionSender.Currency)];
+            if (transferModels[0].Currency != Currency.USD)
+                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
 
             else
-                transactionRecipient.Amount = transactionSender.Amount * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
         }
 
-        transactionSender.TransactionType = TransactionType.Transfer;
-        transactionRecipient.TransactionType = TransactionType.Transfer;
-        transactionSender.Amount = -transactionSender.Amount;
+        transferModels[0].TransactionType = TransactionType.Transfer;
+        transferModels[1].TransactionType = TransactionType.Transfer;
+        transferModels[0].Amount = -transferModels[0].Amount;
 
-        return _transactionRepository.AddTransferTransactions(transactionSender, transactionRecipient);
+        return _transactionRepository.AddTransferTransactions(transferModels[0], transferModels[1]);
     }
 
 

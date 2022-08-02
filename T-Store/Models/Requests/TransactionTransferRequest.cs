@@ -5,7 +5,7 @@ using T_Strore.Data;
 
 namespace T_Store.Models;
 
-public class TransactionTransferRequest 
+public class TransactionTransferRequest : TransactionRequest
 {
 
     [CheckerNumberMoreZero]
