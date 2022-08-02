@@ -15,5 +15,7 @@ public class TransactionRequest
 
     [CheckerNumberMoreZero]
     public decimal Amount { get; set; }
+
+    
     
 }

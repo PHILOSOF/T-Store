@@ -19,7 +19,6 @@ public class TransactionServices : ITransactionServices
 
     public int AddDeposit(TransactionDto transaction)
     {
-        CheckAccountByTypeCurrency(transaction);
 
         transaction.TransactionType = TransactionType.Deposit;
 
@@ -29,7 +28,6 @@ public class TransactionServices : ITransactionServices
 
     public int WithdrawDeposit(TransactionDto transaction)
     {
-        CheckAccountByTypeCurrency(transaction);
         CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
@@ -38,47 +36,46 @@ public class TransactionServices : ITransactionServices
     }
 
 
-    public List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient)
+    public List<int> AddTransfer(List<TransactionDto> transferModels)
     {
         var currencyRates = GetCurrencyRate();
-        CheckAccount(transactionSender.AccountId);
-        CheckAccountByTypeCurrency(transactionRecipient);
-        CheckBalance(transactionSender);
 
-        transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
+        
+        CheckBalance(transferModels[0]);
 
-        if (transactionSender.Currency != Currency.USD && transactionRecipient.Currency != Currency.USD)
+        
+
+        if (transferModels[0].Currency != Currency.USD && transferModels[1].Currency != Currency.USD)
         {
-            var currencyUsd = currencyRates[(Currency.USD, (Currency)transactionSender.Currency)];
-            var tmpTransferUsd = transactionSender.Amount * currencyUsd;
+            var currencyUsd = currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
+            var tmpTransferUsd = transferModels[0].Amount * currencyUsd;
 
-            if(transactionSender.Currency != Currency.USD)
-            transactionRecipient.Amount = tmpTransferUsd / currencyRates[(Currency.USD,(Currency)transactionRecipient.Currency)];
+            if (transferModels[0].Currency != Currency.USD)
+                transferModels[1].Amount = tmpTransferUsd / currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
 
             else
-                transactionRecipient.Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+                transferModels[1].Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
         }
         else
         {
-            if(transactionSender.Currency != Currency.USD)
-            transactionRecipient.Amount = transactionSender.Amount / currencyRates[(Currency.USD,(Currency)transactionSender.Currency)];
+            if (transferModels[0].Currency != Currency.USD)
+                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
 
             else
-                transactionRecipient.Amount = transactionSender.Amount * currencyRates[(Currency.USD, (Currency)transactionRecipient.Currency)];
+                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
         }
 
-        transactionSender.TransactionType = TransactionType.Transfer;
-        transactionRecipient.TransactionType = TransactionType.Transfer;
-        transactionSender.Amount = -transactionSender.Amount;
+        transferModels[0].TransactionType = TransactionType.Transfer;
+        transferModels[1].TransactionType = TransactionType.Transfer;
+        transferModels[0].Amount = -transferModels[0].Amount;
 
-        return _transactionRepository.AddTransferTransactions(transactionSender, transactionRecipient);
+        return _transactionRepository.AddTransferTransactions(transferModels[0], transferModels[1]);
     }
 
 
     public decimal GetBalanceByAccountId(int accountId)
     {
-        CheckAccount(accountId);
-
+        
         return _transactionRepository.GetBalanceByAccountId(accountId);
     }
 
@@ -95,19 +92,11 @@ public class TransactionServices : ITransactionServices
     }
 
 
+
     public List<TransactionDto> GetTransactionsByAccountId(int accountId)
     {
-        CheckAccount(accountId);
 
-        return _transactionRepository.GetTransactionsByAccountId(accountId);
-    }
-
-
-    public List<TransactionDto> GetTransfersByAccountId(int accountId)
-    {
-        CheckAccount(accountId);
-
-        return _transactionRepository.GetTransfersByAccountId(accountId);
+        return _transactionRepository.GetAllTransactionsByAccountId(accountId);
     }
 
 
@@ -126,26 +115,4 @@ public class TransactionServices : ITransactionServices
         }
     }
 
-
-    private void CheckAccountByTypeCurrency(TransactionDto transaction)
-    {
-        var currency = _transactionRepository.GetCurrencyByAccountId(transaction.AccountId);
-
-        if (currency != 0 && currency != ((int)transaction.Currency))
-        {
-            throw new BadRequestException($"Account currency does not match the transaction currency");
-        }
-    }
-
-
-    private void CheckAccount(int accountId)
-    {
-        var cheked = _transactionRepository.CheckExistenceAccountId(accountId);
-
-        if (!cheked)
-        {
-            throw new EntityNotFoundException($"Account {accountId} not found");
-        }
-    }
-    
 }

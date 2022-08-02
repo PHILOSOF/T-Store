@@ -4,10 +4,9 @@ using T_Store.Controllers;
 using Moq;
 using AutoMapper;
 using T_Strore.Business.Services;
-using T_Store;
 using T_Store.Models;
 using T_Strore.Data;
-
+using T_Store.Mapper;
 
 public class TransactionControllerTests
 {

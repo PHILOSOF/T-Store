@@ -22,7 +22,7 @@ public class TransactionController : ControllerBase
     }
 
 
-    [HttpPost("add-deposit")]
+    [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> AddDeposit([FromBody] TransactionRequest transaction)
@@ -32,30 +32,19 @@ public class TransactionController : ControllerBase
     }
 
 
-    [HttpPost("add-transfer")]
+    [HttpPost("transfer")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
-        TransactionDto sender = new()
-        {
-            AccountId = transferModel.AccountIdSender,
-            Amount = transferModel.Amount,
-        };
-
-        TransactionDto recipient = new()
-        {
-            AccountId = transferModel.AccountIdRecipient,
-            Currency = transferModel.CurrencyRecipient,
-        };
-
-
-        var id = _transactionServices.AddTransfer(sender, recipient);
+         
+        var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
+        var id = _transactionServices.AddTransfer(transferModels);
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
 
-    [HttpPost("withdraw-deposit")]
+    [HttpPost("withdraw")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult<int> WithdrawDeposit([FromBody] TransactionRequest transaction)
@@ -65,18 +54,7 @@ public class TransactionController : ControllerBase
     }
 
 
-    [HttpGet("{accountId}/get-balance")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<int> GetBalanceByAccountId([FromRoute] int accountId)
-    {
-         
-        return Ok(_transactionServices.GetBalanceByAccountId(accountId));
-    }
-
-
-    [HttpGet("{id}/get-transaction")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -84,28 +62,5 @@ public class TransactionController : ControllerBase
     {
         var transaction = _transactionServices.GetTransactionById(id);
         return Ok(_mapper.Map<TransactionResponse>(transaction));
-    }
-
-
-    [HttpGet("{accountId}/transactions")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransactionsByAccountId([FromRoute] int accountId)
-    {
-
-        var transactions = _transactionServices.GetTransactionsByAccountId(accountId);
-        return Ok(_mapper.Map<List<TransactionResponse>>(transactions));
-    }
-
-
-    [HttpGet("{accountId}/transactions-with-transfers")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult<List<TransactionResponse>> GetTransactionsWithTransfersByAccountId([FromRoute] int accountId)
-    {
-        var transactionsTransfers = _transactionServices.GetTransfersByAccountId(accountId);
-        return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
     }
 }
