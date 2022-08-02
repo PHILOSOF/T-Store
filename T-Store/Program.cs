@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using T_Store.Mapper;
 using T_Store.Middleware;
 using T_Strore.Business.Services;
+using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
 using T_Strore.Data.Repository.Interfaces;
 
@@ -36,6 +37,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
+builder.Services.AddScoped<ICalculationService, CalculationService>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 
