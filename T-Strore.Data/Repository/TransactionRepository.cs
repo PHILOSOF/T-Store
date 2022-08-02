@@ -11,9 +11,9 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     {
     }
 
-    public int AddTransaction(TransactionDto transaction)
+    public async Task<int> AddTransaction(TransactionDto transaction)
     {
-        var id = Connection.QueryFirstOrDefault<int>(
+        var id = await Connection.QueryFirstOrDefaultAsync<int>(
                   TransactionStoredProcedure.Transaction_Insert,
                   param: new
                   {
@@ -28,20 +28,20 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
 
-    public decimal? GetBalanceByAccountId(int accountId)
+    public async Task<decimal?> GetBalanceByAccountId(int accountId)
     {
-        var balance = Connection.QueryFirstOrDefault<decimal?>(
+        var balance = await Connection.QueryFirstOrDefaultAsync<decimal?>(
                  TransactionStoredProcedure.Transaction_SelectBalanceByAccountId,
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);
 
-        return balance;
+        return  balance;
     }
 
 
-    public TransactionDto? GetTransactionById(int id)
+    public async Task<TransactionDto?> GetTransactionById(int id)
     {
-        var transaction = Connection.QueryFirstOrDefault<TransactionDto>(
+        var transaction = await Connection.QueryFirstOrDefaultAsync<TransactionDto>(
                  TransactionStoredProcedure.Transaction_SelectById,
                  param: new { id },
                  commandType: CommandType.StoredProcedure);
@@ -50,9 +50,9 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
 
-    public List<int> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient)
+    public async Task<List<int>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient)
     {
-        var id = Connection.Query<int>(
+        var id =  await Connection.QueryAsync<int>(
                   TransactionStoredProcedure.Transaction_InsertTransfer,
                   param: new
                   {
@@ -63,19 +63,19 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                       CurrencySender = transactionSender.Currency,
                       CurrencyRecipient = recipient.Currency,
                   },
-                  commandType: CommandType.StoredProcedure).ToList();
+                  commandType: CommandType.StoredProcedure);
 
-        return id;
+        return id.ToList();
     }
 
 
-    public List<TransactionDto> GetAllTransactionsByAccountId(int accountId)
+    public async Task<List<TransactionDto>> GetAllTransactionsByAccountId(int accountId)
     {
-        var transfers = Connection.Query<TransactionDto>(
+        var transfers = await Connection.QueryAsync<TransactionDto>(
                   TransactionStoredProcedure.Transaction_GetAllTransactionsByAccountId,
                   param: new { accountId },
-                  commandType: CommandType.StoredProcedure).ToList();
+                  commandType: CommandType.StoredProcedure);
 
-        return transfers;
+        return transfers.ToList();
     }
 }
