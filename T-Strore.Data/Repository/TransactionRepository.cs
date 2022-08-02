@@ -28,9 +28,9 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     }
 
 
-    public decimal GetBalanceByAccountId(int accountId)
+    public decimal? GetBalanceByAccountId(int accountId)
     {
-        var balance = Connection.QueryFirstOrDefault<decimal>(
+        var balance = Connection.QueryFirstOrDefault<decimal?>(
                  TransactionStoredProcedure.Transaction_SelectBalanceByAccountId,
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);

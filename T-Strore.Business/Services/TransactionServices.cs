@@ -1,4 +1,5 @@
 ﻿using T_Strore.Business.Exceptions;
+using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
 using T_Strore.Data.Repository.Interfaces;
 
@@ -8,12 +9,13 @@ public class TransactionServices : ITransactionServices
 {
 
     private readonly ITransactionRepository _transactionRepository;
+    private readonly ICalculationService _calculationService;
 
 
-
-    public TransactionServices(ITransactionRepository transactionRepository)
+    public TransactionServices(ITransactionRepository transactionRepository, ICalculationService calculationService)
     {
         _transactionRepository = transactionRepository;
+        _calculationService = calculationService;
     }
 
 
@@ -31,49 +33,26 @@ public class TransactionServices : ITransactionServices
         CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
-        transaction.Amount = -transaction.Amount;
+        transaction.Amount = - transaction.Amount;
         return _transactionRepository.AddTransaction(transaction);
     }
 
 
-    public List<int> AddTransfer(List<TransactionDto> transferModels)
+    public List<int> AddTransfer(List<TransactionDto> transfersModels)
     {
-        var currencyRates = GetCurrencyRate();
+       
+        CheckBalance(transfersModels[0]);
+        var transfersConvert = _calculationService.ConvertCurrency(transfersModels);
 
+        transfersConvert[0].TransactionType = TransactionType.Transfer;
+        transfersConvert[1].TransactionType = TransactionType.Transfer;
         
-        CheckBalance(transferModels[0]);
-
-        
-
-        if (transferModels[0].Currency != Currency.USD && transferModels[1].Currency != Currency.USD)
-        {
-            var currencyUsd = currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
-            var tmpTransferUsd = transferModels[0].Amount * currencyUsd;
-
-            if (transferModels[0].Currency != Currency.USD)
-                transferModels[1].Amount = tmpTransferUsd / currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
-
-            else
-                transferModels[1].Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
-        }
-        else
-        {
-            if (transferModels[0].Currency != Currency.USD)
-                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
-
-            else
-                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
-        }
-
-        transferModels[0].TransactionType = TransactionType.Transfer;
-        transferModels[1].TransactionType = TransactionType.Transfer;
-        transferModels[0].Amount = -transferModels[0].Amount;
-
-        return _transactionRepository.AddTransferTransactions(transferModels[0], transferModels[1]);
+        return _transactionRepository.AddTransferTransactions(transfersConvert[0], transfersConvert[1]);
     }
 
+   
 
-    public decimal GetBalanceByAccountId(int accountId)
+    public decimal? GetBalanceByAccountId(int accountId)
     {
         
         return _transactionRepository.GetBalanceByAccountId(accountId);
@@ -100,10 +79,7 @@ public class TransactionServices : ITransactionServices
     }
 
 
-    private Dictionary<(Currency, Currency), decimal> GetCurrencyRate() =>
-        Enum.GetValues(typeof(Currency))
-        .Cast<Currency>()
-               .ToDictionary(t => (Currency.USD, t), t => (decimal)t * 10);    // while we dont have service currency rate
+   
 
 
     private void CheckBalance(TransactionDto transaction)

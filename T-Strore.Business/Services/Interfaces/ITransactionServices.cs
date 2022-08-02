@@ -4,10 +4,10 @@ namespace T_Strore.Business.Services;
 
 public interface ITransactionServices
 {
-    int AddDeposit(TransactionDto transaction);
-    List<int> AddTransfer(List<TransactionDto> transferModels);
-    decimal GetBalanceByAccountId(int accountId);
-    TransactionDto? GetTransactionById(int id);
-    List<TransactionDto> GetTransactionsByAccountId(int accountId);
-    int WithdrawDeposit(TransactionDto transaction);
+    public int AddDeposit(TransactionDto transaction);
+    public List<int> AddTransfer(List<TransactionDto> transferModels);
+    public decimal? GetBalanceByAccountId(int accountId);
+    public TransactionDto? GetTransactionById(int id);
+    public List<TransactionDto> GetTransactionsByAccountId(int accountId);
+    public int WithdrawDeposit(TransactionDto transaction);
 }
