@@ -5,5 +5,12 @@ namespace T_Strore.Data;
 
 public class BaseRepository
 {
-    public IDbConnection ConString => new SqlConnection(@"Server=.\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;");
+    public IDbConnection _connection;
+
+    public BaseRepository(IDbConnection dbConnection)
+    {
+        _connection = dbConnection;
+    }
+    
+    public IDbConnection Connection=> new SqlConnection(_connection.ConnectionString);
 }

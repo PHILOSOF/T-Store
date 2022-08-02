@@ -40,10 +40,10 @@ public class TransactionServices : ITransactionServices
     {
         var currencyRates = GetCurrencyRate();
 
-        //CheckAccountByTypeCurrency(transactionRecipient);
+        
         CheckBalance(transferModels[0]);
 
-        //transactionSender.Currency = (Currency)_transactionRepository.GetCurrencyByAccountId(transactionSender.AccountId);
+        
 
         if (transferModels[0].Currency != Currency.USD && transferModels[1].Currency != Currency.USD)
         {
@@ -95,7 +95,6 @@ public class TransactionServices : ITransactionServices
 
     public List<TransactionDto> GetTransactionsByAccountId(int accountId)
     {
-
 
         return _transactionRepository.GetAllTransactionsByAccountId(accountId);
     }
