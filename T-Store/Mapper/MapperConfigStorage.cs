@@ -2,8 +2,7 @@
 using T_Store.Models;
 using T_Strore.Data;
 
-namespace T_Store.Mapper;
-
+namespace T_Store.MapperConfig;
 public class MapperConfigStorage : Profile
 {
     public MapperConfigStorage()
@@ -15,7 +14,7 @@ public class MapperConfigStorage : Profile
             
 
         CreateMap<TransactionTransferRequest, List<TransactionDto>>()
-            .ConvertUsing<MapperHelper>();
+            .ConvertUsing<TransferRequestMapper>();
     }
 }
 

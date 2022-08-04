@@ -5,7 +5,6 @@ namespace T_Strore.Business.Services;
 
 public class CalculationService : ICalculationService
 {
-
     public async Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels)
     {
         var currencyRates = await GetCurrencyRate();

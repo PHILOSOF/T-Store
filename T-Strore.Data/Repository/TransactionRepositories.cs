@@ -4,9 +4,9 @@ using T_Strore.Data.Repository.Interfaces;
 
 namespace T_Strore.Data;
 
-public class TransactionRepository : BaseRepository, ITransactionRepository
+public class TransactionRepositories : BaseRepositories, ITransactionRepository
 {
-    public TransactionRepository(IDbConnection dbConnection) 
+    public TransactionRepositories(IDbConnection dbConnection) 
         : base(dbConnection)
     {
     }

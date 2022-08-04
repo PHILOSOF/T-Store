@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
-using T_Store.Mapper;
+using T_Store.MapperConfig;
 using T_Store.Middleware;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(options =>
     });         
 });
 
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
 builder.Services.AddScoped<ICalculationService, CalculationService>();
 

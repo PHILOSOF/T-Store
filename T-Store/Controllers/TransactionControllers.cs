@@ -9,13 +9,13 @@ namespace T_Store.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-[Route("transaction")]
-public class TransactionController : ControllerBase
+[Route("transactions")]
+public class TransactionControllers : ControllerBase
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IMapper _mapper;
 
-    public TransactionController (ITransactionServices transactionServices, IMapper mapper)
+    public TransactionControllers (ITransactionServices transactionServices, IMapper mapper)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;
@@ -35,7 +35,7 @@ public class TransactionController : ControllerBase
     [HttpPost("transfer")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<int>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
+    public async Task<ActionResult<List<int>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
          
         var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
