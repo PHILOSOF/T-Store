@@ -10,7 +10,7 @@ using T_Store.Mapper;
 
 public class TransactionControllerTests
 {
-    private TransactionController _sut;
+    private TransactionsController _sut;
     private Mock<ITransactionServices> _transactionServiceMock;
     private IMapper _mapper;
 
@@ -19,7 +19,7 @@ public class TransactionControllerTests
     {
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
         _transactionServiceMock = new Mock<ITransactionServices>();
-        _sut = new TransactionController(_transactionServiceMock.Object, _mapper);
+        _sut = new TransactionsController(_transactionServiceMock.Object, _mapper);
     }
 
     [Test]

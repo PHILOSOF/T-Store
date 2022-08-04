@@ -4,7 +4,7 @@ using T_Strore.Data;
 
 namespace T_Store.Mapper
 {
-    public class MapperHelper :ITypeConverter<TransactionTransferRequest, List<TransactionDto>>
+    public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, List<TransactionDto>>
     {
         public  List<TransactionDto> Convert(TransactionTransferRequest source, List<TransactionDto> destination, ResolutionContext context)
         {
