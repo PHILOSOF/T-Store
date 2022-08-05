@@ -19,16 +19,7 @@ public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<T
                 case 1:
                     {
                         var transactions = source[key];
-                        var transactionModel = new TransactionResponse()
-                        {
-                            Id = transactions[0].Id,
-                            AccountId = transactions[0].AccountId,
-                            Date = transactions[0].Date,
-                            TransactionType = transactions[0].TransactionType,
-                            Amount = transactions[0].Amount,
-                            Currency = transactions[0].Currency,
-
-                        };
+                        var transactionModel = context.Mapper.Map<TransactionResponse>(transactions[0]);
                         destination.Add(transactionModel);
                         break;
                     }

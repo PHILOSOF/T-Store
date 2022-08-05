@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace T_Store.API.Tests;
 public class TransactionControllersTests
 {
-    private TransactionControllers _sut;
+    private TransactionsController _sut;
     private Mock<ITransactionServices> _transactionServiceMock;
     private IMapper _mapper;
 
@@ -21,7 +21,7 @@ public class TransactionControllersTests
     {
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
         _transactionServiceMock = new Mock<ITransactionServices>();
-        _sut = new TransactionControllers(_transactionServiceMock.Object, _mapper);
+        _sut = new TransactionsController(_transactionServiceMock.Object, _mapper);
     }
 
     [Test]

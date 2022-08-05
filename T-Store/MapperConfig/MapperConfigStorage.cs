@@ -12,8 +12,6 @@ public class MapperConfigStorage : Profile
 
         CreateMap<TransactionDto, TransactionResponse>();
       
-
-
         CreateMap<TransactionTransferRequest, List<TransactionDto>>()
             .ConvertUsing<TransferRequestMapper>();
 

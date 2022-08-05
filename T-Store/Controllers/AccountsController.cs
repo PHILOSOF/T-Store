@@ -11,12 +11,12 @@ namespace T_Store.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Route("accounts")]
-public class AccountControllers : ControllerBase
+public class AccountsController : ControllerBase
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IMapper _mapper;
 
-    public AccountControllers(ITransactionServices transactionServices, IMapper mapper)
+    public AccountsController(ITransactionServices transactionServices, IMapper mapper)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;

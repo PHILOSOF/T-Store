@@ -12,7 +12,7 @@ using T_Strore.Data;
 namespace T_Store.API.Tests;
 public class AccountControllersTests
 {
-    private AccountControllers _sut;
+    private AccountsController _sut;
     private Mock<ITransactionServices> _transactionServiceMock;
     private IMapper _mapper;
 
@@ -21,7 +21,7 @@ public class AccountControllersTests
     {
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
         _transactionServiceMock = new Mock<ITransactionServices>();
-        _sut = new AccountControllers(_transactionServiceMock.Object, _mapper);
+        _sut = new AccountsController(_transactionServiceMock.Object, _mapper);
     }
 
     [Test]
