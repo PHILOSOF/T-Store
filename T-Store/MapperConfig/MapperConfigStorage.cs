@@ -18,7 +18,7 @@ public class MapperConfigStorage : Profile
             .ConvertUsing<TransferRequestMapper>();
 
         CreateMap<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>()
-           .ConvertUsing<TransferRespinseMapper>();
+           .ConvertUsing<TransferResponseMapper>();
     }
 }
 

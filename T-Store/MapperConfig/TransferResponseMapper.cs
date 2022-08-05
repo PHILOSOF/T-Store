@@ -5,49 +5,55 @@ using T_Strore.Data;
 
 namespace T_Store.MapperConfig;
 
-public class TransferRespinseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>
+public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>
 {
     public List<TransactionResponse> Convert(Dictionary<DateTime, List<TransactionDto>> source, List<TransactionResponse> destination, ResolutionContext context)
     {
         destination = new();
-        foreach (var trans in source)
+        var keys = source.Keys.ToList();
+        
+        foreach (var key in keys)
         {
-            if (trans.Value.Count == 1)
+            switch (source[key].Count)
             {
-                var key = trans.Key;
-                var tmp = source[trans.Key];
-                var transresp = new TransactionResponse()
-                {
-                    Id = tmp[0].Id,
-                    AccountId = tmp[0].AccountId,
-                    Date = tmp[0].Date,
-                    TransactionType = trans.Value[0].TransactionType,
-                    Amount = trans.Value[0].Amount,
-                    Currency = trans.Value[0].Currency,
+                case 1:
+                    {
+                        var transactions = source[key];
+                        var transactionModel = new TransactionResponse()
+                        {
+                            Id = transactions[0].Id,
+                            AccountId = transactions[0].AccountId,
+                            Date = transactions[0].Date,
+                            TransactionType = transactions[0].TransactionType,
+                            Amount = transactions[0].Amount,
+                            Currency = transactions[0].Currency,
 
-                };
-                destination.Add(transresp);
-            }
-            else
-            {
-                var key = trans.Key;
-                var tmp = source[trans.Key];
-                var transresp1 = new TransferResponse()
-                {
+                        };
+                        destination.Add(transactionModel);
+                        break;
+                    }
 
-                    Id = tmp[0].Id,
-                    AccountId = tmp[0].AccountId,
-                    Date=tmp[0].Date,
-                    TransactionType=trans.Value[0].TransactionType,
-                    Amount=trans.Value[0].Amount,
-                    Currency=trans.Value[0].Currency,
-                    IdRecipient = tmp[1].Id,
-                    AccountIdRecipient = tmp[1].AccountId,
-                    AmountRecipient = tmp[1].Amount,
-                    CurrencyRecipient = tmp[1].Currency
+                case 2:
+                    {
+                        var transfers = source[key];
+                        var transferModel = new TransferResponse()
+                        {
 
-                };
-                destination.Add(transresp1);
+                            Id = transfers[0].Id,
+                            AccountId = transfers[0].AccountId,
+                            Date = transfers[0].Date,
+                            TransactionType = transfers[0].TransactionType,
+                            Amount = transfers[0].Amount,
+                            Currency = transfers[0].Currency,
+                            IdRecipient = transfers[1].Id,
+                            AccountIdRecipient = transfers[1].AccountId,
+                            AmountRecipient = transfers[1].Amount,
+                            CurrencyRecipient = transfers[1].Currency
+
+                        };
+                        destination.Add(transferModel);
+                        break;
+                    }
             }
 
 

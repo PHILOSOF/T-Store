@@ -41,12 +41,9 @@ public class AccountControllers : ControllerBase
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] int id)
     {
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
-        var ad = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
+        var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
 
-
-
-        return Ok(ad);
-
+        return Ok(transactionsModel);
 
     }
 }

@@ -75,10 +75,10 @@ public class TransactionServices : ITransactionServices
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(int accountId)
     {
-        var trans = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
-        var transDict = trans.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());
+        var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
+        var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());
 
-        return transDict;
+        return transactionsDictionary;
     }
 
     private async Task CheckBalance(TransactionDto transaction)
