@@ -11,10 +11,14 @@ public class MapperConfigStorage : Profile
         CreateMap<TransactionRequest, TransactionDto>();
 
         CreateMap<TransactionDto, TransactionResponse>();
-            
+      
+
 
         CreateMap<TransactionTransferRequest, List<TransactionDto>>()
             .ConvertUsing<TransferRequestMapper>();
+
+        CreateMap<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>()
+           .ConvertUsing<TransferRespinseMapper>();
     }
 }
 

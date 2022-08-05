@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(@"Server=.\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;"));
 
 builder.Services.AddControllers()
+    .AddNewtonsoftJson()
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory = context =>
@@ -25,6 +26,7 @@ builder.Services.AddControllers()
         };
         
     });
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

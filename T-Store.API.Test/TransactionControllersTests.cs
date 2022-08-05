@@ -7,6 +7,7 @@ using T_Strore.Business.Services;
 using T_Store.Models;
 using T_Strore.Data;
 using T_Store.MapperConfig;
+using NUnit.Framework;
 
 namespace T_Store.API.Tests;
 public class TransactionControllersTests
@@ -40,13 +41,13 @@ public class TransactionControllersTests
         var actual = await _sut.AddDeposit(transaction);
 
         // then
-        var actualResult =  actual.Result as CreatedResult;
+        var actualResult = actual.Result as CreatedResult;
 
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
         Assert.AreEqual(actualResult.Value, 1);
         _transactionServiceMock.Verify(o => o.AddDeposit(
             It.Is<TransactionDto>
-            (t=>t.AccountId == transaction.AccountId &&
+            (t => t.AccountId == transaction.AccountId &&
             t.Currency == transaction.Currency &&
             t.Amount == transaction.Amount
             )), Times.Once);
@@ -145,6 +146,6 @@ public class TransactionControllersTests
         Assert.AreEqual(actualTransaction.TransactionType, expectedTransaction.TransactionType);
 
         _transactionServiceMock.Verify(o => o.GetTransactionById(expectedTransaction.Id), Times.Once);
-   
+
     }
 }

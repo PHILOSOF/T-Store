@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using T_Store.Models;
+using T_Store.Models.Responses;
 using T_Strore.Business.Services;
 
 
@@ -36,9 +38,15 @@ public class AccountControllers : ControllerBase
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountId([FromRoute] int id)
+    public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] int id)
     {
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
-        return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
+        var ad = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
+
+
+
+        return Ok(ad);
+
+
     }
 }
