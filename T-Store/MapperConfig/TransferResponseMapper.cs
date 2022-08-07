@@ -28,7 +28,7 @@ public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<T
                     {
                         var transfers = source[key];
 
-                        if (transfers[0].Amount<0 && transfers[1].Amount>0)
+                        if (transfers[0].Amount < 0 && transfers[1].Amount > 0)
                         {
                             var transferModel = new TransferResponse()
                             {
@@ -38,10 +38,10 @@ public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<T
                                 TransactionType = transfers[0].TransactionType,
                                 Amount = transfers[0].Amount,
                                 Currency = transfers[0].Currency,
-                                IdRecipient = transfers[1].Id,
-                                AccountIdRecipient = transfers[1].AccountId,
-                                AmountRecipient = transfers[1].Amount,
-                                CurrencyRecipient = transfers[1].Currency
+                                RecipientId = transfers[1].Id,
+                                RecipientAccountId = transfers[1].AccountId,
+                                RecipientAmount = transfers[1].Amount,
+                                RecipientCurrency = transfers[1].Currency
                             };
                             destination.Add(transferModel);
                         }

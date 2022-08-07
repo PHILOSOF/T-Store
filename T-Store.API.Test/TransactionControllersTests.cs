@@ -58,16 +58,19 @@ public class TransactionControllersTests
     {
         // given
         var expectedIds = new List<int> { 1, 2 };
-        _transactionServiceMock.Setup(o => o.AddTransfer(It.IsAny<List<TransactionDto>>())).ReturnsAsync(expectedIds);
 
         var transfer = new TransactionTransferRequest()
         {
             AccountId = 1,
             Currency = Currency.USD,
             Amount = 100,
-            AccountIdRecipient = 2,
-            CurrencyRecipient = Currency.RUB
+            RecipientAccountId = 2,
+            RecipientCurrency = Currency.RUB
         };
+        _transactionServiceMock.Setup(o => o.AddTransfer(It.Is<List<TransactionDto>>(t =>
+        t[0].AccountId== transfer.AccountId &&
+        t[1].AccountId == transfer.RecipientAccountId)))
+        .ReturnsAsync(expectedIds);
 
         // when
         var actual = await _sut.AddTransfer(transfer);
@@ -82,8 +85,8 @@ public class TransactionControllersTests
             (t => t[0].AccountId == transfer.AccountId &&
             t[0].Currency == transfer.Currency &&
             t[0].Amount == transfer.Amount &&
-            t[1].AccountId == transfer.AccountIdRecipient &&
-            t[1].Currency == transfer.CurrencyRecipient
+            t[1].AccountId == transfer.RecipientAccountId &&
+            t[1].Currency == transfer.RecipientCurrency
             )), Times.Once);
     }
 
@@ -91,13 +94,13 @@ public class TransactionControllersTests
     public async Task WithdrawDeposit_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
-        _transactionServiceMock.Setup(t => t.WithdrawDeposit(It.IsAny<TransactionDto>())).ReturnsAsync(1);
         var transaction = new TransactionRequest()
         {
             AccountId = 1,
             Currency = Currency.USD,
             Amount = 100
         };
+        _transactionServiceMock.Setup(t => t.WithdrawDeposit(It.Is<TransactionDto>(t=>t.AccountId== transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.WithdrawDeposit(transaction);
