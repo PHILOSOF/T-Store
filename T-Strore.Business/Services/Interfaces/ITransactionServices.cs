@@ -1,14 +1,13 @@
 ﻿using T_Strore.Data;
 
-namespace T_Strore.Business.Services.Interfaces;
+namespace T_Strore.Business.Services;
 
 public interface ITransactionServices
 {
-    int AddDeposit(TransactionDto transaction);
-    List<int> AddTransfer(TransactionDto transactionSender, TransactionDto transactionRecipient);
-    decimal GetBalanceByAccountId(int accountId);
-    TransactionDto? GetTransactionById(int id);
-    List<TransactionDto> GetTransactionsByAccountId(int accountId);
-    List<TransactionDto> GetTransfersByAccountId(int accountId);
-    int WithdrawDeposit(TransactionDto transaction);
+    public Task<int> AddDeposit(TransactionDto transaction);
+    public Task<List<int>> AddTransfer(List<TransactionDto> transferModels);
+    public Task<decimal?> GetBalanceByAccountId(int accountId);
+    public Task<TransactionDto?> GetTransactionById(int id);
+    public Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(int accountId);
+    public Task<int> WithdrawDeposit(TransactionDto transaction);
 }

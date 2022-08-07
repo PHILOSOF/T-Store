@@ -49,7 +49,6 @@ begin
 
 	declare @RecipientId int= scope_identity()
 
-	select [Id] 
-	from [dbo].[Transaction]
-	where Id=@SenderId or Id=@RecipientId 
+	select @SenderId union all select  @RecipientId
+
 end

@@ -1,21 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using T_Store.CustomAttributesValidations;
-using T_Store.Infrastructure;
+﻿using T_Store.CustomValidations;
 using T_Strore.Data;
 
-namespace T_Store.Models.Requests;
+namespace T_Store.Models;
 
-public class TransactionTransferRequest
+public class TransactionTransferRequest : TransactionRequest
 {
-    [CheckerNumberMoreZero]
-    public int AccountIdSender { get; set; }
 
     [CheckerNumberMoreZero]
-    public int Amount { get; set; }
+    public int RecipientAccountId { get; set; }
 
-    [CheckerNumberMoreZero]
-    public int AccountIdRecipient { get; set; }
-
-    [Range(1, 7, ErrorMessage = ApiErrorMessage.CurrencyRangeError)]
-    public Currency CurrencyRecipient { get; set; }
+    public Currency RecipientCurrency{ get; set; }
 }

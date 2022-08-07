@@ -1,16 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using T_Store;
-using T_Store.Middleware;
+using System.Data;
+using System.Data.SqlClient;
+using T_Store.MapperConfig;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
 using T_Strore.Data.Repository.Interfaces;
+using T_Store.Extensions;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(@"Server=.\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;"));
+
 builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
+    .AddNewtonsoftJson()
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory = context =>
@@ -19,8 +27,9 @@ builder.Services.AddControllers()
             result.StatusCode = StatusCodes.Status422UnprocessableEntity;
             return result;
         };
-
+        
     });
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -31,10 +40,13 @@ builder.Services.AddSwaggerGen(options =>
     });         
 });
 
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
+builder.Services.AddScoped<ICalculationService, CalculationService>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
+
+
 
 
 var app = builder.Build();
