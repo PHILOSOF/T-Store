@@ -70,7 +70,7 @@ public class TransactionServices : ITransactionServices
             throw new EntityNotFoundException($"Transaction {id} not found");
         }
 
-        return await _transactionRepository.GetTransactionById(id);
+        return await transaction;
     }
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(int accountId)
@@ -84,7 +84,7 @@ public class TransactionServices : ITransactionServices
     private async Task CheckBalance(TransactionDto transaction)
     {
         var balance = await _transactionRepository.GetBalanceByAccountId(transaction.AccountId);
-        if (transaction.Amount > balance)
+        if (transaction.Amount > balance || balance is null || balance == 0)
         {
             throw new BadRequestException($"You have not a enough money on balance");
         }

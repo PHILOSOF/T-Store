@@ -49,7 +49,7 @@ public class AccountControllersTests
 
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status200OK);
         Assert.AreEqual(expected, actualResult.Value);
-
+        Assert.AreEqual(actualResult.Value.GetType(), expected.GetType());
         _transactionServiceMock.Verify(o => o.GetBalanceByAccountId(expectedTransaction.Id), Times.Once);
     }
 
