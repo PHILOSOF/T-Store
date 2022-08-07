@@ -20,8 +20,8 @@ public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, L
             },
             new TransactionDto()
             {
-                AccountId = source.AccountIdRecipient,
-                Currency = source.CurrencyRecipient
+                AccountId = source.RecipientAccountId,
+                Currency = source.RecipientCurrency
 
             },
          };

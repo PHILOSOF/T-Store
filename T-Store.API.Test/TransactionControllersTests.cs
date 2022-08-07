@@ -28,14 +28,14 @@ public class TransactionControllersTests
     public async Task AddDeposit_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
-        ;
-        _transactionServiceMock.Setup(t => t.AddDeposit(It.IsAny<TransactionDto>())).ReturnsAsync(1);
+
         var transaction = new TransactionRequest()
         {
             AccountId = 1,
             Currency = Currency.USD,
             Amount = 100
         };
+        _transactionServiceMock.Setup(t => t.AddDeposit(It.Is<TransactionDto>(t=>t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.AddDeposit(transaction);

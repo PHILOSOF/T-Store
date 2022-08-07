@@ -27,23 +27,26 @@ public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<T
                 case 2:
                     {
                         var transfers = source[key];
-                        var transferModel = new TransferResponse()
+
+                        if (transfers[0].Amount<0 && transfers[1].Amount>0)
                         {
-
-                            Id = transfers[0].Id,
-                            AccountId = transfers[0].AccountId,
-                            Date = transfers[0].Date,
-                            TransactionType = transfers[0].TransactionType,
-                            Amount = transfers[0].Amount,
-                            Currency = transfers[0].Currency,
-                            IdRecipient = transfers[1].Id,
-                            AccountIdRecipient = transfers[1].AccountId,
-                            AmountRecipient = transfers[1].Amount,
-                            CurrencyRecipient = transfers[1].Currency
-
-                        };
-                        destination.Add(transferModel);
+                            var transferModel = new TransferResponse()
+                            {
+                                Id = transfers[0].Id,
+                                AccountId = transfers[0].AccountId,
+                                Date = transfers[0].Date,
+                                TransactionType = transfers[0].TransactionType,
+                                Amount = transfers[0].Amount,
+                                Currency = transfers[0].Currency,
+                                IdRecipient = transfers[1].Id,
+                                AccountIdRecipient = transfers[1].AccountId,
+                                AmountRecipient = transfers[1].Amount,
+                                CurrencyRecipient = transfers[1].Currency
+                            };
+                            destination.Add(transferModel);
+                        }
                         break;
+                        
                     }
             }
 
