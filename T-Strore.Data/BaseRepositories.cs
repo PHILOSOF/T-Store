@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 
 namespace T_Strore.Data;
 
-public class BaseRepository
+public class BaseRepositories
 {
     public IDbConnection _connection;
 
-    public BaseRepository(IDbConnection dbConnection)
+    public BaseRepositories(IDbConnection dbConnection)
     {
         _connection = dbConnection;
     }

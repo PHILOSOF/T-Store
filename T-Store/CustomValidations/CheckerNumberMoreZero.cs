@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using T_Store.Infrastructure;
 
-namespace T_Store.CustomAttributesValidations
+namespace T_Store.CustomValidations
 {
     public class CheckerNumberMoreZero : ValidationAttribute
     {

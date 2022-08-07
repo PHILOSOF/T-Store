@@ -8,13 +8,13 @@ namespace T_Store.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-[Route("account")]
-public class AccountController : ControllerBase
+[Route("accounts")]
+public class AccountsController : ControllerBase
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IMapper _mapper;
 
-    public AccountController(ITransactionServices transactionServices, IMapper mapper)
+    public AccountsController(ITransactionServices transactionServices, IMapper mapper)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;
@@ -36,9 +36,12 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountId([FromRoute] int id)
+    public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] int id)
     {
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
-        return Ok(_mapper.Map<List<TransactionResponse>>(transactionsTransfers));
+        var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
+
+        return Ok(transactionsModel);
+
     }
 }
