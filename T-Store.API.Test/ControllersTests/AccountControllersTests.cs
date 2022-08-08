@@ -10,7 +10,7 @@ using T_Store.Models.Responses;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
-namespace T_Store.API.Tests;
+namespace T_Store.API.Test.ControllersTests;
 public class AccountControllersTests
 {
     private AccountsController _sut;
@@ -101,8 +101,8 @@ public class AccountControllersTests
                 }
             },
         };
-        var transferExpected = expectedTransactions[(new DateTime(2022, 05, 05))];
-        var transactionExpected = expectedTransactions[(new DateTime(2021, 05, 05))];
+        var transferExpected = expectedTransactions[new DateTime(2022, 05, 05)];
+        var transactionExpected = expectedTransactions[new DateTime(2021, 05, 05)];
         _transactionServiceMock.Setup(t => t.GetTransactionsByAccountId(expectedAccountId)).ReturnsAsync(expectedTransactions);
 
         //when

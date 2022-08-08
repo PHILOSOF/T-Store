@@ -9,7 +9,7 @@ using T_Strore.Data;
 using T_Store.MapperConfig;
 using NUnit.Framework;
 
-namespace T_Store.API.Tests;
+namespace T_Store.API.Test.ControllersTests;
 public class TransactionControllersTests
 {
     private TransactionsController _sut;
@@ -35,7 +35,7 @@ public class TransactionControllersTests
             Currency = Currency.USD,
             Amount = 100
         };
-        _transactionServiceMock.Setup(t => t.AddDeposit(It.Is<TransactionDto>(t=>t.AccountId == transaction.AccountId))).ReturnsAsync(1);
+        _transactionServiceMock.Setup(t => t.AddDeposit(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.AddDeposit(transaction);
@@ -68,7 +68,7 @@ public class TransactionControllersTests
             RecipientCurrency = Currency.RUB
         };
         _transactionServiceMock.Setup(o => o.AddTransfer(It.Is<List<TransactionDto>>(t =>
-        t[0].AccountId== transfer.AccountId &&
+        t[0].AccountId == transfer.AccountId &&
         t[1].AccountId == transfer.RecipientAccountId)))
         .ReturnsAsync(expectedIds);
 
@@ -100,7 +100,7 @@ public class TransactionControllersTests
             Currency = Currency.USD,
             Amount = 100
         };
-        _transactionServiceMock.Setup(t => t.WithdrawDeposit(It.Is<TransactionDto>(t=>t.AccountId== transaction.AccountId))).ReturnsAsync(1);
+        _transactionServiceMock.Setup(t => t.WithdrawDeposit(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.WithdrawDeposit(transaction);
