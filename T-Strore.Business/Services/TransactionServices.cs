@@ -8,10 +8,10 @@ public class TransactionServices : ITransactionServices
 {
 
     private readonly ITransactionRepository _transactionRepository;
-    private readonly ICalculationService _calculationService;
+    private readonly ICalculationServices _calculationService;
 
 
-    public TransactionServices(ITransactionRepository transactionRepository, ICalculationService calculationService)
+    public TransactionServices(ITransactionRepository transactionRepository, ICalculationServices calculationService)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;

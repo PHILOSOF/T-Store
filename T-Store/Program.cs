@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
-builder.Services.AddScoped<ICalculationService, CalculationService>();
+builder.Services.AddScoped<ICalculationServices, CalculationServices>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 

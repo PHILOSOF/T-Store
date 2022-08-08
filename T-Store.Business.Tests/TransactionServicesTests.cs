@@ -9,14 +9,14 @@ public class TransactionServicesTests
 {
     private TransactionServices _sut;
     private Mock<ITransactionRepository> _transactionRepositoryMock;
-    private Mock<ICalculationService> _calculationService;
+    private Mock<ICalculationServices> _calculationService;
 
 
     [SetUp]
     public void Setup()
     {
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
-        _calculationService = new Mock<ICalculationService>();
+        _calculationService = new Mock<ICalculationServices>();
         _sut = new TransactionServices(_transactionRepositoryMock.Object, _calculationService.Object);
     }
 

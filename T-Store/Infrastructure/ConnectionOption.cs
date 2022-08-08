@@ -2,5 +2,5 @@
 
 public class ConnectionOption
 {
-    public string MAIN_DB_CONNECTION_STRING { get; set; }
+    public string TSRORE_DB_CONNECTION_STRING { get; set; }
 }
