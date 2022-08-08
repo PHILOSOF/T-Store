@@ -1,9 +1,4 @@
-﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
@@ -12,15 +7,14 @@ namespace T_Store.Business.Tests;
 public class CalculationServicesTests
 {
     private CalculationServices _sut;
-
-    private Mock<ICalculationServices> _calculationService;
+    private readonly ICalculationServices _calculationService;
 
 
     [SetUp]
     public void Setup()
     {
-        _calculationService = new Mock<ICalculationServices>();
-        _sut = new CalculationServices(_calculationService.Object);
+
+        _sut= new CalculationServices(_calculationService);
 
     }
 
@@ -144,6 +138,7 @@ public class CalculationServicesTests
         Assert.AreEqual(actual[0].Amount, senderAmountExpected);
         Assert.AreEqual(actual[1].Amount, recipientAmountExpected);
         Assert.AreEqual(actual[0].Date, actual[1].Date);
+
     }
 
 
