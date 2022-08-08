@@ -1,7 +1,6 @@
 ﻿using T_Strore.Business.Exceptions;
-using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data;
-using T_Strore.Data.Repository.Interfaces;
+using T_Strore.Data.Repository;
 
 namespace T_Strore.Business.Services;
 

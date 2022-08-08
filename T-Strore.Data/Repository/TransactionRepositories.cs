@@ -1,8 +1,7 @@
 ﻿using Dapper;
 using System.Data;
-using T_Strore.Data.Repository.Interfaces;
 
-namespace T_Strore.Data;
+namespace T_Strore.Data.Repository;
 
 public class TransactionRepositories : BaseRepositories, ITransactionRepository
 {
