@@ -18,7 +18,7 @@ IWebHostEnvironment environment = builder.Environment;
 var conString = new ConnectionOption();
 builder.Configuration.Bind(conString);
 
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conString.MAIN_DB_CONNECTION_STRING));
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conString.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
