@@ -7,25 +7,24 @@ public class CalculationService : ICalculationService
     public async Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels)
     {
         var currencyRates = await GetCurrencyRate();
+        var senderCurrency = transferModels[0].Currency;
+        var recipientCurrency = transferModels[1].Currency;
+        
 
-        if (transferModels[0].Currency != Currency.USD && transferModels[1].Currency != Currency.USD)
+        if (senderCurrency != Currency.USD && recipientCurrency != Currency.USD)
         {
-            var currencyUsd =  currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
-            var tmpTransferUsd = transferModels[0].Amount * currencyUsd;
+                transferModels[1].Amount = transferModels[0].Amount *
+                currencyRates[(Currency.USD, senderCurrency)] /
+                currencyRates[(Currency.USD, recipientCurrency)];
 
-            if (transferModels[0].Currency != Currency.USD)
-                transferModels[1].Amount = tmpTransferUsd / currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
-
-            else
-                transferModels[1].Amount = tmpTransferUsd * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
         }
         else
         {
             if (transferModels[0].Currency != Currency.USD)
-                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, (Currency)transferModels[0].Currency)];
+                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, senderCurrency)];
 
             else
-                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, (Currency)transferModels[1].Currency)];
+                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, recipientCurrency)];
         }
 
         transferModels[0].Amount = -transferModels[0].Amount;
