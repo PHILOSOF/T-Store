@@ -1,4 +1,4 @@
-﻿namespace T_Strore.Data.Repository.Interfaces;
+﻿namespace T_Strore.Data.Repository;
 
 public interface ITransactionRepository
 {

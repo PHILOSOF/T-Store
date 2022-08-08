@@ -1,8 +1,7 @@
 using Moq;
 using T_Strore.Business.Services;
 using T_Strore.Data;
-using T_Strore.Data.Repository.Interfaces;
-using T_Strore.Business.Services.Interfaces;
+using T_Strore.Data.Repository;
 
 namespace T_Store.Business.Tests;
 

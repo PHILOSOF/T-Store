@@ -1,5 +1,4 @@
-﻿using T_Strore.Business.Services.Interfaces;
-using T_Strore.Data;
+﻿using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
 
@@ -36,14 +35,10 @@ public class CalculationService : ICalculationService
 
     private async Task<Dictionary<(Currency, Currency), decimal>> GetCurrencyRate() // while we dont have service currency rate
     {
-
        var rates = Enum.GetValues(typeof(Currency))
             .Cast<Currency>()
             .ToDictionary(t => (Currency.USD, t), t => (decimal)t * 10);
 
         return await Task.FromResult(rates);
-
-
-
     }
 }
