@@ -6,9 +6,9 @@ public class CalculationServices : ICalculationServices
 {
     private readonly ICalculationServices _calculationService;
 
-    public CalculationServices(ICalculationServices calculationService)
+    public CalculationServices()
     {
-        _calculationService = calculationService;
+        
     }
 
     public async Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels)

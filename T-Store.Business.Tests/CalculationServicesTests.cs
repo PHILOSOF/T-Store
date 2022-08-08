@@ -14,7 +14,7 @@ public class CalculationServicesTests
     public void Setup()
     {
 
-        _sut= new CalculationServices(_calculationService);
+        _sut= new CalculationServices();
 
     }
 
