@@ -10,11 +10,17 @@ using T_Strore.Data.Repository.Interfaces;
 using T_Store.Extensions;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using T_Store.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigurationManager configuration = builder.Configuration;
+IWebHostEnvironment environment = builder.Environment;
 
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(@"Server=.\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;"));
+var conString = new ConnectionOption();
+builder.Configuration.Bind(conString);
+
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conString.MAIN_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
