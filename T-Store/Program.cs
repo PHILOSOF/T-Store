@@ -4,17 +4,21 @@ using System.Data;
 using System.Data.SqlClient;
 using T_Store.MapperConfig;
 using T_Strore.Business.Services;
-using T_Strore.Business.Services.Interfaces;
-using T_Strore.Data;
-using T_Strore.Data.Repository.Interfaces;
+using T_Strore.Data.Repository;
 using T_Store.Extensions;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using T_Store.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigurationManager configuration = builder.Configuration;
+IWebHostEnvironment environment = builder.Environment;
 
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(@"Server=.\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;"));
+var conString = new ConnectionOption();
+builder.Configuration.Bind(conString);
+
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conString.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
@@ -42,7 +46,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
-builder.Services.AddScoped<ICalculationService, CalculationService>();
+builder.Services.AddScoped<ICalculationServices, CalculationServices>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 
