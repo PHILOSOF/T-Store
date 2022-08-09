@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Data", "T-Strore.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Strore.Business", "T-Strore.Business\T-Strore.Business.csproj", "{479FF136-5E4B-493F-9535-4308CBA7F79C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Store.API.Test", "T-Store.API.Test\T-Store.API.Test.csproj", "{A13CFC11-3B93-429B-85B7-EC26C425C50B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store.API.Test", "T-Store.API.Test\T-Store.API.Test.csproj", "{A13CFC11-3B93-429B-85B7-EC26C425C50B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T-Store.Business.Tests", "T-Store.Business.Tests\T-Store.Business.Tests.csproj", "{8240D9D2-E152-472A-849F-C5D90789F26C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store.Business.Tests", "T-Store.Business.Tests\T-Store.Business.Tests.csproj", "{8240D9D2-E152-472A-849F-C5D90789F26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsCreater", "TransactionsCreater\TransactionsCreater.csproj", "{8FA8378B-30DA-4234-BED1-A7012B852E04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{8240D9D2-E152-472A-849F-C5D90789F26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8240D9D2-E152-472A-849F-C5D90789F26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8240D9D2-E152-472A-849F-C5D90789F26C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA8378B-30DA-4234-BED1-A7012B852E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA8378B-30DA-4234-BED1-A7012B852E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA8378B-30DA-4234-BED1-A7012B852E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA8378B-30DA-4234-BED1-A7012B852E04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
