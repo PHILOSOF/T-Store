@@ -2,17 +2,17 @@
 
 public class Account
 {
-    public string Id { get; set; }
-    public string Currency { get; set; }
-    public string LeadId { get; set; }
+    public int Id { get; set; }
+    public int Currency { get; set; }
+    public int LeadId { get; set; }
 
 
     public void CreatePiece(string line)
     {
         string[] parts = line.Split(';');
-        Id = parts[0];
-        Currency = parts[1];
-        LeadId = parts[3];
+        Id =Int32.Parse(parts[0]);
+        Currency = Int32.Parse(parts[1]);
+        LeadId = Int32.Parse(parts[3]);
 
     }
 }

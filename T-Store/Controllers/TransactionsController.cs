@@ -24,7 +24,7 @@ public class TransactionsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<int>> AddDeposit([FromBody] TransactionRequest transaction)
     {
         var id = await _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
@@ -34,7 +34,7 @@ public class TransactionsController : ControllerBase
 
     [HttpPost("transfer")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<List<int>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
          
@@ -46,7 +46,7 @@ public class TransactionsController : ControllerBase
 
     [HttpPost("withdraw")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<int>> WithdrawDeposit([FromBody] TransactionRequest transaction)
     {
         var id = await _transactionServices.WithdrawDeposit(_mapper.Map<TransactionDto>(transaction));
@@ -57,7 +57,6 @@ public class TransactionsController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] int id)
     {
         var transaction = await _transactionServices.GetTransactionById(id);

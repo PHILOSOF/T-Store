@@ -23,7 +23,6 @@ public class AccountsController : ControllerBase
 
     [HttpGet("{id}/balance")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] int id)
     {
@@ -34,7 +33,6 @@ public class AccountsController : ControllerBase
 
     [HttpGet("{id}/transactions")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] int id)
     {

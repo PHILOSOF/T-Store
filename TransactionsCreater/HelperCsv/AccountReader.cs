@@ -4,12 +4,13 @@ namespace TransactionsCreater.HelperCsv;
 
 public class AccountReader
 {
-    public Dictionary<string, List<Account>> ReadFile(string filename)
+    public Dictionary<int, List<Account>> GetDictionaryOut(string filename)
     {
+        string line;
         var accounts = new List<Account>();
+
         using (StreamReader sr = new StreamReader(filename))
         {
-            string line;
             while ((line = sr.ReadLine()) != null)
             {
                 var account = new Account();

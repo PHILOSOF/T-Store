@@ -20,7 +20,7 @@ public class Tests
 
         var transactionList = new List<TransactionDtoToCsv>();
         
-        var accountsDictionary = _accountReader.ReadFile(@"E:\sqlTestFiles\Testcvs.csv");
+        var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Testcvs.csv");
         var keys = accountsDictionary.Keys.ToList();
         var random = new Random();
 
@@ -28,12 +28,12 @@ public class Tests
         {
             var transactionDto = new TransactionDtoToCsv();
             var accountsClinet = accountsDictionary[key];
-            var rubAccount = accountsClinet.Find(a => a.Currency == "2");
+            var rubAccount = accountsClinet.Find(a => a.Currency == (int)Currency.RUB); // rub/ usd ???
 
-            if(rubAccount is not null)
+            if (rubAccount is not null)
             {
-                transactionDto.AccountId = Int32.Parse(rubAccount.Id);
-                transactionDto.Currency = (Currency)Int32.Parse(rubAccount.Currency);
+                transactionDto.AccountId = rubAccount.Id;
+                transactionDto.Currency = (Currency)rubAccount.Currency;
                 transactionDto.TransactionType = TransactionType.Deposit;
                 transactionDto.Amount = random.Next(1000, 1000000);
                 transactionDto.Date = CreateDate();
@@ -43,9 +43,6 @@ public class Tests
         }
         _transactionsToCsv.ConvertToCsv(transactionList, @"E:\sqlTestFiles\TestToFinal.csv");
     }
-
-
-
 
     public DateTime CreateDate()
     {
