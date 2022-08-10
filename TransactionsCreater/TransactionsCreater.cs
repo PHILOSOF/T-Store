@@ -28,7 +28,7 @@ public class Tests
         {
             var transactionDto = new TransactionDtoToCsv();
             var accountsClinet = accountsDictionary[key];
-            var rubAccount = accountsClinet.Find(a => a.Currency == (int)Currency.RUB); // rub/ usd ???
+            var rubAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB? true : a.Currency == (int)Currency.EUR); // rub/ usd ???
 
             if (rubAccount is not null)
             {
@@ -37,6 +37,7 @@ public class Tests
                 transactionDto.TransactionType = TransactionType.Deposit;
                 transactionDto.Amount = random.Next(1000, 1000000);
                 transactionDto.Date = CreateDate();
+                
     
                 transactionList.Add(transactionDto);
             }

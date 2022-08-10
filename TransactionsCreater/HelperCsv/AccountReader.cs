@@ -13,8 +13,7 @@ public class AccountReader
         {
             while ((line = sr.ReadLine()) != null)
             {
-                var account = new Account();
-                account.CreatePiece(line);
+                var account = new Account(line);
                 accounts.Add(account);
             }
         }

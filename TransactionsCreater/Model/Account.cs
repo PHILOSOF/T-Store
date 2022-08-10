@@ -7,12 +7,12 @@ public class Account
     public int LeadId { get; set; }
 
 
-    public void CreatePiece(string line)
+    public Account(string line)
     {
         string[] parts = line.Split(';');
-        Id =Int32.Parse(parts[0]);
+        Id = Int32.Parse(parts[0]);
         Currency = Int32.Parse(parts[1]);
         LeadId = Int32.Parse(parts[3]);
-
     }
+
 }
