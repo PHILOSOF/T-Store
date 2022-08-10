@@ -7,15 +7,14 @@ namespace TransactionsCreater.HelperCsv;
 
 public class TransactionsToCsv
 {
-    public void GoToCsv(List<TransactionDtoToCsv> transactions)
+    public void ConvertToCsv(List<TransactionDtoToCsv> transactions,string filename)
     {
-        using (StreamWriter file = new StreamWriter(@"E:\sqlTestFiles\TestTo.txt"))
+        using (var file = new StreamWriter(filename))
         {
             foreach (var item in transactions)
             {
-                file.WriteLine(item.ToCSVRow());
+                file.WriteLine(item.ToCsvRow());
             }
         }
     }
-
 }

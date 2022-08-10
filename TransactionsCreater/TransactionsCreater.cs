@@ -12,20 +12,15 @@ public class Tests
     private CalculationServices _calculationServices;
     private TransactionsToCsv _transactionsToCsv;
 
-    [SetUp]
-    public void Setup()
-    {
-        _accountReader = new AccountReader();
-        _transactionsToCsv = new TransactionsToCsv();
-    }
-
-
     [Test]
     public void CreateFirsDepositRub()
     {
+        _accountReader = new AccountReader();
+        _transactionsToCsv = new TransactionsToCsv();
+
         var transactionList = new List<TransactionDtoToCsv>();
         
-        var accountsDictionary = _accountReader.GetAccounts("E:\\sqlTestFiles\\Testcvs.csv");
+        var accountsDictionary = _accountReader.ReadFile(@"E:\sqlTestFiles\Testcvs.csv");
         var keys = accountsDictionary.Keys.ToList();
         var random = new Random();
 
@@ -33,7 +28,7 @@ public class Tests
         {
             var transactionDto = new TransactionDtoToCsv();
             var accountsClinet = accountsDictionary[key];
-            var rubAccount = accountsClinet.Find(a => a.Currency =="2");
+            var rubAccount = accountsClinet.Find(a => a.Currency == "2");
 
             if(rubAccount is not null)
             {
@@ -42,26 +37,25 @@ public class Tests
                 transactionDto.TransactionType = TransactionType.Deposit;
                 transactionDto.Amount = random.Next(1000, 1000000);
                 transactionDto.Date = CreateDate();
-
-                
-
+    
                 transactionList.Add(transactionDto);
             }
         }
-
-
-        _transactionsToCsv.GoToCsv(transactionList);
-
-        Assert.NotNull(TransactionType.Deposit);
+        _transactionsToCsv.ConvertToCsv(transactionList, @"E:\sqlTestFiles\TestToFinal.csv");
     }
+
+
 
 
     public DateTime CreateDate()
     {
         Random gen = new Random();
-        DateTime start = new DateTime(1995, 1, 1,18,42,0);
+        DateTime start = new DateTime(1995, 1, 1);
         int range = (DateTime.Today - start).Days;
 
-        return start.AddDays(gen.Next(range));
+        return start.AddDays(gen.Next(range))
+            .AddHours(gen.Next(0, 24))
+            .AddMinutes(gen.Next(0, 60))
+            .AddSeconds(gen.Next(0, 60));
     }
 }

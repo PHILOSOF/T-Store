@@ -6,7 +6,7 @@ public class TransactionDtoToCsv : TransactionDto
 {
     
 
-    public String ToCSVRow()
+    public String ToCsvRow()
     {
         return null + ";"+ AccountId + ";" + Date.ToString() + ";" + ((int)TransactionType).ToString() + ";" + Amount.ToString() + ";" + ((int)Currency).ToString();
     }
