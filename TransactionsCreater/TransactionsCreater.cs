@@ -13,7 +13,7 @@ public class Tests
     private TransactionsToCsv _transactionsToCsv;
 
     [Test]
-    public async Task CreateFirsDepositRub()
+    public async Task CreateFakeTransactionsForDb()
     {
         
         _accountReader = new AccountReader();
