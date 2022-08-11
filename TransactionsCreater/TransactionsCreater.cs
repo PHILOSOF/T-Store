@@ -120,8 +120,8 @@ public class Tests
         Random gen = new Random();
         var randomDays = gen.Next(0, 6);
         DateTime start = transactionTime;
-        DateTime start1 = transactionTime.AddDays(randomDays);
-        int range = (start1 - start).Days;
+        DateTime end = transactionTime.AddDays(randomDays);
+        int range = (end - start).Days;
 
         return start.AddDays(gen.Next(range))
             .AddHours(gen.Next(0, 24))
