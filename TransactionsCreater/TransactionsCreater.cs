@@ -28,7 +28,7 @@ public class Tests
         {
             var transactionDto = new TransactionDtoToCsv();
             var accountsClinet = accountsDictionary[key];
-            var rubAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB? true : a.Currency == (int)Currency.EUR); // rub/ usd ???
+            var rubAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.EUR); // rub/ usd ???
 
             if (rubAccount is not null)
             {
