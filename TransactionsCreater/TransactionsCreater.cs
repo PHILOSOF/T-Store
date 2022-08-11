@@ -15,33 +15,34 @@ public class Tests
     [Test]
     public async Task CreateFirsDepositRub()
     {
+        
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsToCsv();
         _calculationServices = new CalculationServices();
-
+        
         var resultTransactionList = new List<TransactionDtoToCsv>();
-
-
 
         var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Crm_Account_Out_Test.csv");
         var keys = accountsDictionary.Keys.ToList();
         var random = new Random();
+        var indexerWithdraw = 0;
 
-        foreach(var key in keys)
+        foreach (var key in keys)
         {
+            indexerWithdraw++;
             var transactionDeposit = new TransactionDtoToCsv();
             var transferSender = new TransactionDtoToCsv();
             var transferRecipient= new TransactionDtoToCsv();
+            var transactionWithdraw= new TransactionDtoToCsv();
             var transactionsTransferTmp = new List<TransactionDto>();
-            var indexerWithdraw=0;
-            
+
             var accountsClinet = accountsDictionary[key];
-            var rubOrUsdAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD); 
+            var rubOrUsdAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD);
+           
 
             if (rubOrUsdAccount is not null)
             {
-                indexerWithdraw++;
-
+                
                 transactionDeposit.AccountId = rubOrUsdAccount.Id;
                 transactionDeposit.Currency = (Currency)rubOrUsdAccount.Currency;
                 transactionDeposit.LeadId = rubOrUsdAccount.LeadId;
@@ -58,10 +59,10 @@ public class Tests
             if(accountSenderTransfer is not null && accountRecipientTransfer is not null)
             {
                 transferSender.Amount = accountSenderTransfer.Amount * CreatePercentForTransfer();
-
+                transferSender.AccountId = accountSenderTransfer.AccountId;
                 transferSender.Currency = accountSenderTransfer.Currency;
-                transferRecipient.Id = accountRecipientTransfer.Id;
-                transferSender.Date = CreateDateForTransfer(accountSenderTransfer.Date);
+                transferRecipient.AccountId = accountRecipientTransfer.Id;
+                transferSender.Date = CreateDateStartFromDeposit(accountSenderTransfer.Date);
                 transferRecipient.Date = transferSender.Date;
                 transferRecipient.Currency= (Currency)accountRecipientTransfer.Currency;
                 transferSender.TransactionType = TransactionType.Transfer;
@@ -78,14 +79,28 @@ public class Tests
                 resultTransactionList.Add(a[1] as TransactionDtoToCsv);
             }
 
-            if(indexerWithdraw == 4)
+            if(indexerWithdraw == 3)
             {
+                var currentBalance = transactionDeposit.Amount + transferSender.Amount;
+
+                if(currentBalance > 100)
+                {
+
+                    transactionWithdraw.AccountId = transactionDeposit.AccountId;
+                    transactionWithdraw.Currency = transactionDeposit.Currency;
+                    transactionWithdraw.TransactionType = TransactionType.Withdraw;
+                    transactionWithdraw.Amount = -currentBalance;
+                    transactionWithdraw.Date = CreateDateStartFromDeposit(transferSender.Date);
+
+                    resultTransactionList.Add(transactionWithdraw);
+                }
                 indexerWithdraw = 0;
-                //rubOrUsdAccount.a
             }    
 
+
         }
-        _transactionsToCsv.ConvertToCsv(resultTransactionList, @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
+        
+        _transactionsToCsv.ConvertToCsv(resultTransactionList.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
     }
 
     public DateTime CreateDateForDeposit()
@@ -100,12 +115,12 @@ public class Tests
             .AddSeconds(gen.Next(0, 60));
     }
 
-    public DateTime CreateDateForTransfer(DateTime depositeTime)
+    public DateTime CreateDateStartFromDeposit(DateTime transactionTime)
     {
         Random gen = new Random();
         var randomDays = gen.Next(0, 6);
-        DateTime start = depositeTime;
-        DateTime start1 = depositeTime.AddDays(randomDays);
+        DateTime start = transactionTime;
+        DateTime start1 = transactionTime.AddDays(randomDays);
         int range = (start1 - start).Days;
 
         return start.AddDays(gen.Next(range))
