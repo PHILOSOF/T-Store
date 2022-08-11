@@ -4,7 +4,7 @@ namespace TransactionsCreater.Model;
 
 public class TransactionDtoToCsv : TransactionDto
 {
-    
+    public int LeadId { get; set; }
 
     public String ToCsvRow()
     {

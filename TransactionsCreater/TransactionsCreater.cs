@@ -13,39 +13,82 @@ public class Tests
     private TransactionsToCsv _transactionsToCsv;
 
     [Test]
-    public void CreateFirsDepositRub()
+    public async Task CreateFirsDepositRub()
     {
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsToCsv();
+        _calculationServices = new CalculationServices();
 
-        var transactionList = new List<TransactionDtoToCsv>();
-        
-        var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Testcvs.csv");
+        var resultTransactionList = new List<TransactionDtoToCsv>();
+
+
+
+        var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Crm_Account_Out_Test.csv");
         var keys = accountsDictionary.Keys.ToList();
         var random = new Random();
 
         foreach(var key in keys)
         {
-            var transactionDto = new TransactionDtoToCsv();
+            var transactionDeposit = new TransactionDtoToCsv();
+            var transferSender = new TransactionDtoToCsv();
+            var transferRecipient= new TransactionDtoToCsv();
+            var transactionsTransferTmp = new List<TransactionDto>();
+            var indexerWithdraw=0;
+            
             var accountsClinet = accountsDictionary[key];
-            var rubAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.EUR); // rub/ usd ???
+            var rubOrUsdAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD); 
 
-            if (rubAccount is not null)
+            if (rubOrUsdAccount is not null)
             {
-                transactionDto.AccountId = rubAccount.Id;
-                transactionDto.Currency = (Currency)rubAccount.Currency;
-                transactionDto.TransactionType = TransactionType.Deposit;
-                transactionDto.Amount = random.Next(1000, 1000000);
-                transactionDto.Date = CreateDate();
-                
-    
-                transactionList.Add(transactionDto);
+                indexerWithdraw++;
+
+                transactionDeposit.AccountId = rubOrUsdAccount.Id;
+                transactionDeposit.Currency = (Currency)rubOrUsdAccount.Currency;
+                transactionDeposit.LeadId = rubOrUsdAccount.LeadId;
+                transactionDeposit.TransactionType = TransactionType.Deposit;
+                transactionDeposit.Amount = random.Next(1000, 1000000);
+                transactionDeposit.Date = CreateDateForDeposit();
+
+                resultTransactionList.Add(transactionDeposit);
             }
+
+            var accountRecipientTransfer = accountsClinet.Find(a => a.Currency != (int)Currency.RUB || a.Currency != (int)Currency.USD); // exept rub / usd ??
+            var accountSenderTransfer = resultTransactionList.Find(t => t.LeadId == accountRecipientTransfer.LeadId);
+
+            if(accountSenderTransfer is not null && accountRecipientTransfer is not null)
+            {
+                transferSender.Amount = accountSenderTransfer.Amount * CreatePercentForTransfer();
+
+                transferSender.Currency = accountSenderTransfer.Currency;
+                transferRecipient.Id = accountRecipientTransfer.Id;
+                transferSender.Date = CreateDateForTransfer(accountSenderTransfer.Date);
+                transferRecipient.Date = transferSender.Date;
+                transferRecipient.Currency= (Currency)accountRecipientTransfer.Currency;
+                transferSender.TransactionType = TransactionType.Transfer;
+                transferRecipient.TransactionType = TransactionType.Transfer;// ??? 
+
+                transactionsTransferTmp.Add(transferSender);//??
+                transactionsTransferTmp.Add(transferRecipient);      //??
+
+
+                var a = await _calculationServices.ConvertCurrency(transactionsTransferTmp);
+
+
+                resultTransactionList.Add(a[0] as TransactionDtoToCsv);
+                resultTransactionList.Add(a[1] as TransactionDtoToCsv);
+            }
+
+            if(indexerWithdraw == 4)
+            {
+                indexerWithdraw = 0;
+                //rubOrUsdAccount.a
+            }    
+
         }
-        _transactionsToCsv.ConvertToCsv(transactionList, @"E:\sqlTestFiles\TestToFinal.csv");
+        _transactionsToCsv.ConvertToCsv(resultTransactionList, @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
     }
 
-    public DateTime CreateDate()
+    public DateTime CreateDateForDeposit()
     {
         Random gen = new Random();
         DateTime start = new DateTime(1995, 1, 1);
@@ -55,5 +98,25 @@ public class Tests
             .AddHours(gen.Next(0, 24))
             .AddMinutes(gen.Next(0, 60))
             .AddSeconds(gen.Next(0, 60));
+    }
+
+    public DateTime CreateDateForTransfer(DateTime depositeTime)
+    {
+        Random gen = new Random();
+        var randomDays = gen.Next(0, 6);
+        DateTime start = depositeTime;
+        DateTime start1 = depositeTime.AddDays(randomDays);
+        int range = (start1 - start).Days;
+
+        return start.AddDays(gen.Next(range))
+            .AddHours(gen.Next(0, 24))
+            .AddMinutes(gen.Next(0, 60))
+            .AddSeconds(gen.Next(0, 60));
+    }
+
+    public decimal CreatePercentForTransfer()
+    {
+        Random gen = new Random();
+        return gen.Next(50, 100) / 100m;
     }
 }
