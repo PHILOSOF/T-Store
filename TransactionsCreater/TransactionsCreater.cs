@@ -25,8 +25,7 @@ public class Tests
 
     [Test]
     public async Task CreateFakeTransactionsForDb()
-    {
-        
+    {     
         var resultTransactions = new List<TransactionDtoToCsv>();
 
         var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Crm_Account_Out_Test.csv");
@@ -42,10 +41,9 @@ public class Tests
             var transferRecipient= new TransactionDtoToCsv();
             var transactionsTransferTmp = new List<TransactionDto>();
 
-            var accountsClinet = accountsDictionary[key];
+            var accountsClinet = accountsDictionary[key];                   //deposit
             var rubOrUsdAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD);
            
-
             if (rubOrUsdAccount is not null)
             {
                 transactionDeposit = _mapper.Map<TransactionDtoToCsv>(rubOrUsdAccount);
@@ -57,7 +55,7 @@ public class Tests
                 resultTransactions.Add(transactionDeposit);
             }
 
-            var accountRecipientTransfer = accountsClinet.Find(a =>
+            var accountRecipientTransfer = accountsClinet.Find(a =>             //transfer
             (a.Currency != (int)Currency.RUB || a.Currency != (int)Currency.USD) ||  a.Currency != rubOrUsdAccount.Currency);
 
             var accountSenderTransfer = resultTransactions.Find(t => t.LeadId == accountRecipientTransfer.LeadId);
@@ -76,15 +74,12 @@ public class Tests
                 transactionsTransferTmp.Add(transferSender);
                 transactionsTransferTmp.Add(transferRecipient);
 
-
                 var transfersResult = await _calculationServices.ConvertCurrency(transactionsTransferTmp);
-
-
-                resultTransactions.Add(transfersResult[0] as TransactionDtoToCsv);
-                resultTransactions.Add(transfersResult[1] as TransactionDtoToCsv);
+        
+                resultTransactions.AddRange(transfersResult.Cast<TransactionDtoToCsv>());
             }
 
-            switch(indexerWithdraw)
+            switch(indexerWithdraw)                                             //withdraw
             {
                 case 3:
                     var currentBalance = transactionDeposit.Amount + transferSender.Amount;
@@ -101,15 +96,17 @@ public class Tests
                     indexerWithdraw = 0;
                     break;
             }
-        }
-        
+        } 
         _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
     }
+
+
+
 
     private DateTime CreateRandomDate()
     {
         Random gen = new Random();
-        DateTime start = new DateTime(1995, 1, 1);
+        var start = new DateTime(1995, 1, 1);
         int range = (DateTime.Today - start).Days;
 
         return start.AddDays(gen.Next(range))
@@ -122,11 +119,10 @@ public class Tests
     {
         Random gen = new Random();
         var randomDays = gen.Next(0, 15);
-        DateTime start = transactionTime;
-        DateTime end = transactionTime.AddDays(randomDays);
-        int range = (end - start).Days;
+        var end = transactionTime.AddDays(randomDays);
+        int range = (end - transactionTime).Days;
 
-        return start.AddDays(gen.Next(range))
+        return transactionTime.AddDays(gen.Next(range))
             .AddHours(gen.Next(0, 24))
             .AddMinutes(gen.Next(0, 60))
             .AddSeconds(gen.Next(0, 60));
@@ -137,6 +133,4 @@ public class Tests
         Random gen = new Random();
         return gen.Next(50, 100) / 100m;
     }
-
-    
 }

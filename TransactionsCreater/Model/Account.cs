@@ -14,5 +14,4 @@ public class Account
         Currency = Int32.Parse(parts[1]);
         LeadId = Int32.Parse(parts[3]);
     }
-
 }

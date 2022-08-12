@@ -23,7 +23,6 @@ public class TransactionDtoToCsv : TransactionDto
         LeadId = transactionDtoToCsv.LeadId;
     }
 
-
     public String ToCsvRow()
     {
         return null + ";"+

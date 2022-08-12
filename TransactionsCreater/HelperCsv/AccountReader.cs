@@ -21,7 +21,4 @@ public class AccountReader
 
         return accountsDictionary;
     }
-
-    
-
 }
