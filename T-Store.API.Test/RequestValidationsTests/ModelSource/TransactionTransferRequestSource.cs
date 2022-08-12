@@ -84,5 +84,14 @@ public class TransactionTransferRequestSource : IEnumerable
             model,
             ApiErrorMessage.CurrencyRangeError
         };
+
+        model = GetTransactionTransferRequestModelForTests();
+        model.RecipientCurrency = Currency.USD;
+        model.Currency = Currency.USD;
+        yield return new object[]
+        {
+            model,
+            ApiErrorMessage.SameCurrency
+        };
     }
 }

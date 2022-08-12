@@ -37,13 +37,7 @@ public class TransactionServices : ITransactionServices
 
     public async Task<List<int>> AddTransfer(List<TransactionDto> transfersModels)
     {
-       
         await CheckBalance(transfersModels[0]);
-
-        if (transfersModels[0].Currency == transfersModels[1].Currency && transfersModels[0].AccountId == transfersModels[1].AccountId)
-        {
-            throw new BadRequestException($"Sender and recipient have the same currency ");
-        }
 
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
 
@@ -70,7 +64,7 @@ public class TransactionServices : ITransactionServices
     {
         var transaction = _transactionRepository.GetTransactionById(id);
 
-        if (transaction is null)
+        if (transaction.Result is null)
         {
             throw new EntityNotFoundException($"Transaction {id} not found");
         }

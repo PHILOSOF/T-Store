@@ -1,6 +1,10 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>False</AllowParallelTestExecution>
+    <MetricsExclusionList>
+      <Value>TransactionsCreater\FakeTransactionsCreater.csproj</Value>
+      <Value>T-Strore.Data\T-Strore.Data.csproj</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
