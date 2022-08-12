@@ -7,7 +7,7 @@ using TransactionsCreater.Model;
 
 namespace TransactionsCreater;
 
-public class Tests
+public class TransactionsCreater
 {
     private AccountReader _accountReader;
     private CalculationServices _calculationServices;

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store.API.Test", "T-Store
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T-Store.Business.Tests", "T-Store.Business.Tests\T-Store.Business.Tests.csproj", "{8240D9D2-E152-472A-849F-C5D90789F26C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionsCreater", "TransactionsCreater\TransactionsCreater.csproj", "{8FA8378B-30DA-4234-BED1-A7012B852E04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FakeTransactionsCreater", "TransactionsCreater\FakeTransactionsCreater.csproj", "{8FA8378B-30DA-4234-BED1-A7012B852E04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
