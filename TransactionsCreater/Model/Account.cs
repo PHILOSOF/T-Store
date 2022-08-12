@@ -1,13 +1,13 @@
 ﻿namespace TransactionsCreater.Model;
 
-internal class Account
+public class Account
 {
-    internal int Id { get; set; }
-    internal int Currency { get; set; }
-    internal int LeadId { get; set; }
+    public int Id { get; set; }
+    public int Currency { get; set; }
+    public int LeadId { get; set; }
 
 
-    internal Account(string line)
+    public Account(string line)
     {
         string[] parts = line.Split(';');
         Id = Int32.Parse(parts[0]);

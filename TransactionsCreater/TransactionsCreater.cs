@@ -7,21 +7,26 @@ using TransactionsCreater.Model;
 
 namespace TransactionsCreater;
 
-internal class Tests
+public class Tests
 {
     private AccountReader _accountReader;
     private CalculationServices _calculationServices;
     private TransactionsToCsv _transactionsToCsv;
-    private readonly IMapper _mapper;
+    private  IMapper _mapper;
 
+    [SetUp]
+    public void Setup()
+    {
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperForTransactionsCreater>()));
+        _accountReader = new AccountReader();
+        _transactionsToCsv = new TransactionsToCsv();
+        _calculationServices = new CalculationServices();
+    }
 
     [Test]
     public async Task CreateFakeTransactionsForDb()
     {
         
-        _accountReader = new AccountReader();
-        _transactionsToCsv = new TransactionsToCsv();
-        _calculationServices = new CalculationServices();
         var resultTransactions = new List<TransactionDtoToCsv>();
 
         var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Crm_Account_Out_Test.csv");
@@ -43,9 +48,8 @@ internal class Tests
 
             if (rubOrUsdAccount is not null)
             {
-                transactionDeposit.AccountId = rubOrUsdAccount.Id;
-                transactionDeposit.Currency = (Currency)rubOrUsdAccount.Currency;
-                transactionDeposit.LeadId = rubOrUsdAccount.LeadId;
+                transactionDeposit = _mapper.Map<TransactionDtoToCsv>(rubOrUsdAccount);
+
                 transactionDeposit.TransactionType = TransactionType.Deposit;
                 transactionDeposit.Amount = random.Next(1000, 1000000);
                 transactionDeposit.Date = CreateRandomDate();
@@ -64,9 +68,8 @@ internal class Tests
                 transferSender.Amount = accountSenderTransfer.Amount * CreatePercentForTransfer();
                 transferSender.Date = CreateRandomDateStartingFromParameter(accountSenderTransfer.Date);
                 transferSender.TransactionType = TransactionType.Transfer;
-              
-                transferRecipient.AccountId = accountRecipientTransfer.Id;
-                transferRecipient.Currency= (Currency)accountRecipientTransfer.Currency;
+
+                transferRecipient = _mapper.Map<TransactionDtoToCsv>(accountRecipientTransfer);
                 transferRecipient.Date = transferSender.Date;
                 transferRecipient.TransactionType = TransactionType.Transfer;
         

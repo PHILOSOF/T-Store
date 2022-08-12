@@ -2,17 +2,17 @@
 
 namespace TransactionsCreater.Model;
 
-internal class TransactionDtoToCsv : TransactionDto
+public class TransactionDtoToCsv : TransactionDto
 {
-    internal int LeadId { get; set; }
+    public int LeadId { get; set; }
 
 
-    internal TransactionDtoToCsv()
+    public TransactionDtoToCsv()
     {
 
     }
 
-    internal TransactionDtoToCsv(TransactionDtoToCsv transactionDtoToCsv)
+    public TransactionDtoToCsv(TransactionDtoToCsv transactionDtoToCsv)
     {
         Id = transactionDtoToCsv.Id;
         AccountId = transactionDtoToCsv.AccountId;
@@ -24,7 +24,7 @@ internal class TransactionDtoToCsv : TransactionDto
     }
 
 
-    internal String ToCsvRow()
+    public String ToCsvRow()
     {
         return null + ";"+
             AccountId + ";" + 

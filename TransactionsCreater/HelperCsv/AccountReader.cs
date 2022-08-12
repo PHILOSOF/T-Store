@@ -2,9 +2,9 @@
 
 namespace TransactionsCreater.HelperCsv;
 
-internal class AccountReader
+public class AccountReader
 {
-    internal Dictionary<int, List<Account>> GetDictionaryOut(string filename)
+    public Dictionary<int, List<Account>> GetDictionaryOut(string filename)
     {
         string line;
         var accounts = new List<Account>();

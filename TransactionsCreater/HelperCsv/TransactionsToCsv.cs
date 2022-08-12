@@ -5,9 +5,9 @@ using TransactionsCreater.Model;
 
 namespace TransactionsCreater.HelperCsv;
 
-internal class TransactionsToCsv
+public class TransactionsToCsv
 {
-    internal void ConvertToCsv(List<TransactionDtoToCsv> transactions,string filename)
+    public void ConvertToCsv(List<TransactionDtoToCsv> transactions,string filename)
     {
         using (var file = new StreamWriter(filename))
         {
