@@ -21,6 +21,8 @@ public class TransactionDto
             Amount == dto.Amount &&
             Currency == dto.Currency;
     }
+
+
 }
 
 
