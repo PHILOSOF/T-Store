@@ -2,11 +2,29 @@
 
 namespace TransactionsCreater.Model;
 
-public class TransactionDtoToCsv : TransactionDto
+internal class TransactionDtoToCsv : TransactionDto
 {
-    public int LeadId { get; set; }
+    internal int LeadId { get; set; }
 
-    public String ToCsvRow()
+
+    internal TransactionDtoToCsv()
+    {
+
+    }
+
+    internal TransactionDtoToCsv(TransactionDtoToCsv transactionDtoToCsv)
+    {
+        Id = transactionDtoToCsv.Id;
+        AccountId = transactionDtoToCsv.AccountId;
+        Date = transactionDtoToCsv.Date;
+        TransactionType = transactionDtoToCsv.TransactionType;
+        Amount = transactionDtoToCsv.Amount;
+        Currency = transactionDtoToCsv.Currency;
+        LeadId = transactionDtoToCsv.LeadId;
+    }
+
+
+    internal String ToCsvRow()
     {
         return null + ";"+
             AccountId + ";" + 
