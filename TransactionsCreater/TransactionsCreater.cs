@@ -1,3 +1,4 @@
+using AutoMapper;
 using NUnit.Framework;
 using T_Strore.Business.Services;
 using T_Strore.Data;
@@ -11,6 +12,8 @@ internal class Tests
     private AccountReader _accountReader;
     private CalculationServices _calculationServices;
     private TransactionsToCsv _transactionsToCsv;
+    private readonly IMapper _mapper;
+
 
     [Test]
     public async Task CreateFakeTransactionsForDb()
@@ -19,7 +22,6 @@ internal class Tests
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsToCsv();
         _calculationServices = new CalculationServices();
-        
         var resultTransactions = new List<TransactionDtoToCsv>();
 
         var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\sqlTestFiles\Crm_Account_Out_Test.csv");
@@ -41,7 +43,6 @@ internal class Tests
 
             if (rubOrUsdAccount is not null)
             {
-                
                 transactionDeposit.AccountId = rubOrUsdAccount.Id;
                 transactionDeposit.Currency = (Currency)rubOrUsdAccount.Currency;
                 transactionDeposit.LeadId = rubOrUsdAccount.LeadId;
