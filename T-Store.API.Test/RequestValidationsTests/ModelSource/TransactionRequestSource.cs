@@ -21,7 +21,6 @@ public class TransactionRequestSource : IEnumerable
     public IEnumerator GetEnumerator()
     {
         var model = GetTransactionTransferRequestModelForTests();
-
         model.AccountId = 0;
         yield return new object[]
         {
@@ -29,6 +28,7 @@ public class TransactionRequestSource : IEnumerable
             ApiErrorMessage.NumberLessOrEqualZero
         };
 
+        model = GetTransactionTransferRequestModelForTests();
         model.Amount = 0;
         yield return new object[]
         {
@@ -36,6 +36,7 @@ public class TransactionRequestSource : IEnumerable
             ApiErrorMessage.NumberLessOrEqualZero
         };
 
+        model = GetTransactionTransferRequestModelForTests();
         model.AccountId = -1;
         yield return new object[]
         {
@@ -43,6 +44,7 @@ public class TransactionRequestSource : IEnumerable
             ApiErrorMessage.NumberLessOrEqualZero
         };
 
+        model = GetTransactionTransferRequestModelForTests();
         model.Amount = -1;
         yield return new object[]
         {
@@ -50,5 +52,12 @@ public class TransactionRequestSource : IEnumerable
             ApiErrorMessage.NumberLessOrEqualZero
         };
 
+        model = GetTransactionTransferRequestModelForTests();
+        model.Currency = 0;
+        yield return new object[]
+        {
+            model,
+            ApiErrorMessage.CurrencyRangeError
+        };
     }
 }

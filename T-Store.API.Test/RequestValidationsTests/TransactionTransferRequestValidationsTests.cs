@@ -3,11 +3,22 @@ using System.ComponentModel.DataAnnotations;
 using T_Store.API.Test.RequestValidationsTests.ModelSource;
 using T_Store.Models;
 using T_Strore.Data;
+using FluentValidation.TestHelper;
+using T_Store.CustomValidations.FluentValidators;
 
 namespace T_Store.API.Test.RequestValidationsTests;
 
 public class TransactionTransferRequestValidationsTests
 {
+    private TransactionTransferRequestValidator _validator;
+
+    [SetUp]
+    public void Setup()
+    {
+        _validator = new TransactionTransferRequestValidator();
+
+    }
+
     [Test]
     public async Task TransactionTransferRequest_SendingCorrectData_GetAnEmptyStringError()
     {
@@ -22,26 +33,21 @@ public class TransactionTransferRequestValidationsTests
             
         };
 
-        var validationsResults = new List<ValidationResult>();
-
         //when
-        var isValid = Validator.TryValidateObject(client, new ValidationContext(client), validationsResults, true);
+        var isValid = _validator.TestValidate(client);
 
         //then
-        Assert.True(isValid);
+        Assert.True(isValid.IsValid);
     }
 
     [TestCaseSource(typeof(TransactionTransferRequestSource))]
     public async Task TransactionTransferRequest_SendingIncorrectData_GetErrorMessage(TransactionTransferRequest transfer, string errorMessage)
     {
-        //given
-        var validationsResults = new List<ValidationResult>();
-
-        //when
-        var isValid = Validator.TryValidateObject(transfer, new ValidationContext(transfer), validationsResults, true);
+        //given,when
+        var isValid = _validator.TestValidate(transfer);
 
         //then
-        var actualMessage = validationsResults[0].ErrorMessage;
-        Assert.AreEqual(errorMessage, actualMessage);
+        Assert.False(isValid.IsValid);
+        Assert.AreEqual(errorMessage, isValid.ToString());
     }
 }
