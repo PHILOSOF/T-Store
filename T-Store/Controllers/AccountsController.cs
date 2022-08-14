@@ -20,26 +20,20 @@ public class AccountsController : ControllerBase
         _mapper = mapper;
     }
 
-
     [HttpGet("{id}/balance")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] int id)
+    [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
+    public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] long id)
     {
-
         return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 
-
     [HttpGet("{id}/transactions")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] int id)
+    public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] long id)
     {
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
         var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
-
         return Ok(transactionsModel);
-
     }
 }

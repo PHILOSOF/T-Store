@@ -10,8 +10,8 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     {
     }
 
-    public async Task<int> AddTransaction(TransactionDto transaction) =>
-         await Connection.QueryFirstOrDefaultAsync<int>(
+    public async Task<long> AddTransaction(TransactionDto transaction) =>
+         await Connection.QueryFirstOrDefaultAsync<long>(
                   TransactionStoredProcedure.Transaction_Insert,
                   param: new
                   {
@@ -22,20 +22,20 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure);
 
-    public async Task<decimal?> GetBalanceByAccountId(int accountId) =>
+    public async Task<decimal?> GetBalanceByAccountId(long accountId) =>
         await Connection.QueryFirstOrDefaultAsync<decimal?>(
                  TransactionStoredProcedure.Transaction_SelectBalanceByAccountId,
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);
 
-    public async Task<TransactionDto?> GetTransactionById(int id) =>
+    public async Task<TransactionDto?> GetTransactionById(long id) =>
         await Connection.QueryFirstOrDefaultAsync<TransactionDto>(
                  TransactionStoredProcedure.Transaction_SelectById,
                  param: new { id },
                  commandType: CommandType.StoredProcedure);
 
-    public async Task<List<int>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient) =>
-        (await Connection.QueryAsync<int>(
+    public async Task<List<long>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient) =>
+        (await Connection.QueryAsync<long>(
                   TransactionStoredProcedure.Transaction_InsertTransfer,
                   param: new
                   {
@@ -48,7 +48,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-    public async Task<List<TransactionDto>> GetAllTransactionsByAccountId(int accountId) =>
+    public async Task<List<TransactionDto>> GetAllTransactionsByAccountId(long accountId) =>
         (await Connection.QueryAsync<TransactionDto>(
                   TransactionStoredProcedure.Transaction_GetAllTransactionsByAccountId,
                   param: new { accountId },

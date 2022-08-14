@@ -69,7 +69,7 @@ public class TransactionServicesTests
 
 
         //when
-        var actual = await _sut.WithdrawDeposit(transaction);
+        var actual = await _sut.Withdraw(transaction);
 
         //then
         Assert.AreEqual(actual, transaction.Id);
@@ -93,7 +93,7 @@ public class TransactionServicesTests
          .ReturnsAsync(realBalance);
 
         //when,then
-        Assert.ThrowsAsync<BadRequestException>(() => _sut.WithdrawDeposit(transactionWithdraw));
+        Assert.ThrowsAsync<BadRequestException>(() => _sut.Withdraw(transactionWithdraw));
 
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transactionWithdraw.Id), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);
@@ -102,7 +102,7 @@ public class TransactionServicesTests
     public async Task AddTransfer_ValidRequestPassed_AddTransferAndIdReturned()
     {
         //given
-        var expecteIds = new List<int> { 1, 2 };
+        var expecteIds = new List<long> { 1, 2 };
         var transfers = new List<TransactionDto>()
         {
             new TransactionDto()
@@ -258,12 +258,12 @@ public class TransactionServicesTests
     public async Task GetTransactionById_TransactionIsNull_ThrowEntityNotFoundException()
     {
         //given
-        var transactionId = 1;
+        var transactionId = 1l;
  
         //when, then
         Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetTransactionById(transactionId));
 
-        _transactionRepositoryMock.Verify(t => t.GetTransactionById(It.IsAny<int>()), Times.Once);
+        _transactionRepositoryMock.Verify(t => t.GetTransactionById(transactionId), Times.Once);
     }
 
     [Test]

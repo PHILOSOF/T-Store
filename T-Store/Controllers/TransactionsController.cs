@@ -22,10 +22,10 @@ public class TransactionsController : ControllerBase
     }
 
 
-    [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [HttpPost("deposit")]
+    [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<int>> AddDeposit([FromBody] TransactionRequest transaction)
+    public async Task<ActionResult<long>> AddDeposit([FromBody] TransactionRequest transaction)
     {
         var id = await _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
         return Created($"{this.GetRequestPath()}/{id}", id);
@@ -33,9 +33,9 @@ public class TransactionsController : ControllerBase
 
 
     [HttpPost("transfer")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<List<int>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
+    public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
          
         var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
@@ -45,19 +45,19 @@ public class TransactionsController : ControllerBase
 
 
     [HttpPost("withdraw")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<int>> WithdrawDeposit([FromBody] TransactionRequest transaction)
+    public async Task<ActionResult<long>> Withdraw([FromBody] TransactionRequest transaction)
     {
-        var id = await _transactionServices.WithdrawDeposit(_mapper.Map<TransactionDto>(transaction));
+        var id = await _transactionServices.Withdraw(_mapper.Map<TransactionDto>(transaction));
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] int id)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] long id)
     {
         var transaction = await _transactionServices.GetTransactionById(id);
         return Ok(_mapper.Map<TransactionResponse>(transaction));

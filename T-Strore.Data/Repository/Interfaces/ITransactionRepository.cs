@@ -2,10 +2,10 @@
 
 public interface ITransactionRepository
 {
-    public Task<int> AddTransaction(TransactionDto transaction);
-    public Task<List<int>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient);
-    public Task<decimal?> GetBalanceByAccountId(int accountId);
-    public Task<TransactionDto?> GetTransactionById(int id);
-    public Task<List<TransactionDto>> GetAllTransactionsByAccountId(int accountId);
+    public Task<long> AddTransaction(TransactionDto transaction);
+    public Task<List<long>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient);
+    public Task<decimal?> GetBalanceByAccountId(long accountId);
+    public Task<TransactionDto?> GetTransactionById(long id);
+    public Task<List<TransactionDto>> GetAllTransactionsByAccountId(long accountId);
    
 }
