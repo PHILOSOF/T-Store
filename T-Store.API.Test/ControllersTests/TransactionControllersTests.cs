@@ -57,7 +57,7 @@ public class TransactionControllersTests
     public async Task AddTransfer_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
-        var expectedIds = new List<int> { 1, 2 };
+        var expectedIds = new List<long> { 1, 2 };
 
         var transfer = new TransactionTransferRequest()
         {
@@ -100,17 +100,17 @@ public class TransactionControllersTests
             Currency = Currency.USD,
             Amount = 100
         };
-        _transactionServiceMock.Setup(t => t.WithdrawDeposit(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
+        _transactionServiceMock.Setup(t => t.Withdraw(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
-        var actual = await _sut.WithdrawDeposit(transaction);
+        var actual = await _sut.Withdraw(transaction);
 
         // then
         var actualResult = actual.Result as CreatedResult;
 
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
         Assert.AreEqual(actualResult.Value, 1);
-        _transactionServiceMock.Verify(o => o.WithdrawDeposit(
+        _transactionServiceMock.Verify(o => o.Withdraw(
             It.Is<TransactionDto>
             (t => t.AccountId == transaction.AccountId &&
             t.Currency == transaction.Currency &&

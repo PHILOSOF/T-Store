@@ -4,8 +4,8 @@ namespace T_Store.Models;
 
 public class TransactionResponse
 {
-    public int Id { get; set; }
-    public int AccountId { get; set; }
+    public long Id { get; set; }
+    public long AccountId { get; set; }
     public DateTime Date { get; set; }
     public TransactionType TransactionType { get; set; }
     public decimal Amount { get; set; }

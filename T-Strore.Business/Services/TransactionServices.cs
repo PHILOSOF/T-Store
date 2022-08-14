@@ -18,7 +18,7 @@ public class TransactionServices : ITransactionServices
     }
 
 
-    public async Task<int> AddDeposit(TransactionDto transaction)
+    public async Task<long> AddDeposit(TransactionDto transaction)
     {
 
         transaction.TransactionType = TransactionType.Deposit;
@@ -26,7 +26,7 @@ public class TransactionServices : ITransactionServices
         return await _transactionRepository.AddTransaction(transaction);
     }
 
-    public async Task<int> WithdrawDeposit(TransactionDto transaction)
+    public async Task<long> Withdraw(TransactionDto transaction)
     {
         await CheckBalance(transaction);
 
@@ -35,7 +35,7 @@ public class TransactionServices : ITransactionServices
         return await _transactionRepository.AddTransaction(transaction);
     }
 
-    public async Task<List<int>> AddTransfer(List<TransactionDto> transfersModels)
+    public async Task<List<long>> AddTransfer(List<TransactionDto> transfersModels)
     {
         await CheckBalance(transfersModels[0]);
 
@@ -47,7 +47,7 @@ public class TransactionServices : ITransactionServices
         return await _transactionRepository.AddTransferTransactions(transfersConvert[0], transfersConvert[1]);
     }
 
-    public async Task<decimal?> GetBalanceByAccountId(int accountId)
+    public async Task<decimal?> GetBalanceByAccountId(long accountId)
     {
         decimal emptyBalance = 0;
         var balance = await _transactionRepository.GetBalanceByAccountId(accountId);
@@ -60,7 +60,7 @@ public class TransactionServices : ITransactionServices
         return balance;
     }
 
-    public async Task<TransactionDto?> GetTransactionById(int id)
+    public async Task<TransactionDto?> GetTransactionById(long id)
     {
         var transaction = _transactionRepository.GetTransactionById(id);
 
@@ -72,7 +72,7 @@ public class TransactionServices : ITransactionServices
         return await transaction;
     }
 
-    public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(int accountId)
+    public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId)
     {
         var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
         var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());

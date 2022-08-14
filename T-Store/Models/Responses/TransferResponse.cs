@@ -4,8 +4,8 @@ namespace T_Store.Models.Responses
 {
     public class TransferResponse: TransactionResponse
     {
-        public int RecipientId { get; set; }
-        public int RecipientAccountId { get; set; }
+        public long RecipientId { get; set; }
+        public long RecipientAccountId { get; set; }
         public decimal RecipientAmount { get; set; }
         public Currency RecipientCurrency { get; set; }
     }

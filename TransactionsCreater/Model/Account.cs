@@ -2,16 +2,16 @@
 
 public class Account
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public int Currency { get; set; }
-    public int LeadId { get; set; }
+    public long LeadId { get; set; }
 
 
     public Account(string line)
     {
         string[] parts = line.Split(';');
-        Id = Int32.Parse(parts[0]);
+        Id = Int64.Parse(parts[0]);
         Currency = Int32.Parse(parts[1]);
-        LeadId = Int32.Parse(parts[3]);
+        LeadId = Int64.Parse(parts[3]);
     }
 }
