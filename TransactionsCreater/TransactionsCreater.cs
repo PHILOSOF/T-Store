@@ -42,21 +42,21 @@ public class TransactionsCreater
             var transactionsTransferTmp = new List<TransactionDto>();
 
             var accountsClinet = accountsDictionary[key];                   //deposit
-            var rubOrUsdAccount = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD);
+            var accountRubOrUsd = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD);
            
-            if (rubOrUsdAccount is not null)
+            if (accountRubOrUsd is not null)
             {
-                transactionDeposit = _mapper.Map<TransactionDtoToCsv>(rubOrUsdAccount);
+                transactionDeposit = _mapper.Map<TransactionDtoToCsv>(accountRubOrUsd);
 
                 transactionDeposit.TransactionType = TransactionType.Deposit;
                 transactionDeposit.Amount = random.Next(1000, 1000000);
-                transactionDeposit.Date = CreateRandomDate();
+                transactionDeposit.Date = CreateRandomDateStartingFromParameter(accountRubOrUsd.LeadRegistrationDate);
 
                 resultTransactions.Add(transactionDeposit);
             }
 
             var accountRecipientTransfer = accountsClinet.Find(a =>             //transfer
-            (a.Currency != (int)Currency.RUB || a.Currency != (int)Currency.USD) ||  a.Currency != rubOrUsdAccount.Currency);
+            (a.Currency != (int)Currency.RUB || a.Currency != (int)Currency.USD) ||  a.Currency != accountRubOrUsd.Currency);
 
             var accountSenderTransfer = resultTransactions.Find(t => t.LeadId == accountRecipientTransfer.LeadId);
 
@@ -98,21 +98,6 @@ public class TransactionsCreater
             }
         } 
         _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
-    }
-
-
-
-
-    private DateTime CreateRandomDate()
-    {
-        Random gen = new Random();
-        var start = new DateTime(1995, 1, 1);
-        int range = (DateTime.Today - start).Days;
-
-        return start.AddDays(gen.Next(range))
-            .AddHours(gen.Next(0, 24))
-            .AddMinutes(gen.Next(0, 60))
-            .AddSeconds(gen.Next(0, 60));
     }
 
     private DateTime CreateRandomDateStartingFromParameter(DateTime transactionTime)
