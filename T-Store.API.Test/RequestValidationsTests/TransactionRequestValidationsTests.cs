@@ -16,7 +16,6 @@ public class TransactionRequestValidationsTests
     public void Setup()
     {
         _validator = new TransactionRequestValidator();
-        
     }
 
     [Test]
@@ -40,7 +39,6 @@ public class TransactionRequestValidationsTests
     [TestCaseSource(typeof(TransactionRequestSource))]
     public async Task TransactionRequest_SendingIncorrectData_GetErrorMessage(TransactionRequest transfer, string errorMessage)
     {
-
         //given,when
         var isValid = _validator.TestValidate(transfer);
 

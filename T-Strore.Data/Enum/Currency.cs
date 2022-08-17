@@ -11,4 +11,3 @@ public enum Currency
     BGN,
     RSD
 }
-

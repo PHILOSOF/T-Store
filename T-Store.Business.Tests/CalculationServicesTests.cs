@@ -7,8 +7,6 @@ namespace T_Store.Business.Tests;
 public class CalculationServicesTests
 {
     private CalculationServices _sut;
-    private readonly ICalculationServices _calculationService;
-
 
     [SetUp]
     public void Setup()
@@ -141,15 +139,6 @@ public class CalculationServicesTests
 
     }
 
-
-    //[TestCase(Currency.RUB, Currency.EUR)]
-    //[TestCase(Currency.RSD, Currency.AMD)]
-    //[TestCase(Currency.JPY, Currency.BGN)]
-    //[TestCase(Currency.AMD, Currency.JPY)]
-    //[TestCase(Currency.RUB, Currency.EUR)]
-    //[TestCase(Currency.RSD, Currency.AMD)]
-    //[TestCase(Currency.JPY, Currency.BGN)]
-    //[TestCase(Currency.AMD, Currency.JPY)]
     [TestCaseSource(typeof(PairsBesidesUsdSource))]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverPairsBesidesUsd(Currency sender, Currency recipient )
     {

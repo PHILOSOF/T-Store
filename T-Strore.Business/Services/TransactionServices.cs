@@ -6,17 +6,14 @@ namespace T_Strore.Business.Services;
 
 public class TransactionServices : ITransactionServices
 {
-
     private readonly ITransactionRepository _transactionRepository;
     private readonly ICalculationServices _calculationService;
-
 
     public TransactionServices(ITransactionRepository transactionRepository, ICalculationServices calculationService)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;
     }
-
 
     public async Task<long> AddDeposit(TransactionDto transaction)
     {
@@ -88,5 +85,4 @@ public class TransactionServices : ITransactionServices
             throw new BadRequestException($"You have not a enough money on balance");
         }
     }
-
 }

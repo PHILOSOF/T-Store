@@ -4,8 +4,6 @@ namespace T_Strore.Business.Services;
 
 public class CalculationServices : ICalculationServices
 {
-    private readonly ICalculationServices _calculationService;
-
     public CalculationServices()
     {
         

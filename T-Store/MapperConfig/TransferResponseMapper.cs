@@ -45,14 +45,10 @@ public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<T
                             };
                             destination.Add(transferModel);
                         }
-                        break;
-                        
+                        break;                      
                     }
             }
-
-
         }
-
         return destination;
     }
 }

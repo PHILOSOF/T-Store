@@ -28,7 +28,6 @@ public class TransactionControllersTests
     public async Task AddDeposit_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
-
         var transaction = new TransactionRequest()
         {
             AccountId = 1,
@@ -149,6 +148,5 @@ public class TransactionControllersTests
         Assert.AreEqual(actualTransaction.TransactionType, expectedTransaction.TransactionType);
 
         _transactionServiceMock.Verify(o => o.GetTransactionById(expectedTransaction.Id), Times.Once);
-
     }
 }

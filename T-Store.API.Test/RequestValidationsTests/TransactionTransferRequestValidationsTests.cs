@@ -16,7 +16,6 @@ public class TransactionTransferRequestValidationsTests
     public void Setup()
     {
         _validator = new TransactionTransferRequestValidator();
-
     }
 
     [Test]

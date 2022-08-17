@@ -1,5 +1,4 @@
 ﻿
-
 namespace T_Strore.Data;
 
 public enum TransactionType
@@ -8,4 +7,3 @@ public enum TransactionType
     Withdraw,
     Transfer
 }
-

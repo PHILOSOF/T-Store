@@ -57,7 +57,7 @@ public class AccountControllersTests
     public async Task GetTransactionsByAccountId_WhenValidRequestPassed_OkReceived()
     {
         //given
-        int expectedAccountId = 1;
+        long expectedAccountId = 1;
         var expectedTransactions = new Dictionary<DateTime, List<TransactionDto>>()
         {
             { new DateTime(2022,05,05), new List<TransactionDto>()
