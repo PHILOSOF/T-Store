@@ -22,12 +22,9 @@ IWebHostEnvironment environment = builder.Environment;
 var conOptions = new ConnectionOption();
 builder.Configuration.Bind(conOptions);
 
-
 LogManager.Configuration.Variables["mydir"] = "Logs";
 
-
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
-
+ builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
@@ -56,22 +53,16 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
 builder.Services.AddScoped<ICalculationServices, CalculationServices>();
-
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
-
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 
 var app = builder.Build();
-
 app.UseCustomExceptionHandler();
-
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -4,7 +4,7 @@ using T_Store.Extensions;
 using T_Store.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
-
+using NLog;
 namespace T_Store.Controllers;
 
 [ApiController]
@@ -69,7 +69,7 @@ public class TransactionsController : Controller
     {
         var transaction = await _transactionServices.GetTransactionById(id);
 
-        _logger.LogInformation("Transactions returned");
+        _logger.LogInformation("Transaction returned");
         return Ok(_mapper.Map<TransactionResponse>(transaction));
     }
 }

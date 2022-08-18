@@ -24,7 +24,7 @@ public class CustomExceptionHandlerMiddleware
         }
         catch (EntityNotFoundException exception)
         {
-            _logger.Error ($"TESt TEST TEST TEST Stopped program because of {exception}");
+            _logger.Error ($"Stopped program because of {exception}");
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, exception.Message);
         }
         catch (BadRequestException exception)
