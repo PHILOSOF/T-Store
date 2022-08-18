@@ -16,8 +16,6 @@ public class CustomExceptionHandlerMiddleware
         _logger = LogManager.GetCurrentClassLogger();
     }
        
-    
-
     public async Task Invoke(HttpContext context)
     {
         try
@@ -34,13 +32,10 @@ public class CustomExceptionHandlerMiddleware
             _logger.Error(exception, $"Stopped program because of {exception}");
             await HandleExceptionAsync(context, HttpStatusCode.BadRequest, exception.Message);
         }
-       
-
     }
 
     private Task HandleExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)
     {
-
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
