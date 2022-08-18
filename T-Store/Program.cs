@@ -9,16 +9,25 @@ using T_Store.Extensions;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using T_Store.Infrastructure;
+using NLog;
+using NLog.Web;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 
-var conString = new ConnectionOption();
-builder.Configuration.Bind(conString);
+var conOptions = new ConnectionOption();
+builder.Configuration.Bind(conOptions);
 
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conString.TSRORE_DB_CONNECTION_STRING));
+
+LogManager.Configuration.Variables["mydir"] = "Logs";
+
+
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
+
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
@@ -50,7 +59,8 @@ builder.Services.AddScoped<ICalculationServices, CalculationServices>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 
-
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 
 var app = builder.Build();

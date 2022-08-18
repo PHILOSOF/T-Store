@@ -15,6 +15,7 @@ public class TransactionControllersTests
     private TransactionsController _sut;
     private Mock<ITransactionServices> _transactionServiceMock;
     private IMapper _mapper;
+    
 
     [SetUp]
     public void Setup()
