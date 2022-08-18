@@ -13,17 +13,20 @@ public class AccountsController : ControllerBase
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IMapper _mapper;
+    private readonly ILogger<TransactionsController> _logger;
 
-    public AccountsController(ITransactionServices transactionServices, IMapper mapper)
+    public AccountsController(ITransactionServices transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;
+        _logger = logger;
     }
 
     [HttpGet("{id}/balance")]
     [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
     public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] long id)
     {
+        _logger.LogInformation("Balance returned");
         return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 
@@ -34,6 +37,7 @@ public class AccountsController : ControllerBase
     {
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
         var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
+        _logger.LogInformation("Transactions by account id returned");
         return Ok(transactionsModel);
     }
 }
