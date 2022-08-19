@@ -11,8 +11,7 @@ using System.Reflection;
 using T_Store.Infrastructure;
 using NLog;
 using NLog.Web;
-
-
+using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +19,9 @@ ConfigurationManager configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 
 var conOptions = new ConnectionOption();
+
 builder.Configuration.Bind(conOptions);
-
-LogManager.Configuration.Variables["mydir"] = "Logs";
-
- builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
@@ -56,6 +53,7 @@ builder.Services.AddScoped<ICalculationServices, CalculationServices>();
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
+
 
 
 var app = builder.Build();
