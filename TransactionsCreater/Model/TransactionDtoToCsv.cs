@@ -28,8 +28,10 @@ public class TransactionDtoToCsv : TransactionDto
         return null + ";"+
             AccountId + ";" + 
             Date.ToString() + ";" + 
-            ((int)TransactionType).ToString() + ";" + 
-            Amount.ToString() + ";" + 
+            ((int)TransactionType).ToString() + ";" +
+
+
+            Convert.ToInt64(Amount).ToString() + ";" + 
             ((int)Currency).ToString();
     }
 }
