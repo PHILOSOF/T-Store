@@ -21,17 +21,17 @@ public class TransactionDtoToCsv : TransactionDto
         Amount = transactionDtoToCsv.Amount;
         Currency = transactionDtoToCsv.Currency;
         LeadId = transactionDtoToCsv.LeadId;
+
     }
 
     public String ToCsvRow()
     {
+      
         return null + ";"+
             AccountId + ";" + 
             Date.ToString() + ";" + 
             ((int)TransactionType).ToString() + ";" +
-
-
-            Convert.ToInt64(Amount).ToString() + ";" + 
+            ((Amount.ToString()).Replace(",",".")) + ";" + 
             ((int)Currency).ToString();
     }
 }

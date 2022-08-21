@@ -33,6 +33,7 @@ public class CalculationServices : ICalculationServices
 
         transferModels[0].Amount = -transferModels[0].Amount;
 
+     
         return transferModels;
     }
 

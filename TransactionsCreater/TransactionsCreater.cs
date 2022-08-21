@@ -17,6 +17,9 @@ public class TransactionsCreater
     [SetUp]
     public void Setup()
     {
+        
+
+
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperForTransactionsCreater>()));
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsToCsv();
@@ -27,51 +30,78 @@ public class TransactionsCreater
     public async Task CreateFakeTransactionsForDb()
     {
 
-
         var resultTransactions = new List<TransactionDtoToCsv>();
         
         var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\SqlTestFiles\final\finalOut.txt");
         var keys = accountsDictionary.Keys.ToList();
-        var random = new Random();
+        
         var indexerTranfer = 0;
-
+        var indexerDeposit = 0;
         foreach (var key in keys)
         {
             var transactionDeposit = new TransactionDtoToCsv();
             var sender = new TransactionDto();
             var transferRecipient= new TransactionDtoToCsv();
             var transfersResult = new List<TransactionDto>();
+            var transferReverseTmp = new  List<TransactionDto>();
 
             var accountsClinet = accountsDictionary[key];                   //deposit
             var accountRubOrUsd = accountsClinet.Find(a => a.Currency ==  (int)Currency.RUB || a.Currency == (int)Currency.USD);
            
             if (accountRubOrUsd is not null)
             {
-                transactionDeposit = _mapper.Map<TransactionDtoToCsv>(accountRubOrUsd);
+                indexerDeposit++;
+                for ( int i=0; i < 2; i++ )
+                {
+                    transactionDeposit = await GetDeposit(transactionDeposit, accountRubOrUsd);
+                    resultTransactions.Add(transactionDeposit);
+                }
 
-                transactionDeposit.TransactionType = TransactionType.Deposit;
-                transactionDeposit.Amount = random.Next(1000, 1000000);
-                transactionDeposit.Date = CreateRandomDateStartingFromParameter(accountRubOrUsd.LeadRegistrationDate);
+                switch (indexerDeposit)
+                {
+                    case 3:
+                        var transactionWithdraw = await Getwithdraw((transactionDeposit.Amount/90), transactionDeposit); // withdraw usd or rub after reverse
+                        transfersResult.Add(transactionWithdraw);
 
-                resultTransactions.Add(transactionDeposit);
+                        indexerDeposit = 0;
+                        break;
+                }
             }
 
-            var accountsVip = accountsClinet.Where(a => a.Currency != accountRubOrUsd.Currency); // transfer
+            var accountsVip = accountsClinet.Where(a => a.Currency != accountRubOrUsd.Currency).ToList(); // transfer
             foreach (var account in accountsVip)
             {
-                
+
                 indexerTranfer++;
                 switch (indexerTranfer)
                 {
                     case 1:
-                        transfersResult = await GetTransfers(transactionDeposit, account);
+                        transfersResult =await GetTransfers(transactionDeposit, account); // transfer to usd or rub
                         sender = transfersResult.Find(t => t.Currency == transactionDeposit.Currency);
+
+                        var transferReverse = transfersResult[1] as TransactionDtoToCsv; // reverse transfer
+                        transferReverse = new TransactionDtoToCsv(transferReverse);
+                        var initialDeposit = transactionDeposit;
+                        transferReverse.Amount = transferReverse.Amount / 50;
+                        transfersResult.AddRange(await GetTransfers(transferReverse, accountRubOrUsd));
+
+                        transferReverse.Amount = transferReverse.Amount / 50;
+                        transfersResult.AddRange(await GetTransfers(transferReverse, accountRubOrUsd));
+
+                        var transactionWithdraw = await Getwithdraw((transfersResult[3].Amount/50), (TransactionDtoToCsv)transfersResult[2]); // withdraw usd or rub after reverse
+                        transfersResult.Add(transactionWithdraw);
                         break;
                     case 2:
                     case 3:
                     case 4:
                     case 5:
-                        transfersResult = await GetTransfers((TransactionDtoToCsv)transfersResult[1], account);//1-3/5
+                        transfersResult = await GetTransfers((TransactionDtoToCsv)transfersResult[1], account);
+
+                        transferReverse = transfersResult[1] as TransactionDtoToCsv;
+                        transferReverse = new TransactionDtoToCsv(transferReverse);
+                        initialDeposit = transactionDeposit;
+                        transferReverse.Amount = transferReverse.Amount / 50;
+                        transfersResult.AddRange(await GetTransfers(transferReverse, accountRubOrUsd));
                         break;
                 }
                 resultTransactions.AddRange(transfersResult.Cast<TransactionDtoToCsv>());
@@ -82,31 +112,19 @@ public class TransactionsCreater
 
             if (currentBalance > 50)
             {
-                var transactionWithdraw = new TransactionDtoToCsv(transactionDeposit);
-                transactionWithdraw.TransactionType = TransactionType.Withdraw;
-                transactionWithdraw.Amount = -currentBalance;
-                transactionWithdraw.Date = CreateRandomDateStartingFromParameter(transactionDeposit.Date);
-
+                var transactionWithdraw = await Getwithdraw(currentBalance, transactionDeposit);
                 resultTransactions.Add(transactionWithdraw);
             }        
         } 
-
-        //if (indexerForCsvFile ???)
-        //{
-        //    var a = resultTransactions.Last();
-        //    string path = @"E:\SqlTestFiles\final\TestManyFile\TEEEST.csv";
-        //    using (FileStream fs = File.Create(path)) ;
-        //}
-
         _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
     }
-
 
     private async Task<List<TransactionDto>> GetTransfers(TransactionDtoToCsv sender, Account recipient)
     {
         var transactionsTransferTmp = new List<TransactionDto>();
         var transferSender = new TransactionDtoToCsv (sender);
-        transferSender.Amount = sender.Amount * CreatePercentForTransfer();
+        var amoutFull = sender.Amount * CreatePercentForTransfer();
+        transferSender.Amount = Math.Round(amoutFull, 4);
         transferSender.Date = CreateRandomDateStartingFromParameter(sender.Date);
         transferSender.TransactionType = TransactionType.Transfer;
 
@@ -117,7 +135,29 @@ public class TransactionsCreater
         transactionsTransferTmp.Add(transferSender);
         transactionsTransferTmp.Add(transferRecipient);
 
-        return await _calculationServices.ConvertCurrency(transactionsTransferTmp);
+        var transactionsResult = await _calculationServices.ConvertCurrency(transactionsTransferTmp);
+        transactionsResult[0].Amount = Math.Round(transactionsResult[0].Amount, 4);
+        transactionsResult[1].Amount = Math.Round(transactionsResult[1].Amount, 4);
+        return transactionsResult;
+    }
+
+    private async Task<TransactionDtoToCsv> GetDeposit(TransactionDtoToCsv deposit, Account accountRubOrUsd)
+    {
+        var random = new Random();
+        deposit = _mapper.Map<TransactionDtoToCsv>(accountRubOrUsd);
+        deposit.TransactionType = TransactionType.Deposit;
+        deposit.Amount = random.Next(1000, 1000000);
+        deposit.Date = CreateRandomDateStartingFromParameter(accountRubOrUsd.LeadRegistrationDate);
+        return deposit;
+    }
+
+    private async Task<TransactionDtoToCsv> Getwithdraw( decimal currentBalance, TransactionDtoToCsv deposit )
+    {
+        var transactionWithdraw = new TransactionDtoToCsv(deposit);
+        transactionWithdraw.TransactionType = TransactionType.Withdraw;
+        transactionWithdraw.Amount = -currentBalance;
+        transactionWithdraw.Date = CreateRandomDateStartingFromParameter(deposit.Date);
+        return transactionWithdraw;
     }
 
     private DateTime CreateRandomDateStartingFromParameter(DateTime transactionTime)
