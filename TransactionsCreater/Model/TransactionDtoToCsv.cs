@@ -1,4 +1,5 @@
-﻿using T_Strore.Data;
+﻿using System.Globalization;
+using T_Strore.Data;
 
 namespace TransactionsCreater.Model;
 
@@ -21,15 +22,19 @@ public class TransactionDtoToCsv : TransactionDto
         Amount = transactionDtoToCsv.Amount;
         Currency = transactionDtoToCsv.Currency;
         LeadId = transactionDtoToCsv.LeadId;
+
     }
+
+    
 
     public String ToCsvRow()
     {
+        var a = Date.ToLongDateString();
         return null + ";"+
             AccountId + ";" + 
-            Date.ToString() + ";" + 
-            ((int)TransactionType).ToString() + ";" + 
-            Amount.ToString() + ";" + 
+            Date.ToString() +"." + Date.Millisecond.ToString()+ ";" + 
+            ((int)TransactionType).ToString() + ";" +
+            ((Amount.ToString()).Replace(",",".")) + ";" + 
             ((int)Currency).ToString();
     }
 }
