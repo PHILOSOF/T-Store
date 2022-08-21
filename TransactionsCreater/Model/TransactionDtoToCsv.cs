@@ -26,10 +26,10 @@ public class TransactionDtoToCsv : TransactionDto
 
     public String ToCsvRow()
     {
-      
+        var a = Date.ToLongDateString();
         return null + ";"+
             AccountId + ";" + 
-            Date.ToString() + ";" + 
+            Date.ToString() +"." + Date.Millisecond.ToString()+ ";" + 
             ((int)TransactionType).ToString() + ";" +
             ((Amount.ToString()).Replace(",",".")) + ";" + 
             ((int)Currency).ToString();

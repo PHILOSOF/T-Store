@@ -116,7 +116,7 @@ public class TransactionsCreater
                 resultTransactions.Add(transactionWithdraw);
             }        
         } 
-        _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\Crm_Account_To_Test.csv");
+        _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\finalMax\FinalMax.txt");
     }
 
     private async Task<List<TransactionDto>> GetTransfers(TransactionDtoToCsv sender, Account recipient)
@@ -166,11 +166,14 @@ public class TransactionsCreater
         var randomDays = gen.Next(0, 15);
         var end = transactionTime.AddDays(randomDays);
         int range = (end - transactionTime).Days;
+        transactionTime = transactionTime.Add(TimeSpan.FromMilliseconds(gen.Next(0, 1000)));
+
+
 
         return transactionTime.AddDays(gen.Next(range))
             .AddHours(gen.Next(0, 24))
             .AddMinutes(gen.Next(0, 60))
-            .AddSeconds(gen.Next(0, 60));
+            .AddSeconds(gen.Next(0, 60));       
     }
 
     private decimal CreatePercentForTransfer()
