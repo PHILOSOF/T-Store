@@ -1,5 +1,7 @@
 using AutoMapper;
 using NUnit.Framework;
+using System.Data;
+using System.Data.SqlClient;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 using TransactionsCreater.HelperCsv;
@@ -11,28 +13,26 @@ public class TransactionsCreater
 {
     private AccountReader _accountReader;
     private CalculationServices _calculationServices;
-    private TransactionsToCsv _transactionsToCsv;
+    private TransactionsCsvHelper _transactionsToCsv;
     private  IMapper _mapper;
 
     [SetUp]
     public void Setup()
     {
         
-
-
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperForTransactionsCreater>()));
         _accountReader = new AccountReader();
-        _transactionsToCsv = new TransactionsToCsv();
+        _transactionsToCsv = new TransactionsCsvHelper();
         _calculationServices = new CalculationServices();
     }
 
     [Test]
-    public async Task CreateFakeTransactionsForDb()
+    public async Task CreateFakeTransactionsForDbToCsv()
     {
 
         var resultTransactions = new List<TransactionDtoToCsv>();
         
-        var accountsDictionary = _accountReader.GetDictionaryOut(@"E:\SqlTestFiles\final\finalOut.txt");
+        var accountsDictionary = _accountReader.GetDictionaryOut(@"filePath");
         var keys = accountsDictionary.Keys.ToList();
         
         var indexerTranfer = 0;
@@ -115,8 +115,48 @@ public class TransactionsCreater
                 var transactionWithdraw = await Getwithdraw(currentBalance, transactionDeposit);
                 resultTransactions.Add(transactionWithdraw);
             }        
-        } 
-        _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"E:\sqlTestFiles\finalMax\FinalMax.txt");
+        }
+        _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"filePath");
+    }
+
+    [Test]
+    public static void BulkInsertTransactions()
+    {
+
+        var transactionsHelper = new TransactionsCsvHelper();
+        DataTable tbl = new DataTable();
+        tbl.Columns.Add(new DataColumn("AccountId", typeof(int)));
+        tbl.Columns.Add(new DataColumn("Date", typeof(DateTime)));
+        tbl.Columns.Add(new DataColumn("TransactionType", typeof(Enum)));
+        tbl.Columns.Add(new DataColumn("Amount", typeof(Decimal)));
+        tbl.Columns.Add(new DataColumn("Currency", typeof(Enum)));
+
+        var transactionsModel = transactionsHelper.ConvertToModel(@"filePath"); //50
+        for (int i = 0; i < transactionsModel.Count; i++)
+        {
+            DataRow dr = tbl.NewRow();
+            dr["AccountId"] = transactionsModel[i].AccountId;
+            dr["Date"] = transactionsModel[i].Date;
+            dr["TransactionType"] = transactionsModel[i].TransactionType;
+            dr["Amount"] = transactionsModel[i].Amount;
+            dr["Currency"] = transactionsModel[i].Currency;
+            tbl.Rows.Add(dr);
+        }
+
+        string connection = @"??";
+        SqlConnection con = new SqlConnection(connection);
+        SqlBulkCopy objbulk = new SqlBulkCopy(con);
+
+        objbulk.DestinationTableName = "[TransactionStore.DB].[dbo].[Transaction]";
+        objbulk.ColumnMappings.Add("AccountId", "AccountId");
+        objbulk.ColumnMappings.Add("Date", "Date");
+        objbulk.ColumnMappings.Add("TransactionType", "TransactionType");
+        objbulk.ColumnMappings.Add("Amount", "Amount");
+        objbulk.ColumnMappings.Add("Currency", "Currency");
+
+        con.Open();
+        objbulk.WriteToServer(tbl);
+        con.Close();
     }
 
     private async Task<List<TransactionDto>> GetTransfers(TransactionDtoToCsv sender, Account recipient)
@@ -180,10 +220,5 @@ public class TransactionsCreater
     {
         Random gen = new Random();
         return gen.Next(50, 100) / 100m;
-    }
-
-    public static void CreateEmptyFile(string filename)
-    {
-        File.Create(filename).Dispose();
     }
 }

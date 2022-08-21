@@ -1,4 +1,5 @@
-﻿using T_Strore.Data;
+﻿using System.Globalization;
+using T_Strore.Data;
 
 namespace TransactionsCreater.Model;
 
@@ -23,6 +24,8 @@ public class TransactionDtoToCsv : TransactionDto
         LeadId = transactionDtoToCsv.LeadId;
 
     }
+
+    
 
     public String ToCsvRow()
     {
