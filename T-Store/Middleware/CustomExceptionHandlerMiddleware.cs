@@ -1,8 +1,7 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Text.Json;
 using T_Strore.Business.Exceptions;
-using NLog;
-using System.Diagnostics.CodeAnalysis;
 
 namespace T_Store.Middleware;
 

@@ -18,7 +18,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "TSRORE_DB_CONNECTION_STRING": "Server=80.78.240.16;Database=TransactionStore.DB;User Id=Student;Password=qwe!23",
-        "LOG_PATH": "$(MSBuildProjectDirectory)"
+        "LOG_DIRECTORY": "$(MSBuildProjectDirectory)\\Logs"
       }
     },
     "IIS Express": {
@@ -37,7 +37,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TSRORE_DB_CONNECTION_STRING": "Server=.\\SQLEXPRESS;Database=T-Store.DB;Trusted_Connection=True;",
-        "LOG_PATH": "$(MSBuildProjectDirectory)"
+        "LOG_DIRECTORY": "$(MSBuildProjectDirectory)\\Logs"
       }
     }
   }

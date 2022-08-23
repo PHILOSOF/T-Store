@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using T_Store.Models;
 using T_Strore.Business.Services;
 
-
 namespace T_Store.Controllers;
 
 [ApiController]

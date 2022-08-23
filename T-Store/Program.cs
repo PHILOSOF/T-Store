@@ -1,17 +1,16 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
+using T_Store.Extensions;
+using T_Store.Infrastructure;
 using T_Store.MapperConfig;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
-using T_Store.Extensions;
-using FluentValidation.AspNetCore;
-using System.Reflection;
-using T_Store.Infrastructure;
-using NLog;
-using NLog.Web;
-using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +20,8 @@ IWebHostEnvironment environment = builder.Environment;
 var conOptions = new ConnectionOption();
 
 builder.Configuration.Bind(conOptions);
+LogManager.Configuration.Variables[$"{ environment: LOG_DIRECTORY}"] = "Logs";
+
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
