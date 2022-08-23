@@ -1,4 +1,4 @@
-﻿namespace T_Store
+﻿namespace T_Store.Infrastructure
 {
     public static class SafeIps
     {

@@ -354,3 +354,6 @@ MigrationBackup/
 _NCrunch_*
 *.crunch.xml
 nCrunchTemp_*
+
+#appsetings
+appsettings.Production.json

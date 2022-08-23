@@ -1,4 +1,5 @@
-﻿using T_Store.Middleware;
+﻿using T_Store.Infrastructure;
+using T_Store.Middleware;
 
 
 namespace T_Store.Extensions
