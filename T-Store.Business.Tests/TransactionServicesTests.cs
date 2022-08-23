@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Moq;
 using T_Strore.Business.Exceptions;
 using T_Strore.Business.Services;
@@ -11,14 +12,15 @@ public class TransactionServicesTests
     private TransactionServices _sut;
     private Mock<ITransactionRepository> _transactionRepositoryMock;
     private Mock<ICalculationServices> _calculationService;
-
+    private Mock<ILogger<TransactionServices>> _logger;
 
     [SetUp]
     public void Setup()
     {
+        _logger = new Mock<ILogger<TransactionServices>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationServices>();
-        _sut = new TransactionServices(_transactionRepositoryMock.Object, _calculationService.Object);
+        _sut = new TransactionServices(_transactionRepositoryMock.Object, _calculationService.Object, _logger.Object);
     }
 
     [Test]

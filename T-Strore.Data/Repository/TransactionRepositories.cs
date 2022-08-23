@@ -1,14 +1,17 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace T_Strore.Data.Repository;
 
 public class TransactionRepositories : BaseRepositories, ITransactionRepository
 {
-    public TransactionRepositories(IDbConnection dbConnection) 
+    private readonly ILogger<TransactionRepositories> _logger;
+
+    public TransactionRepositories(IDbConnection dbConnection, ILogger<TransactionRepositories> logger)
         : base(dbConnection)
     {
+        _logger = logger;
     }
 
     public async Task<long> AddTransaction(TransactionDto transaction) =>
@@ -30,6 +33,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                  commandType: CommandType.StoredProcedure);
 
     public async Task<TransactionDto?> GetTransactionById(long id) =>
+        
         await Connection.QueryFirstOrDefaultAsync<TransactionDto>(
                  TransactionStoredProcedure.Transaction_SelectById,
                  param: new { id },

@@ -2,7 +2,7 @@
 using System.Collections;
 using T_Strore.Data;
 
-namespace T_Store.Business.Tests;
+namespace T_Store.Business.Tests.CaseSource;
 
 public class PairsBesidesUsdSource : IEnumerable
 {
@@ -18,17 +18,17 @@ public class PairsBesidesUsdSource : IEnumerable
 
     public IEnumerator GetEnumerator()
     {
-        foreach(Currency curFirst in currencies)
+        foreach (Currency curFirst in currencies)
         {
 
-            foreach(Currency curSecond in currencies)
+            foreach (Currency curSecond in currencies)
             {
                 yield return new object[]
                 {
                      curFirst,curSecond
                 };
             }
-        }       
+        }
     }
 }
 

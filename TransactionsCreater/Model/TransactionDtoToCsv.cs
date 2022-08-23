@@ -25,8 +25,6 @@ public class TransactionDtoToCsv : TransactionDto
 
     }
 
-    
-
     public String ToCsvRow()
     {
         var a = Date.ToLongDateString();

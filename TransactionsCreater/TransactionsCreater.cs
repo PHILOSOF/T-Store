@@ -16,14 +16,14 @@ public class TransactionsCreater
     private TransactionsCsvHelper _transactionsToCsv;
     private  IMapper _mapper;
 
-    [SetUp]
+    //[SetUp]
     public void Setup()
     {
         
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperForTransactionsCreater>()));
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsCsvHelper();
-        _calculationServices = new CalculationServices();
+        _calculationServices = new CalculationServices(null);
     }
 
     [Test]
@@ -119,7 +119,7 @@ public class TransactionsCreater
         _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"filePath");
     }
 
-    [Test]
+    //[Test]
     public static void BulkInsertTransactions()
     {
 

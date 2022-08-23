@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.Extensions.Logging;
+using Moq;
+using T_Store.Business.Tests.CaseSource;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
@@ -7,13 +10,14 @@ namespace T_Store.Business.Tests;
 public class CalculationServicesTests
 {
     private CalculationServices _sut;
+    private Mock<ILogger<CalculationServices>> _logger;
+    
 
     [SetUp]
     public void Setup()
     {
-
-        _sut= new CalculationServices();
-
+        _logger = new Mock<ILogger<CalculationServices>>();
+        _sut = new CalculationServices(_logger.Object);
     }
 
     [TestCase(Currency.EUR)]
