@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using T_Store.Controllers;
@@ -16,13 +18,15 @@ public class AccountControllersTests
     private AccountsController _sut;
     private Mock<ITransactionServices> _transactionServiceMock;
     private IMapper _mapper;
+    private Mock<ILogger<AccountsController>> _logger;
 
     [SetUp]
     public void Setup()
     {
+        _logger = new Mock<ILogger<AccountsController>>();
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
         _transactionServiceMock = new Mock<ITransactionServices>();
-        _sut = new AccountsController(_transactionServiceMock.Object, _mapper);
+        _sut = new AccountsController(_transactionServiceMock.Object, _mapper, _logger.Object);
     }
 
     [Test]

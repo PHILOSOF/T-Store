@@ -13,9 +13,9 @@ public class AccountsController : ControllerBase
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IMapper _mapper;
-    private readonly ILogger<TransactionsController> _logger;
+    private readonly ILogger<AccountsController> _logger;
 
-    public AccountsController(ITransactionServices transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
+    public AccountsController(ITransactionServices transactionServices, IMapper mapper, ILogger<AccountsController> logger)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;

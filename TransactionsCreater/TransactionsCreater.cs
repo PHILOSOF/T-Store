@@ -16,7 +16,7 @@ public class TransactionsCreater
     private TransactionsCsvHelper _transactionsToCsv;
     private  IMapper _mapper;
 
-    [SetUp]
+    //[SetUp]
     public void Setup()
     {
         
@@ -26,7 +26,7 @@ public class TransactionsCreater
         _calculationServices = new CalculationServices();
     }
 
-    [Test]
+    //[Test]
     public async Task CreateFakeTransactionsForDbToCsv()
     {
 
@@ -119,7 +119,7 @@ public class TransactionsCreater
         _transactionsToCsv.ConvertToCsv(resultTransactions.OrderBy(r => r.Date).ToList(), @"filePath");
     }
 
-    [Test]
+    //[Test]
     public static void BulkInsertTransactions()
     {
 
