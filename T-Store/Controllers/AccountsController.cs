@@ -25,7 +25,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
     public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] long id)
     {
-        _logger.LogInformation("Balance returned");
+        _logger.LogInformation("Controller: Request a balance");
         return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 
@@ -34,9 +34,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] long id)
     {
+        _logger.LogInformation("Controller: Request a transactions by account id");
         var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
         var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
-        _logger.LogInformation("Transactions by account id returned");
+    
         return Ok(transactionsModel);
     }
 }

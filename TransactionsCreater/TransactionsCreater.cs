@@ -26,7 +26,7 @@ public class TransactionsCreater
         _calculationServices = new CalculationServices(null);
     }
 
-    [Test]
+    //[Test]
     public async Task CreateFakeTransactionsForDbToCsv()
     {
 
