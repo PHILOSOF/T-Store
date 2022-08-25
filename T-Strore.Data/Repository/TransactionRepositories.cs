@@ -41,7 +41,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation("Transaction added");
+        _logger.LogInformation("Balance returned");
         return balance;
     }
         
@@ -54,7 +54,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                  param: new { id },
                  commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation("Transaction added");
+        _logger.LogInformation("Transaction returned");
         return transaction;
     }
           
@@ -74,7 +74,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-        _logger.LogInformation("Transaction added");
+        _logger.LogInformation("Transfer added");
         return transferIds;
     }
         
@@ -86,7 +86,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
                   param: new { accountId },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-        _logger.LogInformation("Transaction added");
+        _logger.LogInformation("Transactions added");
         return transactions;
     }       
 }
