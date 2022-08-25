@@ -13,12 +13,12 @@ public class CalculationServices : ICalculationServices
 
     public async Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels)
     {
-        _logger.LogInformation("Currency rate receiving");
+        _logger.LogInformation("Business layer: Currency rate receiving");
         var currencyRates = await GetCurrencyRate();
         var senderCurrency = transferModels[0].Currency;
         var recipientCurrency = transferModels[1].Currency;
 
-        _logger.LogInformation("Conver currency");
+        _logger.LogInformation("Business layer: Converting currency");
         if (senderCurrency != Currency.USD && recipientCurrency != Currency.USD)
         {
                 transferModels[1].Amount = (transferModels[0].Amount /
@@ -36,7 +36,7 @@ public class CalculationServices : ICalculationServices
 
         transferModels[0].Amount = -transferModels[0].Amount;
 
-        _logger.LogInformation("Convert result returned");
+        _logger.LogInformation("Business layer: Convert result returned");
         return transferModels;
     }
 

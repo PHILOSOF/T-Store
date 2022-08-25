@@ -21,32 +21,34 @@ public class TransactionServices : ITransactionServices
     {
 
         transaction.TransactionType = TransactionType.Deposit;
-        _logger.LogInformation("Add deposit, id returned");
+        _logger.LogInformation("Business layer: Request in data base for  add transaction");
         return await _transactionRepository.AddTransaction(transaction);
     }
 
     public async Task<long> Withdraw(TransactionDto transaction)
     {
+        _logger.LogInformation("Business layer: Check balance");
         await CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
         transaction.Amount = - transaction.Amount;
-        _logger.LogInformation("Add withdraw, id returned");
+
+        _logger.LogInformation("Business layer: Request in data base for add withdraw");
         return await _transactionRepository.AddTransaction(transaction);
     }
 
     public async Task<List<long>> AddTransfer(List<TransactionDto> transfersModels)
     {
-        _logger.LogInformation("Check balance");
+        _logger.LogInformation("Business layer: Check balance");
         await CheckBalance(transfersModels[0]);
 
-        _logger.LogInformation("Conver Currency");
+       
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
 
         transfersConvert[0].TransactionType = TransactionType.Transfer;
         transfersConvert[1].TransactionType = TransactionType.Transfer;
 
-        _logger.LogInformation("Add Transfer, ids returned");
+        _logger.LogInformation("Business layer: Request in data base for add transfers");
         return await _transactionRepository.AddTransferTransactions(transfersConvert[0], transfersConvert[1]);
     }
 
@@ -54,21 +56,22 @@ public class TransactionServices : ITransactionServices
     {
         decimal emptyBalance = 0;
 
-        _logger.LogInformation("Balance receiving");
+        _logger.LogInformation("Business layer: Request in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(accountId);
 
         if(balance is null)
         {
+            _logger.LogInformation("Business layer: Balance returned in controller");
             return balance = emptyBalance;
         }
 
-        _logger.LogInformation("Balance returned");
+        _logger.LogInformation("Business layer: Balance returned in controller");
         return balance;
     }
 
     public async Task<TransactionDto?> GetTransactionById(long id)
     {
-        _logger.LogInformation("Transaction receiving");
+        _logger.LogInformation("Business layer: Request in data base for transaction receiving");
         var transaction = _transactionRepository.GetTransactionById(id);
 
         if (transaction.Result is null)
@@ -76,25 +79,25 @@ public class TransactionServices : ITransactionServices
             throw new EntityNotFoundException($"Transaction {id} not found");
         }
 
-        _logger.LogInformation("Transaction returned");
+        _logger.LogInformation("Business layer: Transaction returned in controller");
         return await transaction;
     }
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId)
     {
-        _logger.LogInformation("Transactions receiving");
+        _logger.LogInformation("Business layer: Request in data base for transaction by id receiving");
         var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
 
-        _logger.LogInformation("Transactions dictionary receiving");
+        _logger.LogInformation("Business layer: Add transactions in dictionary");
         var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());
 
-        _logger.LogInformation("Transactions returned");
+        _logger.LogInformation("Business layer: Transactions returned in controller");
         return transactionsDictionary;
     }
 
     private async Task CheckBalance(TransactionDto transaction)
     {
-        _logger.LogInformation("Balance receiving");
+        _logger.LogInformation("Business layer: request in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(transaction.AccountId);
         if (transaction.Amount > balance || balance is null || balance == 0)
         {

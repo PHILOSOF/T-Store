@@ -28,9 +28,10 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<long>> AddDeposit([FromBody] TransactionRequest transaction)
     {
+        _logger.LogInformation("Controller: Request to add deposit");
         var id = await _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation("Deposit add");
+        _logger.LogInformation("Controller: Id returned");
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
@@ -42,9 +43,11 @@ public class TransactionsController : Controller
     {
          
         var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
+
+        _logger.LogInformation("Controller: Request to add transfer");
         var id = await _transactionServices.AddTransfer(transferModels);
 
-        _logger.LogInformation("Transfer created");
+        _logger.LogInformation("Controller: Transfer ids returned");
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
@@ -54,9 +57,10 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<long>> Withdraw([FromBody] TransactionRequest transaction)
     {
+        _logger.LogInformation("Controller: Request to add withdraw");
         var id = await _transactionServices.Withdraw(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation("Withdraw created");
+        _logger.LogInformation("Controller: Withdraw id returned");
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 
@@ -66,6 +70,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] long id)
     {
+        _logger.LogInformation("Controller: Request Transactions by id");
         var transaction = await _transactionServices.GetTransactionById(id);
 
         _logger.LogInformation("Transaction returned");
