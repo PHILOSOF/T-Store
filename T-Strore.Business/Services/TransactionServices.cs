@@ -85,13 +85,13 @@ public class TransactionServices : ITransactionServices
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId)
     {
-        _logger.LogInformation("Business layer: Request in data base for transaction by id receiving");
+        _logger.LogInformation($"Business layer: Sending a request to database to get transactions by {accountId} id ");
         var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
 
         _logger.LogInformation("Business layer: Add transactions in dictionary");
         var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());
 
-        _logger.LogInformation("Business layer: Transactions returned in controller");
+        _logger.LogInformation("Business layer: Transactions returned to controller");
         return transactionsDictionary;
     }
 

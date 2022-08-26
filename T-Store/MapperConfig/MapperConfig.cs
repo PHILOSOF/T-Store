@@ -3,9 +3,9 @@ using T_Store.Models;
 using T_Strore.Data;
 
 namespace T_Store.MapperConfig;
-public class MapperConfigStorage : Profile
+public class MapperConfig : Profile
 {
-    public MapperConfigStorage()
+    public MapperConfig()
     {
 
         CreateMap<TransactionRequest, TransactionDto>();
@@ -16,7 +16,7 @@ public class MapperConfigStorage : Profile
             .ConvertUsing<TransferRequestMapper>();
 
         CreateMap<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>()
-           .ConvertUsing<TransferResponseMapper>();
+           .ConvertUsing<TransactionResponseMapper>();
     }
 }
 

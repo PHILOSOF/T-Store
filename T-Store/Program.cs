@@ -24,11 +24,12 @@ LogManager.Configuration.Variables[$"{ environment: LOG_DIRECTORY}"] = "Logs";
 
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
 
+// to fix
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
     .AddNewtonsoftJson()
     .ConfigureApiBehaviorOptions(options =>
-    {
+    {     
         options.InvalidModelStateResponseFactory = context =>
         {
             var result = new BadRequestObjectResult(context.ModelState);
@@ -40,6 +41,8 @@ builder.Services.AddControllers()
 
 
 builder.Services.AddEndpointsApiExplorer();
+
+// move code into extension methods
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo 
@@ -51,12 +54,10 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
 builder.Services.AddScoped<ITransactionServices, TransactionServices>();
 builder.Services.AddScoped<ICalculationServices, CalculationServices>();
-builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
-
-
-
+      
 var app = builder.Build();
 app.UseCustomExceptionHandler();
 app.UseSwagger();
