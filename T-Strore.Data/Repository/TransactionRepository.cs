@@ -4,11 +4,11 @@ using System.Data;
 
 namespace T_Strore.Data.Repository;
 
-public class TransactionRepositories : BaseRepositories, ITransactionRepository
+public class TransactionRepository : BaseRepository, ITransactionRepository
 {
-    private readonly ILogger<TransactionRepositories> _logger;
+    private readonly ILogger<TransactionRepository> _logger;
 
-    public TransactionRepositories(IDbConnection dbConnection, ILogger<TransactionRepositories> logger)
+    public TransactionRepository(IDbConnection dbConnection, ILogger<TransactionRepository> logger)
         : base(dbConnection)
     {
         _logger = logger;
@@ -17,7 +17,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     public async Task<long> AddTransaction(TransactionDto transaction)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
-        var id = await Connection.QueryFirstOrDefaultAsync<long>(
+        var id = await _dbConnection.QueryFirstOrDefaultAsync<long>(
                   TransactionStoredProcedure.Transaction_Insert,
                   param: new
                   {
@@ -33,10 +33,10 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     }
          
 
-    public async Task<decimal?> GetBalanceByAccountId(long accountId)
+    public async Task<decimal> GetBalanceByAccountId(long accountId)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
-        var balance = await Connection.QueryFirstOrDefaultAsync<decimal?>(
+        var balance = await _dbConnection.QueryFirstOrDefaultAsync<decimal>(
                  TransactionStoredProcedure.Transaction_SelectBalanceByAccountId,
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);
@@ -48,7 +48,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     public async Task<TransactionDto?> GetTransactionById(long id)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
-        var transaction = await Connection.QueryFirstOrDefaultAsync<TransactionDto>(
+        var transaction = await _dbConnection.QueryFirstOrDefaultAsync<TransactionDto>(
                  TransactionStoredProcedure.Transaction_SelectById,
                  param: new { id },
                  commandType: CommandType.StoredProcedure);
@@ -60,7 +60,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     public async Task<List<long>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
-        var transferIds= (await Connection.QueryAsync<long>(
+        var transferIds= (await _dbConnection.QueryAsync<long>(
                   TransactionStoredProcedure.Transaction_InsertTransfer,
                   param: new
                   {
@@ -80,7 +80,7 @@ public class TransactionRepositories : BaseRepositories, ITransactionRepository
     public async Task<List<TransactionDto>> GetAllTransactionsByAccountId(long accountId)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
-        var transactions = (await Connection.QueryAsync<TransactionDto>(
+        var transactions = (await _dbConnection.QueryAsync<TransactionDto>(
                   TransactionStoredProcedure.Transaction_GetAllTransactionsByAccountId,
                   param: new { accountId },
                   commandType: CommandType.StoredProcedure)).ToList();

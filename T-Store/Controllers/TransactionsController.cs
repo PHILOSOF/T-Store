@@ -67,7 +67,6 @@ public class TransactionsController : Controller
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] long id)
     {
         _logger.LogInformation("Controller: Request Transactions by id");

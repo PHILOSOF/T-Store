@@ -9,15 +9,15 @@ namespace T_Store.Business.Tests;
 
 public class CalculationServicesTests
 {
-    private CalculationServices _sut;
-    private Mock<ILogger<CalculationServices>> _logger;
+    private CalculationService _sut;
+    private Mock<ILogger<CalculationService>> _logger;
     
 
     [SetUp]
     public void Setup()
     {
-        _logger = new Mock<ILogger<CalculationServices>>();
-        _sut = new CalculationServices(_logger.Object);
+        _logger = new Mock<ILogger<CalculationService>>();
+        _sut = new CalculationService(_logger.Object);
     }
 
     [TestCase(Currency.EUR)]

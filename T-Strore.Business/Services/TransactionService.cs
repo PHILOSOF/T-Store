@@ -5,12 +5,12 @@ using T_Strore.Data.Repository;
 
 namespace T_Strore.Business.Services;
 
-public class TransactionServices : ITransactionServices
+public class TransactionService : ITransactionServices
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly ICalculationServices _calculationService;
-    private readonly ILogger<TransactionServices> _logger;
-    public TransactionServices(ITransactionRepository transactionRepository, ICalculationServices calculationService, ILogger<TransactionServices> logger)
+    private readonly ILogger<TransactionService> _logger;
+    public TransactionService(ITransactionRepository transactionRepository, ICalculationServices calculationService, ILogger<TransactionService> logger)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;
@@ -19,7 +19,6 @@ public class TransactionServices : ITransactionServices
 
     public async Task<long> AddDeposit(TransactionDto transaction)
     {
-
         transaction.TransactionType = TransactionType.Deposit;
         _logger.LogInformation("Business layer: Request in data base for  add transaction");
         return await _transactionRepository.AddTransaction(transaction);
@@ -31,7 +30,7 @@ public class TransactionServices : ITransactionServices
         await CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
-        transaction.Amount = - transaction.Amount;
+        transaction.Amount *= -1;
 
         _logger.LogInformation("Business layer: Request in data base for add withdraw");
         return await _transactionRepository.AddTransaction(transaction);
@@ -41,10 +40,10 @@ public class TransactionServices : ITransactionServices
     {
         _logger.LogInformation("Business layer: Check balance");
         await CheckBalance(transfersModels[0]);
-
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
 
+        // to automapper
         transfersConvert[0].TransactionType = TransactionType.Transfer;
         transfersConvert[1].TransactionType = TransactionType.Transfer;
 
@@ -54,16 +53,8 @@ public class TransactionServices : ITransactionServices
 
     public async Task<decimal?> GetBalanceByAccountId(long accountId)
     {
-        decimal emptyBalance = 0;
-
         _logger.LogInformation("Business layer: Request in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(accountId);
-
-        if(balance is null)
-        {
-            _logger.LogInformation("Business layer: Balance returned in controller");
-            return balance = emptyBalance;
-        }
 
         _logger.LogInformation("Business layer: Balance returned in controller");
         return balance;
@@ -72,15 +63,15 @@ public class TransactionServices : ITransactionServices
     public async Task<TransactionDto?> GetTransactionById(long id)
     {
         _logger.LogInformation("Business layer: Request in data base for transaction receiving");
-        var transaction = _transactionRepository.GetTransactionById(id);
+        var transaction = await _transactionRepository.GetTransactionById(id);
 
-        if (transaction.Result is null)
+        if (transaction is null)
         {
             throw new EntityNotFoundException($"Transaction {id} not found");
         }
 
         _logger.LogInformation("Business layer: Transaction returned in controller");
-        return await transaction;
+        return transaction;
     }
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId)
@@ -99,9 +90,9 @@ public class TransactionServices : ITransactionServices
     {
         _logger.LogInformation("Business layer: request in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(transaction.AccountId);
-        if (transaction.Amount > balance || balance is null || balance == 0)
+        if (transaction.Amount > balance)
         {
-            throw new BadRequestException($"You have not a enough money on balance");
+            throw new BalanceExceedException($"You have not a enough money on balance");
         }
     }
 }

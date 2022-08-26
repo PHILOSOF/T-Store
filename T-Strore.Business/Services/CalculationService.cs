@@ -3,10 +3,10 @@ using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
 
-public class CalculationServices : ICalculationServices
+public class CalculationService : ICalculationServices
 {
-    private readonly ILogger<CalculationServices> _logger;
-    public CalculationServices(ILogger<CalculationServices> logger)
+    private readonly ILogger<CalculationService> _logger;
+    public CalculationService(ILogger<CalculationService> logger)
     {
         _logger=logger;
     }
@@ -15,10 +15,18 @@ public class CalculationServices : ICalculationServices
     {
         _logger.LogInformation("Business layer: Currency rate receiving");
         var currencyRates = await GetCurrencyRate();
-        var senderCurrency = transferModels[0].Currency;
-        var recipientCurrency = transferModels[1].Currency;
+        var senderCurrency = transferModels[0].Currency;   // .ToString() => RUB
+        var recipientCurrency = transferModels[1].Currency;   // .ToString() => EUR
 
-        _logger.LogInformation("Business layer: Converting currency");
+        // TryFind('RUBEUR')   RUBUSD -> false
+        // TryFind('EURRUB')   USDRUB -> true; rate = 1 \ rate
+
+        // var base = currencyRates.First().Key.substring(0, 3) => JPY
+        // rate1 = currencyRates["JPY""RUB"]
+        // rate2 = currencyRates["JPY""EUR"]
+
+
+        _logger.LogInformation("Business layer: Converting amount by currency");
         if (senderCurrency != Currency.USD && recipientCurrency != Currency.USD)
         {
                 transferModels[1].Amount = (transferModels[0].Amount /

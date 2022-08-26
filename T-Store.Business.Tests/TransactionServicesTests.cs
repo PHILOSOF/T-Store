@@ -9,18 +9,18 @@ namespace T_Store.Business.Tests;
 
 public class TransactionServicesTests
 {
-    private TransactionServices _sut;
+    private TransactionService _sut;
     private Mock<ITransactionRepository> _transactionRepositoryMock;
     private Mock<ICalculationServices> _calculationService;
-    private Mock<ILogger<TransactionServices>> _logger;
+    private Mock<ILogger<TransactionService>> _logger;
 
     [SetUp]
     public void Setup()
     {
-        _logger = new Mock<ILogger<TransactionServices>>();
+        _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationServices>();
-        _sut = new TransactionServices(_transactionRepositoryMock.Object, _calculationService.Object, _logger.Object);
+        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _logger.Object);
     }
 
     [Test]
@@ -95,7 +95,7 @@ public class TransactionServicesTests
          .ReturnsAsync(realBalance);
 
         //when,then
-        Assert.ThrowsAsync<BadRequestException>(() => _sut.Withdraw(transactionWithdraw));
+        Assert.ThrowsAsync<BalanceExceedException>(() => _sut.Withdraw(transactionWithdraw));
 
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transactionWithdraw.Id), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);
@@ -186,7 +186,7 @@ public class TransactionServicesTests
 
         //when,then
 
-        Assert.ThrowsAsync<BadRequestException>(() => _sut.AddTransfer(transfers));
+        Assert.ThrowsAsync<BalanceExceedException>(() => _sut.AddTransfer(transfers));
 
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transfers[0].AccountId), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);

@@ -17,6 +17,7 @@ public class TransactionTransferRequestValidator : AbstractValidator<Transaction
            .NotEqual(t => t.RecipientCurrency).WithMessage(ApiErrorMessage.SameCurrency);
         RuleFor(t => t.AccountId)
             .GreaterThanOrEqualTo(1).WithMessage(ApiErrorMessage.NumberLessOrEqualZero);
+            // .NotEqual
         RuleFor(t => t.Amount)
             .GreaterThanOrEqualTo(1).WithMessage(ApiErrorMessage.NumberLessOrEqualZero);
     }

@@ -31,7 +31,6 @@ public class AccountsController : ControllerBase
 
     [HttpGet("{id}/transactions")]
     [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] long id)
     {
         _logger.LogInformation("Controller: Request a transactions by account id");

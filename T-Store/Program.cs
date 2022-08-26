@@ -48,9 +48,9 @@ builder.Services.AddSwaggerGen(options =>
     });         
 });
 
-builder.Services.AddScoped<ITransactionRepository, TransactionRepositories>();
-builder.Services.AddScoped<ITransactionServices, TransactionServices>();
-builder.Services.AddScoped<ICalculationServices, CalculationServices>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionServices, TransactionService>();
+builder.Services.AddScoped<ICalculationServices, CalculationService>();
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
