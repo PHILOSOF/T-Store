@@ -1,16 +1,12 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using System.Data;
 using System.Data.SqlClient;
-using System.Reflection;
 using T_Store.Extensions;
 using T_Store.Infrastructure;
 using T_Store.MapperConfig;
-using T_Strore.Business.Services;
-using T_Strore.Data.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +21,6 @@ LogManager.Configuration.Variables[$"{ environment: LOG_DIRECTORY}"] = "Logs";
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(conOptions.TSRORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
     .AddNewtonsoftJson()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -38,24 +33,14 @@ builder.Services.AddControllers()
         
     });
 
-
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "T-Store", Version = "v1" 
-    });         
-});
-
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-builder.Services.AddScoped<ITransactionServices, TransactionService>();
-builder.Services.AddScoped<ICalculationServices, CalculationService>();
+builder.Services.AddSwaggerGen();
+builder.Services.AddFluentValidation();
+builder.Services.AddServices();
+builder.Services.AddRepositories();
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
-
-
 
 var app = builder.Build();
 app.UseCustomExceptionHandler();
