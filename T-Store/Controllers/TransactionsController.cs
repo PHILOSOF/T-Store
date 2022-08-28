@@ -11,11 +11,11 @@ namespace T_Store.Controllers;
 [Route("transactions")]
 public class TransactionsController : Controller
 {
-    private readonly ITransactionServices _transactionServices;
+    private readonly ITransactionService _transactionServices;
     private readonly IMapper _mapper;
     private readonly ILogger<TransactionsController> _logger;
 
-    public TransactionsController (ITransactionServices transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
+    public TransactionsController (ITransactionService transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;

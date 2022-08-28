@@ -2,7 +2,7 @@
 using T_Store.Models;
 using T_Strore.Data;
 
-namespace T_Store.MapperConfig;
+namespace T_Store.MapperConfiguration;
 
 public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, List<TransactionDto>>
 {

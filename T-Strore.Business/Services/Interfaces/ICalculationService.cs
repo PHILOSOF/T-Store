@@ -2,7 +2,7 @@
 
 namespace T_Strore.Business.Services;
 
-public interface ICalculationServices
+public interface ICalculationService
 {
    public Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels);
 }

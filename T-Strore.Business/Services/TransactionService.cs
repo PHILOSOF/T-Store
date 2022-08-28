@@ -5,12 +5,15 @@ using T_Strore.Data.Repository;
 
 namespace T_Strore.Business.Services;
 
-public class TransactionService : ITransactionServices
+public class TransactionService : ITransactionService
 {
     private readonly ITransactionRepository _transactionRepository;
-    private readonly ICalculationServices _calculationService;
+    private readonly ICalculationService _calculationService;
     private readonly ILogger<TransactionService> _logger;
-    public TransactionService(ITransactionRepository transactionRepository, ICalculationServices calculationService, ILogger<TransactionService> logger)
+
+    int sender = 0;
+    int recipient = 1;
+    public TransactionService(ITransactionRepository transactionRepository, ICalculationService calculationService, ILogger<TransactionService> logger)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;
@@ -39,13 +42,13 @@ public class TransactionService : ITransactionServices
     public async Task<List<long>> AddTransfer(List<TransactionDto> transfersModels)
     {
         _logger.LogInformation("Business layer: Check balance");
-        await CheckBalance(transfersModels[0]);
+        await CheckBalance(transfersModels[sender]);
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
 
         // to automapper
-        transfersConvert[0].TransactionType = TransactionType.Transfer;
-        transfersConvert[1].TransactionType = TransactionType.Transfer;
+        transfersConvert[sender].TransactionType = TransactionType.Transfer; // add to automapper
+        transfersConvert[recipient].TransactionType = TransactionType.Transfer;
 
         _logger.LogInformation("Business layer: Request in data base for add transfers");
         return await _transactionRepository.AddTransferTransactions(transfersConvert[0], transfersConvert[1]);
@@ -56,7 +59,7 @@ public class TransactionService : ITransactionServices
         _logger.LogInformation("Business layer: Request in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(accountId);
 
-        _logger.LogInformation("Business layer: Balance returned in controller");
+        _logger.LogInformation("Business layer: Balance returned to controller");
         return balance;
     }
 
@@ -70,19 +73,19 @@ public class TransactionService : ITransactionServices
             throw new EntityNotFoundException($"Transaction {id} not found");
         }
 
-        _logger.LogInformation("Business layer: Transaction returned in controller");
+        _logger.LogInformation("Business layer: Transaction returned to controller");
         return transaction;
     }
 
     public async Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId)
     {
-        _logger.LogInformation("Business layer: Request in data base for transaction by id receiving");
+        _logger.LogInformation($"Business layer: Sending a request to database for transaction by {accountId} id ");
         var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
 
         _logger.LogInformation("Business layer: Add transactions in dictionary");
-        var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(d => d.Key, d => d.ToList());
+        var transactionsDictionary = transactions.GroupBy(t => t.Date).ToDictionary(date => date.Key, transactions => transactions.ToList());
 
-        _logger.LogInformation("Business layer: Transactions returned in controller");
+        _logger.LogInformation("Business layer: Transactions returned to controller");
         return transactionsDictionary;
     }
 

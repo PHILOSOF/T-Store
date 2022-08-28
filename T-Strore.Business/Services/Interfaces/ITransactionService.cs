@@ -2,7 +2,7 @@
 
 namespace T_Strore.Business.Services;
 
-public interface ITransactionServices
+public interface ITransactionService
 {
     public Task<long> AddDeposit(TransactionDto transaction);
     public Task<List<long>> AddTransfer(List<TransactionDto> transferModels);

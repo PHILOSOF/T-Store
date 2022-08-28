@@ -10,11 +10,11 @@ namespace T_Store.Controllers;
 [Route("accounts")]
 public class AccountsController : ControllerBase
 {
-    private readonly ITransactionServices _transactionServices;
+    private readonly ITransactionService _transactionServices;
     private readonly IMapper _mapper;
     private readonly ILogger<AccountsController> _logger;
 
-    public AccountsController(ITransactionServices transactionServices, IMapper mapper, ILogger<AccountsController> logger)
+    public AccountsController(ITransactionService transactionServices, IMapper mapper, ILogger<AccountsController> logger)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;
@@ -34,8 +34,8 @@ public class AccountsController : ControllerBase
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] long id)
     {
         _logger.LogInformation("Controller: Request a transactions by account id");
-        var transactionsTransfers = await _transactionServices.GetTransactionsByAccountId(id);
-        var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactionsTransfers);
+        var transactions = await _transactionServices.GetTransactionsByAccountId(id);
+        var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactions);
     
         return Ok(transactionsModel);
     }

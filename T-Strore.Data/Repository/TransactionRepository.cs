@@ -28,7 +28,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation("Data layer: Transaction added, id returned in business");
+        _logger.LogInformation("Data layer: Transaction added, id returned to business");
         return id;
     }
          
@@ -41,7 +41,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                  param: new { accountId },
                  commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation("Data layer: Balance returned in business");
+        _logger.LogInformation("Data layer: Balance returned to business");
         return balance;
     }
         
@@ -53,7 +53,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                  param: new { id },
                  commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation("Data layer: Transaction returned in business");
+        _logger.LogInformation("Data layer: Transaction returned to business");
         return transaction;
     }
           
@@ -73,7 +73,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-        _logger.LogInformation("Data layer: Transfer added, ids returned in business");
+        _logger.LogInformation("Data layer: Transfer added, ids returned to business");
         return transferIds;
     }
         
@@ -85,7 +85,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   param: new { accountId },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-        _logger.LogInformation("Data layer: Transactions returned in business");
+        _logger.LogInformation("Data layer: Transactions returned to business");
         return transactions;
     }       
 }

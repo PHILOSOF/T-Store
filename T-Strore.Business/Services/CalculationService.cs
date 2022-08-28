@@ -3,7 +3,7 @@ using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
 
-public class CalculationService : ICalculationServices
+public class CalculationService : ICalculationService
 {
     private readonly ILogger<CalculationService> _logger;
     public CalculationService(ILogger<CalculationService> logger)

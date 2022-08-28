@@ -3,9 +3,9 @@ using T_Store.Models;
 using T_Store.Models.Responses;
 using T_Strore.Data;
 
-namespace T_Store.MapperConfig;
+namespace T_Store.MapperConfiguration;
 
-public class TransferResponseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>
+public class TransactionResponseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>
 {
     public List<TransactionResponse> Convert(Dictionary<DateTime, List<TransactionDto>> source, List<TransactionResponse> destination, ResolutionContext context)
     {

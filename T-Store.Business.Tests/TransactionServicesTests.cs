@@ -11,7 +11,7 @@ public class TransactionServicesTests
 {
     private TransactionService _sut;
     private Mock<ITransactionRepository> _transactionRepositoryMock;
-    private Mock<ICalculationServices> _calculationService;
+    private Mock<ICalculationService> _calculationService;
     private Mock<ILogger<TransactionService>> _logger;
 
     [SetUp]
@@ -19,7 +19,7 @@ public class TransactionServicesTests
     {
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
-        _calculationService = new Mock<ICalculationServices>();
+        _calculationService = new Mock<ICalculationService>();
         _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _logger.Object);
     }
 

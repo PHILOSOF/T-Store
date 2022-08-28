@@ -12,8 +12,8 @@ namespace T_Store.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddScoped<ITransactionServices, TransactionService>();
-            services.AddScoped<ICalculationServices, CalculationService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<ICalculationService, CalculationService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
