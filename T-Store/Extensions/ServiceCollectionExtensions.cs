@@ -23,7 +23,7 @@ namespace T_Store.Extensions
 
         public static void AddFluentValidation(this IServiceCollection services)
         {
-            services.AddFluentValidation(config => config.AutomaticValidationEnabled = true);
+            services.AddFluentValidationAutoValidation (config => config.DisableDataAnnotationsValidation = true);
             services.AddScoped<IValidator<TransactionRequest>, TransactionRequestValidator>();
             services.AddScoped<IValidator<TransactionTransferRequest>, TransactionTransferRequestValidator>();
         }
