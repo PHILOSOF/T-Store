@@ -9,39 +9,26 @@ public class AdminSafeListMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<AdminSafeListMiddleware> _logger;
-    private readonly byte[][] _safelist;
+    private readonly string[] _safelist;
 
-    public AdminSafeListMiddleware(RequestDelegate next, ILogger<AdminSafeListMiddleware> logger, string safelist)
+    public AdminSafeListMiddleware(RequestDelegate next, ILogger<AdminSafeListMiddleware> logger, IConfiguration configuration)
     {
-        var ips = safelist.Split(';');
-        _safelist = new byte[ips.Length][];
-
-        for (var i = 0; i < ips.Length; i++)
-        {
-            _safelist[i] = IPAddress.Parse(ips[i]).GetAddressBytes();
-        }
+        var whitList = configuration.GetSection("HostWhiteList").Value.ToString();
+        _safelist = whitList.Split(';'); 
         _next = next;
         _logger = logger;
     }
 
     public async Task Invoke(HttpContext context)
     {
-        var remoteIp = context.Connection.RemoteIpAddress;
-        _logger.LogDebug($"Request from Remote IP address: {remoteIp}");
+        var remote = context.Request.Host;
 
-        var bytes = remoteIp.GetAddressBytes();
+        _logger.LogInformation($"Request from Remote host address: {remote.Host}");
         var badIp = true;
-        foreach (var address in _safelist)
+
+        if(!_safelist.Contains(remote.Host))
         {
-            if (address.SequenceEqual(bytes))
-            {
-                badIp = false;
-                break;
-            }
-        }
-        if (badIp)
-        {
-            _logger.LogWarning($"Forbidden Request from Remote IP address: {remoteIp}");
+            _logger.LogError($"Forbidden Request from Remote IP address: {remote.Host}");
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
             return;
         }

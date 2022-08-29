@@ -11,11 +11,11 @@ namespace T_Store.Controllers;
 [Route("transactions")]
 public class TransactionsController : Controller
 {
-    private readonly ITransactionServices _transactionServices;
+    private readonly ITransactionService _transactionServices;
     private readonly IMapper _mapper;
     private readonly ILogger<TransactionsController> _logger;
 
-    public TransactionsController (ITransactionServices transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
+    public TransactionsController (ITransactionService transactionServices, IMapper mapper, ILogger<TransactionsController> logger)
     {
         _transactionServices = transactionServices;
         _mapper = mapper;
@@ -41,7 +41,6 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
-         
         var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
 
         _logger.LogInformation("Controller: Request to add transfer");
@@ -67,7 +66,6 @@ public class TransactionsController : Controller
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<TransactionResponse>> GetTransactionById([FromRoute] long id)
     {
         _logger.LogInformation("Controller: Request Transactions by id");

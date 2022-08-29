@@ -16,7 +16,8 @@ public class TransactionTransferRequestValidator : AbstractValidator<Transaction
            .IsInEnum().WithMessage(ApiErrorMessage.CurrencyRangeError)
            .NotEqual(t => t.RecipientCurrency).WithMessage(ApiErrorMessage.SameCurrency);
         RuleFor(t => t.AccountId)
-            .GreaterThanOrEqualTo(1).WithMessage(ApiErrorMessage.NumberLessOrEqualZero);
+            .GreaterThanOrEqualTo(1).WithMessage(ApiErrorMessage.NumberLessOrEqualZero)
+            .NotEqual(t=>t.RecipientAccountId).WithMessage(ApiErrorMessage.SameAccountId);
         RuleFor(t => t.Amount)
             .GreaterThanOrEqualTo(1).WithMessage(ApiErrorMessage.NumberLessOrEqualZero);
     }

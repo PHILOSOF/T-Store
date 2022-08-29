@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using T_Store.Controllers;
-using T_Store.MapperConfig;
+using T_Store.MapperConfiguration;
 using T_Store.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
@@ -14,7 +14,7 @@ namespace T_Store.API.Test.ControllersTests;
 public class TransactionControllersTests
 {
     private TransactionsController _sut;
-    private Mock<ITransactionServices> _transactionServiceMock;
+    private Mock<ITransactionService> _transactionServiceMock;
     private IMapper _mapper;
     private Mock<ILogger<TransactionsController>> _logger;  
 
@@ -22,8 +22,8 @@ public class TransactionControllersTests
     public void Setup()
     {
         _logger = new Mock<ILogger<TransactionsController>>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
-        _transactionServiceMock = new Mock<ITransactionServices>();
+        _mapper = new Mapper(new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
+        _transactionServiceMock = new Mock<ITransactionService>();
         _sut = new TransactionsController(_transactionServiceMock.Object, _mapper, _logger.Object);
     }
 

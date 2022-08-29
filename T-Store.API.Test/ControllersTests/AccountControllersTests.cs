@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using T_Store.Controllers;
-using T_Store.MapperConfig;
+using T_Store.MapperConfiguration;
 using T_Store.Models;
 using T_Store.Models.Responses;
 using T_Strore.Business.Services;
@@ -16,7 +15,7 @@ namespace T_Store.API.Test.ControllersTests;
 public class AccountControllersTests
 {
     private AccountsController _sut;
-    private Mock<ITransactionServices> _transactionServiceMock;
+    private Mock<ITransactionService> _transactionServiceMock;
     private IMapper _mapper;
     private Mock<ILogger<AccountsController>> _logger;
 
@@ -24,8 +23,8 @@ public class AccountControllersTests
     public void Setup()
     {
         _logger = new Mock<ILogger<AccountsController>>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
-        _transactionServiceMock = new Mock<ITransactionServices>();
+        _mapper = new Mapper(new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
+        _transactionServiceMock = new Mock<ITransactionService>();
         _sut = new AccountsController(_transactionServiceMock.Object, _mapper, _logger.Object);
     }
 

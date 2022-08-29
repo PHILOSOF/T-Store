@@ -1,5 +1,4 @@
-﻿
-namespace T_Strore.Data;
+﻿namespace T_Strore.Data;
 
 public enum Currency
 {

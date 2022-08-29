@@ -12,7 +12,7 @@ namespace TransactionsCreater;
 public class TransactionsCreater
 {
     private AccountReader _accountReader;
-    private CalculationServices _calculationServices;
+    private CalculationService _calculationServices;
     private TransactionsCsvHelper _transactionsToCsv;
     private  IMapper _mapper;
 
@@ -23,7 +23,7 @@ public class TransactionsCreater
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperForTransactionsCreater>()));
         _accountReader = new AccountReader();
         _transactionsToCsv = new TransactionsCsvHelper();
-        _calculationServices = new CalculationServices(null);
+        _calculationServices = new CalculationService(null);
     }
 
     //[Test]

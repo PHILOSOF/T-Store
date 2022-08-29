@@ -2,7 +2,7 @@
 using T_Store.Models;
 using T_Strore.Data;
 
-namespace T_Store.MapperConfig;
+namespace T_Store.MapperConfiguration;
 
 public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, List<TransactionDto>>
 {
@@ -15,13 +15,15 @@ public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, L
             {
                 AccountId = source.AccountId,
                 Amount = source.Amount,
-                Currency = source.Currency
+                Currency = source.Currency,
+                TransactionType = TransactionType.Transfer
 
             },
             new TransactionDto()
             {
                 AccountId = source.RecipientAccountId,
-                Currency = source.RecipientCurrency
+                Currency = source.RecipientCurrency,
+                TransactionType = TransactionType.Transfer
 
             },
          };

@@ -25,12 +25,12 @@ public class CustomExceptionHandlerMiddleware
         }
         catch (EntityNotFoundException exception)
         {
-            _logger.LogWarning($"Stopped program because of {exception}");
+            _logger.LogError($"Stopped program because of {exception}");
             await HandleExceptionAsync(context, HttpStatusCode.NotFound, exception.Message);
         }
-        catch (BadRequestException exception)
+        catch (BalanceExceedException exception)
         {
-            _logger.LogWarning(exception, $"Stopped program because of {exception}");
+            _logger.LogError(exception, $"Stopped program because of {exception}");
             await HandleExceptionAsync(context, HttpStatusCode.BadRequest, exception.Message);
         }
     }

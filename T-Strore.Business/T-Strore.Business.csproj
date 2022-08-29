@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="5.0.2" />
+    <PackageReference Include="System.Collections" Version="4.0.11" />
   </ItemGroup>
 
   <ItemGroup>
