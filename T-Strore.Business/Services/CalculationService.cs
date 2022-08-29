@@ -18,29 +18,10 @@ public class CalculationService : ICalculationService
     {
         _logger.LogInformation("Business layer: Currency rate receiving");
         var currencyRates = await GetCurrencyRate();
-        //var senderCurrency = transferModels[0].Currency.ToString();
-        //var recipientCurrency = transferModels[1].Currency.ToString();
-        //var pairCurrencyWhithBase = currencyRates.Keys.ToList()
-        //    .GroupBy(x => x.Item1)
-        //    .First();
 
         _logger.LogInformation("Business layer: Converting amount by currency");
         transferModels = GetConvertingAmountByCurrency(currencyRates, transferModels);
-        //if (pairCurrencyWhithBase.Key != senderCurrency && pairCurrencyWhithBase.Key != recipientCurrency)
-        //{
-        //    transferModels[1].Amount = (transferModels[0].Amount /
-        //    currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]) *
-        //    currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
-        //}
-        //if (pairCurrencyWhithBase.Any(t=>t.Item1 == senderCurrency&&t.Item2== recipientCurrency))
-        //{
-        //    transferModels[1].Amount = transferModels[0].Amount * currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
-        //}
-        //if (pairCurrencyWhithBase.Any(t => t.Item1 == recipientCurrency && t.Item2 == senderCurrency))
-        //{
-        //    transferModels[1].Amount = transferModels[0].Amount / currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]; 
-        //}
-
+       
         transferModels[0].Amount *= -1;
 
         _logger.LogInformation("Business layer: Convert result returned");

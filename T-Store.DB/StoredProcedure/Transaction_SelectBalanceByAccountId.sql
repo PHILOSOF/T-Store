@@ -4,7 +4,7 @@
 as
 begin
 
-	select sum([Amount])
+	select coalesce(sum([Amount]),0)
 	from [dbo].[Transaction]
 
 	where [AccountId] = @AccountId
