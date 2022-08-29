@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Production",
         "TSRORE_DB_CONNECTION_STRING": "",
         "LOG_DIRECTORY": "$(MSBuildProjectDirectory)\\Logs",
-        "IpWhiteList": ""
+        "IpWhiteList":""
       }
     },
     "IIS Express": {
@@ -39,7 +39,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TSRORE_DB_CONNECTION_STRING": "Server=.;Database=T-Store.DB;Trusted_Connection=True;",
         "LOG_DIRECTORY": "$(MSBuildProjectDirectory)\\Logs",
-        "IpWhiteList":  "::1"  
+        "HostWhiteList": "localhost"
       }
     }
   }
