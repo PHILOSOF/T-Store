@@ -357,3 +357,6 @@ nCrunchTemp_*
 
 #appsetings
 appsettings.Production.json
+
+#launchSettings
+**/Properties/launchSettings.json
