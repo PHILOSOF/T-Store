@@ -18,7 +18,7 @@ builder.Configuration.Bind(dbConfig);
 
 LogManager.Configuration.Variables[$"{ environment: LOG_DIRECTORY}"] = "Logs";
 
-builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(dbConfig.TSRORE_DB_CONNECTION_STRING));
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(dbConfig.TSTORE_DB_CONNECTION_STRING));
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson()

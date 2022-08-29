@@ -2,5 +2,5 @@
 
 public class DbConfig
 {
-    public string TSRORE_DB_CONNECTION_STRING { get; set; }
+    public string TSTORE_DB_CONNECTION_STRING { get; set; }
 }
