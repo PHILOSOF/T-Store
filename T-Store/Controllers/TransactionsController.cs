@@ -41,7 +41,6 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
-         
         var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
 
         _logger.LogInformation("Controller: Request to add transfer");

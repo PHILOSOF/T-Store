@@ -46,10 +46,6 @@ public class TransactionService : ITransactionService
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
 
-        // to automapper
-        transfersConvert[sender].TransactionType = TransactionType.Transfer; // add to automapper
-        transfersConvert[recipient].TransactionType = TransactionType.Transfer;
-
         _logger.LogInformation("Business layer: Request in data base for add transfers");
         return await _transactionRepository.AddTransferTransactions(transfersConvert[0], transfersConvert[1]);
     }

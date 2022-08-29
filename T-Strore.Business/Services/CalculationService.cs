@@ -39,7 +39,7 @@ public class CalculationService : ICalculationService
         }
         
         _logger.LogInformation("Business layer: Converting amount by currency");
-        transferModels[0].Amount = -transferModels[0].Amount;
+        transferModels[0].Amount *= -1;
 
         _logger.LogInformation("Business layer: Convert result returned");
         return transferModels;

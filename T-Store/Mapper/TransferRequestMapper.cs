@@ -15,13 +15,15 @@ public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, L
             {
                 AccountId = source.AccountId,
                 Amount = source.Amount,
-                Currency = source.Currency
+                Currency = source.Currency,
+                TransactionType = TransactionType.Transfer
 
             },
             new TransactionDto()
             {
                 AccountId = source.RecipientAccountId,
-                Currency = source.RecipientCurrency
+                Currency = source.RecipientCurrency,
+                TransactionType = TransactionType.Transfer
 
             },
          };
