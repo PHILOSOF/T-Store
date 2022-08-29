@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Dapper;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
@@ -15,40 +17,35 @@ public class CalculationService : ICalculationService
     {
         _logger.LogInformation("Business layer: Currency rate receiving");
         var currencyRates = await GetCurrencyRate();
-        var senderCurrency = transferModels[0].Currency;   // .ToString() => RUB
-        var recipientCurrency = transferModels[1].Currency;   // .ToString() => EUR
+        var senderCurrency = transferModels[0].Currency.ToString();
+        var recipientCurrency = transferModels[1].Currency.ToString();
+        var pairCurrencyWhithBase = currencyRates.Keys.ToList()
+            .GroupBy(x => x.Item1)
+            .First();
 
-        // TryFind('RUBEUR')   RUBUSD -> false
-        // TryFind('EURRUB')   USDRUB -> true; rate = 1 \ rate
-
-        // var base = currencyRates.First().Key.substring(0, 3) => JPY
-        // rate1 = currencyRates["JPY""RUB"]
-        // rate2 = currencyRates["JPY""EUR"]
-
-
+        if (pairCurrencyWhithBase.Key != senderCurrency && pairCurrencyWhithBase.Key != recipientCurrency)
+        {
+            transferModels[1].Amount = (transferModels[0].Amount /
+            currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]) *
+            currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
+        }
+        if (pairCurrencyWhithBase.Any(t=>t.Item1 == senderCurrency&&t.Item2== recipientCurrency))
+        {
+            transferModels[1].Amount = transferModels[0].Amount * currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
+        }
+        if (pairCurrencyWhithBase.Any(t => t.Item1 == recipientCurrency && t.Item2 == senderCurrency))
+        {
+            transferModels[1].Amount = transferModels[0].Amount / currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]; 
+        }
+        
         _logger.LogInformation("Business layer: Converting amount by currency");
-        if (senderCurrency != Currency.USD && recipientCurrency != Currency.USD)
-        {
-                transferModels[1].Amount = (transferModels[0].Amount /
-                currencyRates[(Currency.USD, senderCurrency)]) *
-                currencyRates[(Currency.USD, recipientCurrency)];
-        }
-        else
-        {
-            if (transferModels[0].Currency != Currency.USD)
-                transferModels[1].Amount = transferModels[0].Amount / currencyRates[(Currency.USD, senderCurrency)];
-
-            else
-                transferModels[1].Amount = transferModels[0].Amount * currencyRates[(Currency.USD, recipientCurrency)];
-        }
-
         transferModels[0].Amount = -transferModels[0].Amount;
 
         _logger.LogInformation("Business layer: Convert result returned");
         return transferModels;
     }
 
-    private async Task<Dictionary<(Currency, Currency), decimal>> GetCurrencyRate() // while we dont have service currency rate
+    private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate() // while we dont have service currency rate
     {
         var ratesList = new List<decimal>() 
         { 
@@ -62,7 +59,7 @@ public class CalculationService : ICalculationService
         };
        var ratesResult = Enum.GetValues(typeof(Currency))
             .Cast<Currency>()
-            .ToDictionary(t => (Currency.USD, t),b=> (decimal)ratesList[(int)b-1]);
+            .ToDictionary(t => (Currency.USD.ToString(), t.ToString()),b=> (decimal)ratesList[(int)b-1]);
 
         return await Task.FromResult(ratesResult);
     }
