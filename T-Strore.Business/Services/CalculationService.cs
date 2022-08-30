@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using T_Strore.Business.Models;
 using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
@@ -11,7 +12,7 @@ public class CalculationService : ICalculationService
         _logger=logger;
     }
 
-    public async Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels)
+    public async Task<List<TransactionModel>> ConvertCurrency(List<TransactionModel> transferModels)
     {
         _logger.LogInformation("Business layer: Currency rate receiving");
         var currencyRates = await GetCurrencyRate();
@@ -25,7 +26,7 @@ public class CalculationService : ICalculationService
         return transferModels;
     }
 
-    private List<TransactionDto> GetConvertingAmountByCurrency(Dictionary<(string,string),decimal> currencyRates, List<TransactionDto> transferModels)
+    private List<TransactionModel> GetConvertingAmountByCurrency(Dictionary<(string,string),decimal> currencyRates, List<TransactionModel> transferModels)
     {
         var senderCurrency = transferModels[0].Currency.ToString();
         var recipientCurrency = transferModels[1].Currency.ToString();

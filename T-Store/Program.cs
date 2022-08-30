@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using T_Store.Extensions;
 using T_Store.Infrastructure;
 using T_Store.MapperConfiguration;
+using T_Strore.Business.MapperConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidation();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
-builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfig));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
