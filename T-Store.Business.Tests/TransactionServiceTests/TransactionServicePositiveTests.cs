@@ -1,8 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Data.Common;
-using System.Transactions;
 using T_Strore.Business.Exceptions;
 using T_Strore.Business.MapperConfiguration;
 using T_Strore.Business.Models;
@@ -10,9 +8,9 @@ using T_Strore.Business.Services;
 using T_Strore.Data;
 using T_Strore.Data.Repository;
 
-namespace T_Store.Business.Tests;
+namespace T_Store.Business.Tests.TransactionServiceTests;
 
-public class TransactionServicesTests
+public class TransactionServicePositiveTests
 {
     private TransactionService _sut;
     private Mock<ITransactionRepository> _transactionRepositoryMock;
@@ -27,7 +25,7 @@ public class TransactionServicesTests
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationService>();
-        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object,_mapper, _logger.Object);
+        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object);
     }
 
     [Test]
@@ -38,15 +36,15 @@ public class TransactionServicesTests
 
         var transaction = new TransactionModel()
         {
-            Id =1,
+            Id = 1,
             AccountId = 1,
             Amount = 10,
             Currency = Currency.USD
 
         };
 
- 
-        _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t=>t.Id== transaction.Id)))
+
+        _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(1);
 
         //when
@@ -55,10 +53,10 @@ public class TransactionServicesTests
         //then
 
         Assert.AreEqual(actualId, expectedId);
-        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(c=>
+        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(c =>
         c.Id == transaction.Id &&
-        c.Currency== transaction.Currency &&
-        c.TransactionType == transaction.TransactionType && 
+        c.Currency == transaction.Currency &&
+        c.TransactionType == transaction.TransactionType &&
         c.AccountId == transaction.AccountId &&
         c.Amount == transaction.Amount)), Times.Once);
     }
@@ -77,10 +75,10 @@ public class TransactionServicesTests
             Amount = 10,
             Currency = Currency.EUR
         };
-       
+
         _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transaction.Id))
          .ReturnsAsync(100);
-        _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t=>t.Id==transaction.Id)))
+        _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
 
 
@@ -89,36 +87,13 @@ public class TransactionServicesTests
 
         //then
         Assert.AreEqual(actual, transaction.Id);
-        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(t=>
+        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(t =>
         t.Id == transaction.Id &&
         t.Currency == transaction.Currency &&
         t.TransactionType == transaction.TransactionType &&
         t.AccountId == transaction.AccountId &&
         t.Amount == transaction.Amount)), Times.Once);
-        _transactionRepositoryMock.Verify(t=>t.GetBalanceByAccountId(transaction.Id), Times.Once);
-    }
-
-    [Test]
-    public async Task WithdrawDeposit_BalanceLessRequested_ThrowBalanceExceedException()
-    {
-        //given
-        var realBalance = 100;
-        var transactionWithdraw = new TransactionModel()
-        {          
-            Id = 1,
-            AccountId = 1,
-            Amount = 1000,
-            Currency = Currency.EUR
-        };
-
-        _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transactionWithdraw.Id))
-         .ReturnsAsync(realBalance);
-
-        //when,then
-        Assert.ThrowsAsync<BalanceExceedException>(() => _sut.Withdraw(_mapper.Map<T_Strore.Business.Models.TransactionModel>(transactionWithdraw)));
-
-        _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transactionWithdraw.Id), Times.Once);
-        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);
+        _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transaction.Id), Times.Once);
     }
 
     [Test]
@@ -163,7 +138,7 @@ public class TransactionServicesTests
                 Currency=Currency.RUB
             }
         };
-        
+
         _calculationService.Setup(c => c.ConvertCurrency(transfers))
          .ReturnsAsync(convertModels);
 
@@ -196,41 +171,6 @@ public class TransactionServicesTests
     }
 
     [Test]
-    public async Task AddTransfer_BalanceLessRequested_ThrowBadRequestException()
-    {
-        //given
-        var realBalance = 1;
-        var transfers = new List<TransactionModel>()
-        {
-            new TransactionModel()
-            {
-                Id = 1,
-                AccountId = 1,
-                Amount = 10,
-
-                Currency=Currency.EUR
-            },
-            new TransactionModel()
-            {
-                Id = 2,
-                AccountId = 2,
-                Currency=Currency.RUB
-            }
-        };
-
-        _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transfers[0].AccountId))
-        .ReturnsAsync(realBalance);
-
-        //when,then
-
-        Assert.ThrowsAsync<BalanceExceedException>(() => _sut.AddTransfer(transfers));
-
-        _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transfers[0].AccountId), Times.Once);
-        _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);
-
-    }
-
-    [Test]
     public async Task GetBalanceByAccountId_ValidRequestPassed_BalanceReturned()
     {
         //given
@@ -254,7 +194,7 @@ public class TransactionServicesTests
         //given
         var expectedAcoountId = 1;
         decimal expectedBalance = 0;
-       
+
         //when
         var actual = await _sut.GetBalanceByAccountId(expectedAcoountId);
 
@@ -295,23 +235,11 @@ public class TransactionServicesTests
     }
 
     [Test]
-    public async Task GetTransactionById_TransactionIsNull_ThrowEntityNotFoundException()
-    {
-        //given
-        var transactionId = 1l;
- 
-        //when, then
-        Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetTransactionById(transactionId));
-
-        _transactionRepositoryMock.Verify(t => t.GetTransactionById(transactionId), Times.Once);
-    }
-
-    [Test]
     public async Task GetTransactionsById_ValidRequestPassed_TransactionsReturned()
     {
         //given
         var transactions = new List<TransactionModel>()
-        { 
+        {
             new()
             {
                 Id = 1,

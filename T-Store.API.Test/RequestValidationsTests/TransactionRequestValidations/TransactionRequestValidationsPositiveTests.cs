@@ -6,9 +6,9 @@ using T_Strore.Data;
 using FluentValidation.TestHelper;
 
 
-namespace T_Store.API.Test.RequestValidationsTests;
+namespace T_Store.API.Test.RequestValidationsTests.TransactionRequestValidations;
 
-public class TransactionRequestValidationsTests 
+public class TransactionRequestValidationsTests
 {
     private TransactionRequestValidator _validator;
 
@@ -19,7 +19,7 @@ public class TransactionRequestValidationsTests
     }
 
     [Test]
-    public async Task TransactionRequest_SendingCorrectData_GetAnEmptyStringError()
+    public async Task TransactionRequest_SendingCorrectData_NoErrorReceived()
     {
         //given
         var client = new TransactionRequest()
@@ -34,16 +34,5 @@ public class TransactionRequestValidationsTests
 
         //then
         Assert.True(isValid.IsValid);
-    }
-
-    [TestCaseSource(typeof(TransactionRequestSource))]
-    public async Task TransactionRequest_SendingIncorrectData_GetErrorMessage(TransactionRequest transfer, string errorMessage)
-    {
-        //given,when
-        var isValid = _validator.TestValidate(transfer);
-
-        //then
-        Assert.False(isValid.IsValid);
-        Assert.AreEqual(errorMessage, isValid.ToString());
     }
 }
