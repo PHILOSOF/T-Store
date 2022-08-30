@@ -5,6 +5,7 @@ using T_Strore.Business.Models;
 using T_Strore.Data;
 using T_Strore.Data.Repository;
 
+
 namespace T_Strore.Business.Services;
 
 public class TransactionService : ITransactionService
@@ -14,8 +15,6 @@ public class TransactionService : ITransactionService
     private readonly ILogger<TransactionService> _logger;
     private readonly IMapper _mapper;
 
-    int sender = 0;
-    int recipient = 1;
     public TransactionService(ITransactionRepository transactionRepository, ICalculationService calculationService,
         IMapper mapper, ILogger<TransactionService> logger)
     {
@@ -29,7 +28,6 @@ public class TransactionService : ITransactionService
     {
         transaction.TransactionType = TransactionType.Deposit;
         _logger.LogInformation("Business layer: Request in data base for  add transaction");
-        var a = _mapper.Map<TransactionDto>(transaction);
         return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
     }
 
@@ -47,15 +45,15 @@ public class TransactionService : ITransactionService
 
     public async Task<List<long>> AddTransfer(List<TransactionModel> transfersModels)
     {
+        int senderIndex = 0;
         _logger.LogInformation("Business layer: Check balance");
-        await CheckBalance(transfersModels[sender]);
+        await CheckBalance(transfersModels[senderIndex]);
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
         
         _logger.LogInformation("Business layer: Request in data base for add transfers");
-        var a = _mapper.Map<TransactionDto>(transfersConvert[0]);
-        var b =  _mapper.Map<TransactionDto>(transfersConvert[1]);
-        return await _transactionRepository.AddTransferTransactions(a,b);
+
+        return await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
     }
 
     public async Task<decimal?> GetBalanceByAccountId(long accountId)

@@ -26,6 +26,7 @@ public class CalculationService : ICalculationService
         return transferModels;
     }
 
+
     private List<TransactionModel> GetConvertingAmountByCurrency(Dictionary<(string,string),decimal> currencyRates, List<TransactionModel> transferModels)
     {
         var senderCurrency = transferModels[0].Currency.ToString();

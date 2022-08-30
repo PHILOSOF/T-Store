@@ -8,6 +8,7 @@ using T_Store.Controllers;
 using T_Store.MapperConfiguration;
 using T_Store.Models;
 using T_Store.Models.Responses;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
@@ -33,7 +34,7 @@ public class AccountControllersTests
     {
         // given
         decimal expected = 100;
-        var expectedTransaction = new TransactionDto()
+        var expectedTransaction = new TransactionModel()
         {
             Id = 1,
             AccountId = 1,
@@ -61,11 +62,13 @@ public class AccountControllersTests
     {
         //given
         long expectedAccountId = 1;
-        var expectedTransactions = new Dictionary<DateTime, List<TransactionDto>>()
+        var expectedTransactions = new Dictionary<DateTime, List<TransactionModel>>()
         {
-            { new DateTime(2022,05,05), new List<TransactionDto>()
+            { 
+                new DateTime(2022,05,05), 
+                new List<TransactionModel>()
                 {
-                    new TransactionDto()
+                    new TransactionModel()
                     {
                         Id = 1,
                         AccountId = 1,
@@ -75,7 +78,7 @@ public class AccountControllersTests
                         TransactionType = TransactionType.Transfer
 
                     },
-                    new TransactionDto()
+                    new TransactionModel()
                     {
                         Id = 2,
                         AccountId = 3,
@@ -89,9 +92,9 @@ public class AccountControllersTests
 
 
             },
-            {new DateTime(2021,05,05), new List<TransactionDto>()
+            {new DateTime(2021,05,05), new List<TransactionModel>()
                 {
-                    new TransactionDto()
+                    new TransactionModel()
                     {
                         Id = 3,
                         AccountId = 1,

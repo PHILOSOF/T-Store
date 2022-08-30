@@ -5,14 +5,14 @@ using T_Strore.Data;
 
 namespace T_Store.MapperConfiguration;
 
-public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, List<TransactionModel>>
+public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, List<T_Strore.Business.Models.TransactionModel>>
 {
-    public  List<TransactionModel> Convert(TransactionTransferRequest source, List<TransactionModel> destination, ResolutionContext context)
+    public  List<T_Strore.Business.Models.TransactionModel> Convert(TransactionTransferRequest source, List<T_Strore.Business.Models.TransactionModel> destination, ResolutionContext context)
     {
 
-        destination = new List<TransactionModel>()
+        destination = new List<T_Strore.Business.Models.TransactionModel>()
          {
-            new TransactionModel()
+            new T_Strore.Business.Models.TransactionModel()
             {
                 AccountId = source.AccountId,
                 Amount = source.Amount,
@@ -20,7 +20,7 @@ public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, L
                 TransactionType = TransactionType.Transfer
 
             },
-            new TransactionModel()
+            new T_Strore.Business.Models.TransactionModel()
             {
                 AccountId = source.RecipientAccountId,
                 Currency = source.RecipientCurrency,
@@ -29,6 +29,6 @@ public class TransferRequestMapper :ITypeConverter<TransactionTransferRequest, L
             },
          };
 
-        return context.Mapper.Map<List<TransactionModel>>(destination);
+        return context.Mapper.Map<List<T_Strore.Business.Models.TransactionModel>>(destination);
     }
 }

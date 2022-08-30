@@ -11,7 +11,7 @@ public class MapperConfig : Profile
         CreateMap<TransactionRequest, TransactionModel>();
 
         CreateMap<TransactionModel, TransactionResponse>();
-      
+
         CreateMap<TransactionTransferRequest, List<TransactionModel>>()
             .ConvertUsing<TransferRequestMapper>();
 

@@ -1,7 +1,7 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using T_Store.Business.Tests.CaseSource;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
@@ -43,7 +43,7 @@ public class CalculationServicesTests
              .Cast<Currency>()
              .ToDictionary(t => (Currency.USD, t), b => (decimal)ratesList[(int)b - 1]);
         
-        var transferModel = new List<TransactionDto>()
+        var transferModel = new List<TransactionModel>()
         {
             new()
             {
@@ -104,7 +104,7 @@ public class CalculationServicesTests
              .Cast<Currency>()
              .ToDictionary(t => (Currency.USD, t), b => (decimal)ratesList[(int)b - 1]);
 
-        var transferModel = new List<TransactionDto>()
+        var transferModel = new List<TransactionModel>()
         {
             new()
             {
@@ -162,7 +162,7 @@ public class CalculationServicesTests
              .ToDictionary(t => (Currency.USD, t), b => (decimal)ratesList[(int)b - 1]);
 
 
-        var transferModel = new List<TransactionDto>()
+        var transferModel = new List<TransactionModel>()
         {
             new()
             {

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using T_Store.Controllers;
 using T_Store.MapperConfiguration;
 using T_Store.Models;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 
@@ -37,7 +38,7 @@ public class TransactionControllersTests
             Currency = Currency.USD,
             Amount = 100
         };
-        _transactionServiceMock.Setup(t => t.AddDeposit(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
+        _transactionServiceMock.Setup(t => t.AddDeposit(It.Is<TransactionModel>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.AddDeposit(transaction);
@@ -48,7 +49,7 @@ public class TransactionControllersTests
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
         Assert.AreEqual(actualResult.Value, 1);
         _transactionServiceMock.Verify(o => o.AddDeposit(
-            It.Is<TransactionDto>
+            It.Is<TransactionModel>
             (t => t.AccountId == transaction.AccountId &&
             t.Currency == transaction.Currency &&
             t.Amount == transaction.Amount
@@ -69,7 +70,7 @@ public class TransactionControllersTests
             RecipientAccountId = 2,
             RecipientCurrency = Currency.RUB
         };
-        _transactionServiceMock.Setup(o => o.AddTransfer(It.Is<List<TransactionDto>>(t =>
+        _transactionServiceMock.Setup(o => o.AddTransfer(It.Is<List<TransactionModel>>(t =>
         t[0].AccountId == transfer.AccountId &&
         t[1].AccountId == transfer.RecipientAccountId)))
         .ReturnsAsync(expectedIds);
@@ -83,7 +84,7 @@ public class TransactionControllersTests
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
         Assert.AreEqual(actualResult.Value, expectedIds);
         _transactionServiceMock.Verify(o => o.AddTransfer(
-            It.Is<List<TransactionDto>>
+            It.Is<List<TransactionModel>>
             (t => t[0].AccountId == transfer.AccountId &&
             t[0].Currency == transfer.Currency &&
             t[0].Amount == transfer.Amount &&
@@ -102,7 +103,7 @@ public class TransactionControllersTests
             Currency = Currency.USD,
             Amount = 100
         };
-        _transactionServiceMock.Setup(t => t.Withdraw(It.Is<TransactionDto>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
+        _transactionServiceMock.Setup(t => t.Withdraw(It.Is<TransactionModel>(t => t.AccountId == transaction.AccountId))).ReturnsAsync(1);
 
         // when
         var actual = await _sut.Withdraw(transaction);
@@ -113,7 +114,7 @@ public class TransactionControllersTests
         Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
         Assert.AreEqual(actualResult.Value, 1);
         _transactionServiceMock.Verify(o => o.Withdraw(
-            It.Is<TransactionDto>
+            It.Is<TransactionModel>
             (t => t.AccountId == transaction.AccountId &&
             t.Currency == transaction.Currency &&
             t.Amount == transaction.Amount
@@ -124,7 +125,7 @@ public class TransactionControllersTests
     public async Task GetTransactionById_WhenValidRequestPassed_OkReceived()
     {
         // given
-        var expectedTransaction = new TransactionDto()
+        var expectedTransaction = new TransactionModel()
         {
             Id = 1,
             AccountId = 1,
