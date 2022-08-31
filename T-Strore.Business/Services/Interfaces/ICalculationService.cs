@@ -1,8 +1,8 @@
-﻿using T_Strore.Data;
+﻿using T_Strore.Business.Models;
 
 namespace T_Strore.Business.Services;
 
 public interface ICalculationService
 {
-   public Task<List<TransactionDto>> ConvertCurrency(List<TransactionDto> transferModels);
+   public Task<List<TransactionModel>> ConvertCurrency(List<TransactionModel> transferModels);
 }

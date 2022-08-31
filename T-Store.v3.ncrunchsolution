@@ -4,6 +4,9 @@
     <MetricsExclusionList>
       <Value>TransactionsCreater\FakeTransactionsCreater.csproj</Value>
       <Value>T-Strore.Data\T-Strore.Data.csproj</Value>
+      <Value>T-Store\T-Store.API.csproj\Extensions</Value>
+      <Value>T-Store\T-Store.API.csproj\Infrastructure</Value>
+      <Value>T-Store\T-Store.API.csproj\Middleware</Value>
     </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>

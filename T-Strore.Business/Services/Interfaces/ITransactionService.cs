@@ -1,13 +1,13 @@
-﻿using T_Strore.Data;
+﻿using T_Strore.Business.Models;
 
 namespace T_Strore.Business.Services;
 
 public interface ITransactionService
 {
-    public Task<long> AddDeposit(TransactionDto transaction);
-    public Task<List<long>> AddTransfer(List<TransactionDto> transferModels);
+    public Task<long> AddDeposit(TransactionModel transaction);
+    public Task<List<long>> AddTransfer(List<TransactionModel> transferModels);
     public Task<decimal?> GetBalanceByAccountId(long accountId);
-    public Task<TransactionDto?> GetTransactionById(long id);
-    public Task<Dictionary<DateTime,List<TransactionDto>>> GetTransactionsByAccountId(long accountId);
-    public Task<long> Withdraw(TransactionDto transaction);
+    public Task<TransactionModel?> GetTransactionById(long id);
+    public Task<Dictionary<DateTime,List<TransactionModel>>> GetTransactionsByAccountId(long accountId);
+    public Task<long> Withdraw(TransactionModel transaction);
 }

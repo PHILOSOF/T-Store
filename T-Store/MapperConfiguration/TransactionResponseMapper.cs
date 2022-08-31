@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using T_Store.Models;
 using T_Store.Models.Responses;
-using T_Strore.Data;
+using T_Strore.Business.Models;
 
 namespace T_Store.MapperConfiguration;
 
-public class TransactionResponseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionDto>>, List<TransactionResponse>>
+public class TransactionResponseMapper : ITypeConverter<Dictionary<DateTime, List<TransactionModel>>, List<TransactionResponse>>
 {
-    public List<TransactionResponse> Convert(Dictionary<DateTime, List<TransactionDto>> source, List<TransactionResponse> destination, ResolutionContext context)
+    public List<TransactionResponse> Convert(Dictionary<DateTime, List<TransactionModel>> source, List<TransactionResponse> destination, ResolutionContext context)
     {
         destination = new();
         var keys = source.Keys.ToList();

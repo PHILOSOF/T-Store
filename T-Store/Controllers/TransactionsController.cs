@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using T_Store.Extensions;
 using T_Store.Models;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services;
-using T_Strore.Data;
 namespace T_Store.Controllers;
 
 [ApiController]
@@ -29,7 +29,7 @@ public class TransactionsController : Controller
     public async Task<ActionResult<long>> AddDeposit([FromBody] TransactionRequest transaction)
     {
         _logger.LogInformation("Controller: Request to add deposit");
-        var id = await _transactionServices.AddDeposit(_mapper.Map<TransactionDto>(transaction));
+        var id = await _transactionServices.AddDeposit(_mapper.Map<TransactionModel>(transaction));
 
         _logger.LogInformation("Controller: Id returned");
         return Created($"{this.GetRequestPath()}/{id}", id);
@@ -41,7 +41,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransactionTransferRequest transferModel)
     {
-        var transferModels = _mapper.Map<List<TransactionDto>>(transferModel);
+        var transferModels = _mapper.Map<List<TransactionModel>>(transferModel);
 
         _logger.LogInformation("Controller: Request to add transfer");
         var id = await _transactionServices.AddTransfer(transferModels);
@@ -57,7 +57,7 @@ public class TransactionsController : Controller
     public async Task<ActionResult<long>> Withdraw([FromBody] TransactionRequest transaction)
     {
         _logger.LogInformation("Controller: Request to add withdraw");
-        var id = await _transactionServices.Withdraw(_mapper.Map<TransactionDto>(transaction));
+        var id = await _transactionServices.Withdraw(_mapper.Map<TransactionModel>(transaction));
 
         _logger.LogInformation("Controller: Withdraw id returned");
         return Created($"{this.GetRequestPath()}/{id}", id);

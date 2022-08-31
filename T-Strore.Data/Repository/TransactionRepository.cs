@@ -57,19 +57,19 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         return transaction;
     }
           
-    public async Task<List<long>> AddTransferTransactions(TransactionDto transactionSender, TransactionDto recipient)
+    public async Task<List<long>> AddTransferTransactions(List<TransactionDto> transfer)
     {
         _logger.LogInformation("Data layer: Сonnection to data base");
         var transferIds= (await _dbConnection.QueryAsync<long>(
                   TransactionStoredProcedure.Transaction_InsertTransfer,
                   param: new
                   {
-                      AccountIdSender = transactionSender.AccountId,
-                      AccountIdRecipient = recipient.AccountId,
-                      Amount = transactionSender.Amount,
-                      AmountConverted = recipient.Amount,
-                      CurrencySender = transactionSender.Currency,
-                      CurrencyRecipient = recipient.Currency,
+                      AccountIdSender = transfer[0].AccountId,
+                      AccountIdRecipient = transfer[1].AccountId,
+                      Amount = transfer[0].Amount,
+                      AmountConverted = transfer[1].Amount,
+                      CurrencySender = transfer[0].Currency,
+                      CurrencyRecipient = transfer[1].Currency,
                   },
                   commandType: CommandType.StoredProcedure)).ToList();
 
