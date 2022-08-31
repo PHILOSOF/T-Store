@@ -22,10 +22,8 @@ public class AdminSafeListMiddleware
     public async Task Invoke(HttpContext context)
     {
         var remote = context.Request.Host;
-
         _logger.LogInformation($"Request from Remote host address: {remote.Host}");
-        var badIp = true;
-
+    
         if(!_safelist.Contains(remote.Host))
         {
             _logger.LogError($"Forbidden Request from Remote IP address: {remote.Host}");
