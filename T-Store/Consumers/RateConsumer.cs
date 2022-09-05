@@ -3,7 +3,7 @@ using T_Strore.Business.Models;
 
 namespace T_Store.Consumers;
 
-public class RateConsumer : IConsumer<RateModel>
+public class RateConsumer : IConsumer<RateModel>//??
 {
     private readonly ILogger<RateConsumer> _logger;
 
@@ -15,6 +15,6 @@ public class RateConsumer : IConsumer<RateModel>
     public async  Task Consume(ConsumeContext<RateModel> context)
     {
         _logger.LogInformation($"RateConsumer: {context.Message.TestRate}");
-        await Console.Out.WriteLineAsync(context.Message.ToString());
+        //await Console.Out.WriteLineAsync(context.Message.TestRate);
     }
 }

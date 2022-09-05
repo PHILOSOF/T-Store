@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidation();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
-builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfig));
+builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfigAPI));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 

@@ -46,14 +46,12 @@ namespace T_Store.Extensions
         {
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<RateConsumer>();
+                config.AddConsumer<RateConsumer>();//??
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    //cfg.Host("amqp://guest:guest@localhist:5672");
-
                     cfg.ReceiveEndpoint("temp-queue", c =>
                     {
-                        c.ConfigureConsumer<RateConsumer>(ctx);
+                        c.ConfigureConsumer<RateConsumer>(ctx);//??
                     });
                 });
             });

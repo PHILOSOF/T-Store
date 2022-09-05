@@ -1,4 +1,4 @@
-﻿namespace T_Strore.Business.Models;
+﻿namespace T_Strore.Business.Models;// namespace by timur??
 
 public class RateModel
 {
