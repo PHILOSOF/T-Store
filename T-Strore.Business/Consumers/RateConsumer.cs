@@ -16,7 +16,7 @@ namespace T_Strore.Business.Consumers
 
         public async Task Consume(ConsumeContext<RateModel> context)
         {
-            _logger.LogInformation($"RateConsumer: {context.Message.TestRate}");
+            _logger.LogInformation($"RateConsumer: Save actual rates in model");
             CurrencyRateModel.CurrencyRate=context.Message.TestRate;
         }
     }

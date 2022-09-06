@@ -15,10 +15,10 @@ public class CalculationService : ICalculationService
 
     public async Task<List<TransactionModel>> ConvertCurrency(List<TransactionModel> transferModels)
     {
-        _logger.LogInformation("Business layer: Currency rate receiving");
+        _logger.LogInformation("Business layer: Call GetCurrencyRate method");
         var currencyRates = await GetCurrencyRate();
 
-        _logger.LogInformation("Business layer: Converting amount by currency");
+        _logger.LogInformation("Business layer: Call GetConvertingAmountByCurrency method");
         transferModels = GetConvertingAmountByCurrency(currencyRates, transferModels);
        
         transferModels[0].Amount *= -1;
@@ -35,21 +35,29 @@ public class CalculationService : ICalculationService
         var pairCurrencyWhithBase = currencyRates.Keys.ToList()
             .GroupBy(x => x.Item1)
             .First();
-
+        
         if (pairCurrencyWhithBase.Key != senderCurrency && pairCurrencyWhithBase.Key != recipientCurrency)
         {
-            
+            _logger.LogInformation($"Business layer: Transfer {senderCurrency}{recipientCurrency}," +
+                $" exchange rate: {pairCurrencyWhithBase.Key}{senderCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]} and " +
+                $"{pairCurrencyWhithBase.Key}{recipientCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+
             transferModels[1].Amount = (transferModels[0].Amount /
             currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]) *
             currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == senderCurrency && t.Item2 == recipientCurrency))
         {
-            //_logger.LogInformation($"Business layer: Exchange rate translation{currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}," +
+                $"exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+
             transferModels[1].Amount = transferModels[0].Amount * currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == recipientCurrency && t.Item2 == senderCurrency))
         {
+            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}," +
+                $"exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+
             transferModels[1].Amount = transferModels[0].Amount / currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)];
         }
         return transferModels;
@@ -59,14 +67,19 @@ public class CalculationService : ICalculationService
     {
         var ratesDictionary = CurrencyRateModel.CurrencyRate;
 
+        _logger.LogInformation("Business layer: Convert to a dictionary currency rates wiht out base currency");
         var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
+
+        _logger.LogInformation("Business layer: Find base currency");
         var baseCurrency = ratesDictionary.GroupBy(k => k.Key.Remove(3))
             .FirstOrDefault()
             .Key;
 
+        _logger.LogInformation("Business layer: Creating result dictionary");
         var ratesResult = withOutBase
             .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
 
+        _logger.LogInformation("Business layer: Rates result returned");
         return await Task.FromResult(ratesResult);
     }
 }
