@@ -49,7 +49,7 @@ namespace T_Store.Extensions
                 config.AddConsumer<RateConsumer>();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("temp-queue", c =>
+                    cfg.ReceiveEndpoint("rates", c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);
                     });
