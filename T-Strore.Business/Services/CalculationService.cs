@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using T_Strore.Business.Exceptions;
 using T_Strore.Business.Models;
 
 namespace T_Strore.Business.Services;
@@ -66,6 +67,10 @@ public class CalculationService : ICalculationService
     private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
     {
         var ratesDictionary = CurrencyRateModel.CurrencyRate;
+        if (ratesDictionary is null)
+        {
+            throw new EntityNotFoundException($"Rates is epmty");
+        }
 
         _logger.LogInformation("Business layer: Convert to a dictionary currency rates wiht out base currency");
         var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);

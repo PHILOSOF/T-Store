@@ -46,7 +46,7 @@ namespace T_Store.Extensions
         {
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<RateConsumer>();//??
+                config.AddConsumer<RateConsumer>();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.ReceiveEndpoint("temp-queue", c =>

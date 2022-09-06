@@ -27,7 +27,7 @@ public class TransactionService : ITransactionService
     public async Task<long> AddDeposit(TransactionModel transaction)
     {
         transaction.TransactionType = TransactionType.Deposit;
-        _logger.LogInformation("Business layer: Request in data base for  add transaction");
+        _logger.LogInformation("Business layer: Request in data base for add transaction");
         return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
     }
 
