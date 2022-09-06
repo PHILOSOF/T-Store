@@ -51,7 +51,7 @@ namespace T_Store.Extensions
                 {
                     cfg.ReceiveEndpoint("temp-queue", c =>
                     {
-                        c.ConfigureConsumer<RateConsumer>(ctx);//??
+                        c.ConfigureConsumer<RateConsumer>(ctx);
                     });
                 });
             });
