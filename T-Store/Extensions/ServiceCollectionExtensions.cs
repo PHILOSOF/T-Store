@@ -2,9 +2,9 @@
 using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.OpenApi.Models;
-using T_Store.Consumers;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
+using T_Strore.Business.Consumers;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
 

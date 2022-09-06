@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using T_Strore.Business.Models;
-using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
 
 public class CalculationService : ICalculationService
 {
+
     private readonly ILogger<CalculationService> _logger;
-    public CalculationService(ILogger<CalculationService> logger)
+
+    public CalculationService( ILogger<CalculationService> logger)
     {
         _logger=logger;
     }
@@ -37,12 +38,14 @@ public class CalculationService : ICalculationService
 
         if (pairCurrencyWhithBase.Key != senderCurrency && pairCurrencyWhithBase.Key != recipientCurrency)
         {
+            
             transferModels[1].Amount = (transferModels[0].Amount /
             currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]) *
             currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == senderCurrency && t.Item2 == recipientCurrency))
         {
+            //_logger.LogInformation($"Business layer: Exchange rate translation{currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
             transferModels[1].Amount = transferModels[0].Amount * currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == recipientCurrency && t.Item2 == senderCurrency))
@@ -52,21 +55,17 @@ public class CalculationService : ICalculationService
         return transferModels;
     }
 
-    private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate() // while we dont have service currency rate
+    private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
     {
-        var ratesList = new List<decimal>() 
-        { 
-            0.98m,  //EUR
-            61.88m, //RUB
-            1,      //USD
-            134.61m,//JPY
-            406.61m,//AMD
-            1.92m,  //BGN
-            115.02m //RSD
-        };
-       var ratesResult = Enum.GetValues(typeof(Currency))
-            .Cast<Currency>()
-            .ToDictionary(t => (Currency.USD.ToString(), t.ToString()),b=> (decimal)ratesList[(int)b-1]);
+        var ratesDictionary = CurrencyRateModel.CurrencyRate;
+
+        var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
+        var baseCurrency = ratesDictionary.GroupBy(k => k.Key.Remove(3))
+            .FirstOrDefault()
+            .Key;
+
+        var ratesResult = withOutBase
+            .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
 
         return await Task.FromResult(ratesResult);
     }
