@@ -25,7 +25,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
     public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] long id)
     {
-        _logger.LogInformation("Controller: Request a balance");
+        _logger.LogInformation($"Controller: Call method GetBalanceByAccountId {id}");
         return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 
@@ -33,11 +33,12 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTransactionsByAccountId([FromRoute] long id)
     {
-        _logger.LogInformation("Controller: Request a transactions by account id");
+        _logger.LogInformation($"Controller: Call method GetTransactionByAccountId {id}");
         var transactions = await _transactionServices.GetTransactionsByAccountId(id);
+
         var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactions);
-    
+
+        _logger.LogInformation($"Controller: Transactions returned, accountId{id}");
         return Ok(transactionsModel);
     }
 }
- 
