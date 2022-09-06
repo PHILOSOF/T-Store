@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
+using T_Strore.Business.Consumers;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
 
@@ -39,6 +41,23 @@ namespace T_Store.Extensions
                 });
             });
         }
+
+        public static void AddMassTransit(this IServiceCollection services)
+        {
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<RateConsumer>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.ReceiveEndpoint("temp-queue", c =>
+                    {
+                        c.ConfigureConsumer<RateConsumer>(ctx);
+                    });
+                });
+            });
+         
+        }
+
     }
 }
 

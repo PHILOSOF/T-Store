@@ -3,9 +3,9 @@ using T_Store.Models;
 using T_Strore.Business.Models;
 
 namespace T_Store.MapperConfiguration;
-public class MapperConfig : Profile
+public class MapperConfigAPI : Profile
 {
-    public MapperConfig()
+    public MapperConfigAPI()
     {
 
         CreateMap<TransactionRequest, TransactionModel>();

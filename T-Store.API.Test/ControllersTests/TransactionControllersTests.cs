@@ -23,7 +23,7 @@ public class TransactionControllersTests
     public void Setup()
     {
         _logger = new Mock<ILogger<TransactionsController>>();
-        _mapper = new Mapper(new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
+        _mapper = new Mapper(new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<MapperConfigAPI>()));
         _transactionServiceMock = new Mock<ITransactionService>();
         _sut = new TransactionsController(_transactionServiceMock.Object, _mapper, _logger.Object);
     }

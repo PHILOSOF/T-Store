@@ -8,6 +8,7 @@ using T_Store.Extensions;
 using T_Store.Infrastructure;
 using T_Store.MapperConfiguration;
 using T_Strore.Business.MapperConfiguration;
+using T_Strore.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,12 +35,13 @@ builder.Services.AddControllers()
         
     });
 
+builder.Services.AddMassTransit();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidation();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
-builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfig));
+builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfigAPI));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
