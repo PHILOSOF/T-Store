@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using T_Strore.Business.Models;
 
 namespace T_Strore.Business.Consumers
@@ -16,8 +17,9 @@ namespace T_Strore.Business.Consumers
 
         public async Task Consume(ConsumeContext<RateModel> context)
         {
+            var dictionaryConvert = new ConcurrentDictionary<string, decimal>(context.Message.TestRate);
             _logger.LogInformation($"RateConsumer: Save actual rates in model");
-            CurrencyRateModel.CurrencyRate=context.Message.TestRate;
+            CurrencyRateModel.CurrencyRate = dictionaryConvert;
         }
     }
 }

@@ -27,47 +27,46 @@ public class TransactionService : ITransactionService
     public async Task<long> AddDeposit(TransactionModel transaction)
     {
         transaction.TransactionType = TransactionType.Deposit;
-        _logger.LogInformation("Business layer: Request in data base for add transaction");
+        _logger.LogInformation("Business layer: Query in data base for add transaction");
         return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
     }
 
     public async Task<long> Withdraw(TransactionModel transaction)
     {
-        _logger.LogInformation("Business layer: Check balance");
+        _logger.LogInformation($"Business layer: Check balance by accoint id {transaction.AccountId}");
         await CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
         transaction.Amount *= -1;
 
-        _logger.LogInformation("Business layer: Request in data base for add withdraw");
+        _logger.LogInformation("Business layer: Query to data base for add withdraw");
         return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
     }
 
     public async Task<List<long>> AddTransfer(List<TransactionModel> transfersModels)
     {
         int senderIndex = 0;
-        _logger.LogInformation("Business layer: Check balance");
+        _logger.LogInformation($"Business layer: Check balance by account id {transfersModels[senderIndex].AccountId}");
         await CheckBalance(transfersModels[senderIndex]);
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
         
-        _logger.LogInformation("Business layer: Request in data base for add transfers");
-
+        _logger.LogInformation("Business layer: Query to data base for add transfers");
         return await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
     }
 
     public async Task<decimal?> GetBalanceByAccountId(long accountId)
     {
-        _logger.LogInformation("Business layer: Request in data base for received balance");
+        _logger.LogInformation("Business layer: Query in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(accountId);
 
-        _logger.LogInformation("Business layer: Balance returned to controller");
+        _logger.LogInformation($"Business layer: Balance by account id {accountId} returned to controller");
         return balance;
     }
 
     public async Task<TransactionModel?> GetTransactionById(long id)
     {
-        _logger.LogInformation("Business layer: Request in data base for transaction receiving");
+        _logger.LogInformation("Business layer: Query in data base for transaction receiving");
         var transaction = await _transactionRepository.GetTransactionById(id);
 
         if (transaction is null)
@@ -81,10 +80,10 @@ public class TransactionService : ITransactionService
 
     public async Task<Dictionary<DateTime,List<TransactionModel>>> GetTransactionsByAccountId(long accountId)
     {
-        _logger.LogInformation($"Business layer: Sending a request to database for transaction by {accountId} id ");
+        _logger.LogInformation($"Business layer: Query in database for transaction by accountId {accountId}");
         var transactions = await _transactionRepository.GetAllTransactionsByAccountId(accountId);
 
-        _logger.LogInformation("Business layer: Add transactions in dictionary");
+        _logger.LogInformation($"Business layer: Add transactions in dictionary");
         var transactionsDictionary = _mapper.Map<List<TransactionDto>, List<TransactionModel>>(transactions)
             .GroupBy(t => t.Date)
             .ToDictionary(date => date.Key, transactions => transactions
@@ -96,7 +95,7 @@ public class TransactionService : ITransactionService
 
     private async Task CheckBalance(TransactionModel transaction)
     {
-        _logger.LogInformation("Business layer: request in data base for received balance");
+        _logger.LogInformation("Business layer: Query in data base for received balance");
         var balance = await _transactionRepository.GetBalanceByAccountId(transaction.AccountId);
         if (transaction.Amount > balance)
         {

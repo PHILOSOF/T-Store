@@ -38,7 +38,7 @@ public class AccountsController : ControllerBase
 
         var transactionsModel = _mapper.Map<List<TransactionResponse>>(transactions);
 
-        _logger.LogInformation($"Controller: Transactions returned, accountId{id}");
+        _logger.LogInformation($"Controller: Transactions returned by accountId {id}");
         return Ok(transactionsModel);
     }
 }

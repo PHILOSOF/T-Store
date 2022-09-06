@@ -24,7 +24,7 @@ public class CalculationService : ICalculationService
        
         transferModels[0].Amount *= -1;
 
-        _logger.LogInformation("Business layer: Convert result returned");
+        _logger.LogInformation("Business layer: Transfers converted returned");
         return transferModels;
     }
 
@@ -39,9 +39,7 @@ public class CalculationService : ICalculationService
         
         if (pairCurrencyWhithBase.Key != senderCurrency && pairCurrencyWhithBase.Key != recipientCurrency)
         {
-            _logger.LogInformation($"Business layer: Transfer {senderCurrency}{recipientCurrency}," +
-                $" exchange rate: {pairCurrencyWhithBase.Key}{senderCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]} and " +
-                $"{pairCurrencyWhithBase.Key}{recipientCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+            _logger.LogInformation($"Business layer: Transfer {senderCurrency}{recipientCurrency}, exchange rate: {pairCurrencyWhithBase.Key}{senderCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]} and {pairCurrencyWhithBase.Key}{recipientCurrency}:{currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
 
             transferModels[1].Amount = (transferModels[0].Amount /
             currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)]) *
@@ -49,18 +47,17 @@ public class CalculationService : ICalculationService
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == senderCurrency && t.Item2 == recipientCurrency))
         {
-            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}," +
-                $"exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}, exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
 
             transferModels[1].Amount = transferModels[0].Amount * currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)];
         }
         if (pairCurrencyWhithBase.Any(t => t.Item1 == recipientCurrency && t.Item2 == senderCurrency))
         {
-            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}," +
-                $"exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
+            _logger.LogInformation($"Business layer: Transfer{senderCurrency}{recipientCurrency}, exchange rate: {currencyRates[(pairCurrencyWhithBase.Key, recipientCurrency)]}");
 
             transferModels[1].Amount = transferModels[0].Amount / currencyRates[(pairCurrencyWhithBase.Key, senderCurrency)];
         }
+        _logger.LogInformation($"Business layer: Total amount {transferModels[1].Amount} recipient id {transferModels[1].AccountId}");
         return transferModels;
     }
 
@@ -72,7 +69,7 @@ public class CalculationService : ICalculationService
             throw new EntityNotFoundException($"Rates is epmty");
         }
 
-        _logger.LogInformation("Business layer: Convert to a dictionary currency rates wiht out base currency");
+        _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
         var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
 
         _logger.LogInformation("Business layer: Find base currency");
@@ -80,7 +77,7 @@ public class CalculationService : ICalculationService
             .FirstOrDefault()
             .Key;
 
-        _logger.LogInformation("Business layer: Creating result dictionary");
+        _logger.LogInformation($"Business layer: Creating result dictionary which base currency {baseCurrency}");
         var ratesResult = withOutBase
             .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
 
