@@ -63,10 +63,10 @@ public class CalculationService : ICalculationService
 
     private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
     {
-        var ratesDictionary = CurrencyRateModel.CurrencyRate;
+        var ratesDictionary = CurrencyRateModel.CurrencyRates;
         if (ratesDictionary is null)
         {
-            throw new EntityNotFoundException($"Rates is epmty");
+            throw new EntityNotFoundException($"Rates is epmty"); // while not working
         }
 
         _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");

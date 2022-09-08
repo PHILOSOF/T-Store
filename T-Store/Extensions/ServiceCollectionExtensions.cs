@@ -49,7 +49,7 @@ namespace T_Store.Extensions
                 config.AddConsumer<RateConsumer>();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("rates", c =>
+                    cfg.ReceiveEndpoint("currency-rates", c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);
                     });

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using T_Strore.Business.Models;
-using IncredibleBackendContracts.Models;
+using IncredibleBackendContracts.ExchangeModels;
 
 namespace T_Strore.Business.Consumers;
 
@@ -18,8 +18,8 @@ public class RateConsumer : IConsumer<CurrencyRate>
 
     public async Task Consume(ConsumeContext<CurrencyRate> context)
     {
-        var dictionaryConvert = new ConcurrentDictionary<string, decimal>(context.Message.Rates);
+        var dictionaryConvert = new Dictionary<string, decimal>(context.Message.Rates);
         _logger.LogInformation($"RateConsumer: Save actual rates in model");
-        CurrencyRateModel.CurrencyRate = dictionaryConvert;
+        CurrencyRateModel.CurrencyRates = dictionaryConvert;
     }
 }
