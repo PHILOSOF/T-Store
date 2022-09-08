@@ -19,11 +19,18 @@ public class TransactionProducer : ITransactionProducer
 
     public async Task NotifyTransaction(TransactionModel model)
     {
-
-        if (model.Currency == Currency.RUB)
-            model.ExchangeRateToTheRuble = 1;
-        else
-            model.ExchangeRateToTheRuble = CurrencyRateModel.CurrencyRates["USDRUB"];
+        if(model.TransactionType != TransactionType.Transfer)
+        {
+            switch (model.Currency)
+            {
+                case Currency.RUB:
+                    model.ExchangeRateToTheRuble = 1;
+                    break;
+                case Currency.USD:
+                    model.ExchangeRateToTheRuble = CurrencyRateModel.CurrencyRates["USDRUB"];
+                    break;
+            }  
+        }
 
         _logger.LogInformation($"Business layer: Transaction id {model.Id} published");
 
