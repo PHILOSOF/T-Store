@@ -28,7 +28,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure);
 
-        _logger.LogInformation($"Data layer: Transaction-{transaction.TransactionType} added, id {id} returned to business");
+        _logger.LogInformation($"Data layer: Transaction {transaction.TransactionType} id {id} created");
         return id;
     }
          
@@ -73,7 +73,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   },
                   commandType: CommandType.StoredProcedure)).ToList();
 
-        _logger.LogInformation($"Data layer:Transfer added, ids {transferIds[0]}, {transferIds[1]} returned to business");
+        _logger.LogInformation($"Data layer:Transaction-{transfer[0].TransactionType}, ids {transferIds[0]}, {transferIds[1]} created");
         return transferIds;
     }
         
