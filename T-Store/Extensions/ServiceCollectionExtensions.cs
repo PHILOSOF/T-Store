@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Business.Consumers;
+using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
 
@@ -21,6 +22,11 @@ namespace T_Store.Extensions
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+        }
+
+        public static void AddProducers(this IServiceCollection services)
+        {
+            services.AddScoped<ITransactionProducer, TransactionProducer>();
         }
 
         public static void AddFluentValidation(this IServiceCollection services)
@@ -47,17 +53,18 @@ namespace T_Store.Extensions
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<RateConsumer>();
+         
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("currency-rates", c =>
+                    cfg.ReceiveEndpoint("test-queue", c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);
+                        
                     });
+
                 });
             });
-         
         }
-
     }
 }
 

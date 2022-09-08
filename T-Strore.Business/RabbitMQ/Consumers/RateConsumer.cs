@@ -1,8 +1,7 @@
-﻿using MassTransit;
+﻿using IncredibleBackendContracts.ExchangeModels;
+using MassTransit;
 using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
 using T_Strore.Business.Models;
-using IncredibleBackendContracts.ExchangeModels;
 
 namespace T_Strore.Business.Consumers;
 
