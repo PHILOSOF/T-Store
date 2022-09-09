@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Business.Consumers;
+using T_Strore.Business.Models;
 using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
@@ -56,10 +57,15 @@ namespace T_Store.Extensions
          
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("test-queue", c =>
+                    cfg.ReceiveEndpoint("currency-rates", c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);
                         
+                    });
+
+                    cfg.ReceiveEndpoint("transaction-queue", c =>
+                    {
+                        c.Bind<TransactionModel>();
                     });
 
                 });
