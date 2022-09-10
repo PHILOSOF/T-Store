@@ -1,6 +1,4 @@
-﻿
-
-namespace T_Strore.Business.Exceptions;
+﻿namespace T_Strore.Business.Exceptions;
 
 public class EntityNotFoundException : Exception 
 {

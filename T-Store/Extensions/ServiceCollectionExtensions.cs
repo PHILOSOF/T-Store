@@ -9,6 +9,8 @@ using T_Strore.Business.Models;
 using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
 using T_Strore.Data.Repository;
+using IncredibleBackendContracts.Constants;
+using T_Strore.Business.Services.Interfaces;
 
 namespace T_Store.Extensions
 {
@@ -18,6 +20,7 @@ namespace T_Store.Extensions
         {
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ICalculationService, CalculationService>();
+            services.AddScoped<IRateService, RateService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -57,21 +60,18 @@ namespace T_Store.Extensions
          
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("currency-rates", c =>
+                    cfg.ReceiveEndpoint(/*RabbitEndpoint.CurrencyRates*/"test-queue", c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);
                         
                     });
 
-                    cfg.ReceiveEndpoint("transaction-queue", c =>
+                    cfg.ReceiveEndpoint(RabbitEndpoint.TransactionCreate, c =>
                     {
                         c.Bind<TransactionModel>();
                     });
-
                 });
             });
         }
     }
 }
-
-

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using T_Strore.Business.Exceptions;
 using T_Strore.Business.Models;
+using T_Strore.Business.Services.Interfaces;
 
 namespace T_Strore.Business.Services;
 
@@ -8,16 +9,18 @@ public class CalculationService : ICalculationService
 {
 
     private readonly ILogger<CalculationService> _logger;
+    private readonly IRateService _rateService;
 
-    public CalculationService( ILogger<CalculationService> logger)
+    public CalculationService( ILogger<CalculationService> logger, IRateService rateService)
     {
         _logger=logger;
+        _rateService=rateService;
     }
 
     public async Task<List<TransactionModel>> ConvertCurrency(List<TransactionModel> transferModels)
     {
         _logger.LogInformation("Business layer: Call GetCurrencyRate method");
-        var currencyRates = await GetCurrencyRate();
+        var currencyRates =  _rateService.GetRate();
 
         _logger.LogInformation("Business layer: Call GetConvertingAmountByCurrency method");
         transferModels = GetConvertingAmountByCurrency(currencyRates, transferModels);
@@ -61,27 +64,27 @@ public class CalculationService : ICalculationService
         return transferModels;
     }
 
-    private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
-    {
-        var ratesDictionary = CurrencyRateModel.CurrencyRates;
-        if (ratesDictionary is null)
-        {
-            throw new EntityNotFoundException($"Rates is epmty"); // while not working
-        }
+    //private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
+    //{
+    //    var ratesDictionary = CurrencyRateModel.CurrencyRates;
+    //    if (ratesDictionary is null)
+    //    {
+    //        throw new EntityNotFoundException($"Rates is epmty"); // while not working
+    //    }
 
-        _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
-        var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
+    //    _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
+    //    var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
 
-        _logger.LogInformation("Business layer: Find base currency");
-        var baseCurrency = ratesDictionary.GroupBy(k => k.Key.Remove(3))
-            .FirstOrDefault()
-            .Key;
+    //    _logger.LogInformation("Business layer: Find base currency");
+    //    var baseCurrency = ratesDictionary.GroupBy(k => k.Key.Remove(3))
+    //        .FirstOrDefault()
+    //        .Key;
 
-        _logger.LogInformation($"Business layer: Creating result dictionary which base currency {baseCurrency}");
-        var ratesResult = withOutBase
-            .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
+    //    _logger.LogInformation($"Business layer: Creating result dictionary which base currency {baseCurrency}");
+    //    var ratesResult = withOutBase
+    //        .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
 
-        _logger.LogInformation("Business layer: Rates result returned");
-        return await Task.FromResult(ratesResult);
-    }
+    //    _logger.LogInformation("Business layer: Rates result returned");
+    //    return await Task.FromResult(ratesResult);
+    //}
 }
