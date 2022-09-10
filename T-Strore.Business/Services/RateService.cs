@@ -11,7 +11,7 @@ public class RateService : IRateService
     private readonly object _locker = new object();
     public Dictionary<(string, string), decimal> currencyRates { get; set; }
 
-    public RateService(ILogger<RateService> logger) => _logger = logger;
+    public RateService(ILogger<RateService> logger) =>_logger = logger;
 
     public void SaveCurrencyRate(Dictionary<string, decimal> rates)
     {
@@ -47,4 +47,10 @@ public class RateService : IRateService
             return currencyRates;
         }
     }
+
+
+    //public decimal GetExchangeCurrencies(string baseCurrency, string currencyFirst, string currensySecond)
+    //{
+    //    return decimal
+    //}
 }

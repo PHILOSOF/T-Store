@@ -5,7 +5,7 @@ using T_Strore.Business.Services.Interfaces;
 
 namespace T_Strore.Business.Consumers;
 
-public class RateConsumer : IConsumer<NewRatesEvent>
+public class RateConsumer : IConsumer<NewRatesEvent >
 {
 
     private readonly ILogger<RateConsumer> _logger;

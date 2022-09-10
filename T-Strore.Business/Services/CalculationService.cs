@@ -64,27 +64,4 @@ public class CalculationService : ICalculationService
         return transferModels;
     }
 
-    //private async Task<Dictionary<(string, string), decimal>> GetCurrencyRate()
-    //{
-    //    var ratesDictionary = CurrencyRateModel.CurrencyRates;
-    //    if (ratesDictionary is null)
-    //    {
-    //        throw new EntityNotFoundException($"Rates is epmty"); // while not working
-    //    }
-
-    //    _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
-    //    var withOutBase = ratesDictionary.ToDictionary(t => t.Key.Substring(3), t => t.Value);
-
-    //    _logger.LogInformation("Business layer: Find base currency");
-    //    var baseCurrency = ratesDictionary.GroupBy(k => k.Key.Remove(3))
-    //        .FirstOrDefault()
-    //        .Key;
-
-    //    _logger.LogInformation($"Business layer: Creating result dictionary which base currency {baseCurrency}");
-    //    var ratesResult = withOutBase
-    //        .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
-
-    //    _logger.LogInformation("Business layer: Rates result returned");
-    //    return await Task.FromResult(ratesResult);
-    //}
 }
