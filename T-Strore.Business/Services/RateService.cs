@@ -19,7 +19,7 @@ public class RateService : IRateService
         {
             if (rates is null)
             {
-                throw new ServiceUnavailable($"Rates is epmty");
+                throw new ServiceUnavailable("Rates is epmty");
             }
             _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
             RateModel.currencyRates = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
@@ -38,13 +38,15 @@ public class RateService : IRateService
         lock(_locker)
         {
             var rates = GetRate();
+            if(rates is null)
+            {
+                throw new ServiceUnavailable("Rates is epmty");
+            }
             if(currencyFirst != currencySecond)
             {
                 if (RateModel.baseCurrency == currencyFirst || RateModel.baseCurrency == currencySecond)
                 {
-                    var checkFirstKey = rates.ContainsKey(currencyFirst);
-                    var chekSecondKey = rates.ContainsKey(currencySecond);
-                    result = checkFirstKey is true ? rates[currencyFirst] : rates[currencySecond];
+                    result = rates.ContainsKey(currencyFirst) is true ? rates[currencyFirst] : rates[currencySecond];
                 }
                 else
                 {
@@ -52,11 +54,8 @@ public class RateService : IRateService
                 }
             }
             return result;
-            
         }
     }
-
-   
 
     public Dictionary<string, decimal> GetRate()
     {

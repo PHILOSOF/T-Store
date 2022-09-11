@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services.Interfaces;
-using IncredibleBackendContracts.Enums;
 
 namespace T_Strore.Business.Services;
 
 public class CalculationService : ICalculationService
 {
-
     private readonly ILogger<CalculationService> _logger;
     private readonly IRateService _rateService;
-    private readonly object _locker = new object();
 
     public CalculationService( ILogger<CalculationService> logger, IRateService rateService)
     {
@@ -23,21 +20,20 @@ public class CalculationService : ICalculationService
         var senderIndex = 0;
         var recipientIndex = 1;
 
-        _logger.LogInformation("Business layer: Call GetCrossCurrencyRate method");
-        var crossRate = _rateService.GetCurrencyRate(transferModels[0].Currency.ToString(), transferModels[1].Currency.ToString());
+        _logger.LogInformation("Business layer: Call GetCurrencyRate method");
+        var crossRate = _rateService.GetCurrencyRate(transferModels[senderIndex].Currency.ToString(), transferModels[recipientIndex].Currency.ToString());
 
         if (transferModels[0].Currency.ToString() == RateModel.baseCurrency || transferModels[1].Currency.ToString() == RateModel.baseCurrency)
         {
-            transferModels[recipientIndex].Amount = transferModels[0].Currency.ToString() == RateModel.baseCurrency ?
+            _logger.LogInformation($"Business layer: Converting {transferModels[senderIndex].Currency} to {transferModels[recipientIndex].Currency} amount {transferModels[senderIndex].Amount}");
+            transferModels[recipientIndex].Amount = transferModels[senderIndex].Currency.ToString() == RateModel.baseCurrency ?
             transferModels[senderIndex].Amount * crossRate : transferModels[senderIndex].Amount / crossRate;
         }
         else
         {
+            _logger.LogInformation($"Business layer: Converting {transferModels[0].Currency} to {transferModels[recipientIndex].Currency} amount {transferModels[senderIndex].Amount}");
             transferModels[recipientIndex].Amount = transferModels[senderIndex].Amount * crossRate;
         }
-        
-        
-
         transferModels[senderIndex].Amount *= -1;
 
         _logger.LogInformation("Business layer: Transfers converted returned");
