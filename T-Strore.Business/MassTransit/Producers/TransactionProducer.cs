@@ -26,7 +26,7 @@ public class TransactionProducer : ITransactionProducer
     public async Task NotifyTransaction(TransactionModel model)
     {
         var modelForEvent = _mapper.Map<TransactionCreatedEvent>(model);
-        var crossRateResult = _rateService.GetCrossCurrencyRate(model.Currency.ToString(), Currency.RUB.ToString());
+        var crossRateResult = _rateService.GetCurrencyRate(model.Currency.ToString(), Currency.RUB.ToString());
         modelForEvent.Rate = crossRateResult;
 
         _logger.LogInformation($"Business layer: Transaction id {modelForEvent.Id} published");
@@ -36,7 +36,7 @@ public class TransactionProducer : ITransactionProducer
     public async Task NotifyTransfer(TransactionModel sender, TransactionModel recipient)
     {
         var modelForEvent = _mapper.Map<TransferTransactionCreatedEvent>((sender,recipient));
-        var crossRateResult = _rateService.GetCrossCurrencyRate(recipient.Currency.ToString(), Currency.RUB.ToString());
+        var crossRateResult = _rateService.GetCurrencyRate(recipient.Currency.ToString(), Currency.RUB.ToString());
         modelForEvent.Rate = crossRateResult;
         _logger.LogInformation($"Business layer: Transaction id {sender.Id},{recipient.Id} published");
         await _publishEndpoint.Publish(modelForEvent);

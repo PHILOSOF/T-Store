@@ -3,6 +3,7 @@ using T_Strore.Business.Exceptions;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services.Interfaces;
 
+
 namespace T_Strore.Business.Services;
 
 public class RateService : IRateService
@@ -20,32 +21,42 @@ public class RateService : IRateService
             {
                 throw new ServiceUnavailable($"Rates is epmty");
             }
-
             _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
             RateModel.currencyRates = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
 
             _logger.LogInformation("Business layer: Find base currency");
-
             RateModel.baseCurrency = rates.GroupBy(k => k.Key.Remove(3))
                 .FirstOrDefault()!
                 .Key;
         }
     }
 
-    public decimal GetCrossCurrencyRate(string currencyFirst, string currencySecond)
+    public decimal GetCurrencyRate(string currencyFirst, string currencySecond)
     {
         var result = 1m;
 
         lock(_locker)
         {
-            if (currencyFirst != currencySecond)
+            var rates = GetRate();
+            if(currencyFirst != currencySecond)
             {
-                var rates = GetRate();
-                result = rates[currencySecond] / rates[currencyFirst];
+                if (RateModel.baseCurrency == currencyFirst || RateModel.baseCurrency == currencySecond)
+                {
+                    var checkFirstKey = rates.ContainsKey(currencyFirst);
+                    var chekSecondKey = rates.ContainsKey(currencySecond);
+                    result = checkFirstKey is true ? rates[currencyFirst] : rates[currencySecond];
+                }
+                else
+                {
+                    result = rates[currencySecond] / rates[currencyFirst];
+                }
             }
             return result;
+            
         }
     }
+
+   
 
     public Dictionary<string, decimal> GetRate()
     {

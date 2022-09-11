@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using NLog;
-using T_Strore.Business.Exceptions;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services.Interfaces;
+using IncredibleBackendContracts.Enums;
 
 namespace T_Strore.Business.Services;
 
@@ -25,9 +24,20 @@ public class CalculationService : ICalculationService
         var recipientIndex = 1;
 
         _logger.LogInformation("Business layer: Call GetCrossCurrencyRate method");
-        var crossRate = _rateService.GetCrossCurrencyRate(transferModels[0].Currency.ToString(), transferModels[1].Currency.ToString());
+        var crossRate = _rateService.GetCurrencyRate(transferModels[0].Currency.ToString(), transferModels[1].Currency.ToString());
 
-        transferModels[recipientIndex].Amount = transferModels[senderIndex].Amount * crossRate;
+        if (transferModels[0].Currency.ToString() == RateModel.baseCurrency || transferModels[1].Currency.ToString() == RateModel.baseCurrency)
+        {
+            transferModels[recipientIndex].Amount = transferModels[0].Currency.ToString() == RateModel.baseCurrency ?
+            transferModels[senderIndex].Amount * crossRate : transferModels[senderIndex].Amount / crossRate;
+        }
+        else
+        {
+            transferModels[recipientIndex].Amount = transferModels[senderIndex].Amount * crossRate;
+        }
+        
+        
+
         transferModels[senderIndex].Amount *= -1;
 
         _logger.LogInformation("Business layer: Transfers converted returned");

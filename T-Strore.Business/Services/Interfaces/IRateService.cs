@@ -6,5 +6,5 @@ public interface IRateService
 {
     public void SaveCurrencyRate(Dictionary<string, decimal> rates);
     public Dictionary<string, decimal> GetRate();
-    public decimal GetCrossCurrencyRate(string currencyFirst, string currencySecond);
+    public decimal GetCurrencyRate(string currencyFirst, string currencySecond);
 }
