@@ -22,44 +22,33 @@ public class RateService : IRateService
             }
 
             _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
-            var withOutBase = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
+            RateModel.currencyRates = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
 
             _logger.LogInformation("Business layer: Find base currency");
 
             RateModel.baseCurrency = rates.GroupBy(k => k.Key.Remove(3))
                 .FirstOrDefault()!
                 .Key;
-
-            _logger.LogInformation($"Business layer: Creating result dictionary which base currency {RateModel.baseCurrency}");
-            var ratesResult = withOutBase
-                .ToDictionary(t => (RateModel.baseCurrency, t.Key.ToString()), b => b.Value);
-
-            _logger.LogInformation("Business layer: Rates result returned");
-
-            RateModel.currencyRates = new(ratesResult);
         }
     }
 
-    public Dictionary<(string, string), decimal> GetRate()
+    public decimal GetCrossCurrencyRate(string currencyFirst, string currencySecond)
+    {
+        var result = 1m;
+
+        if(currencyFirst != currencySecond)
+        {
+            var rates = GetRate();
+            result = rates[currencySecond] / rates[currencyFirst];
+        }
+        return result;
+    }
+
+    public Dictionary<string, decimal> GetRate()
     {
         lock(_locker)
         {
             return RateModel.currencyRates;
         }
-    }
-
-
-    public decimal GetCrossCurrencyRate(string currencyRecipient, string currencyVariable)
-    {
-        var result = 1m;
-
-        if(currencyRecipient != currencyVariable)
-        {
-            var test = GetRate();
-            var recipientRate = test[(RateModel.baseCurrency, currencyRecipient)];
-            var variableRate = test[(RateModel.baseCurrency, currencyVariable)];
-            result = variableRate / recipientRate;
-        }
-        return result;
     }
 }

@@ -61,6 +61,7 @@ public class TransactionService : ITransactionService
     {
         int senderIndex = 0;
         int recipientIndex = 1;
+
         _logger.LogInformation($"Business layer: Check balance by account id {transfersModels[senderIndex].AccountId}");
         await CheckBalance(transfersModels[senderIndex]);
        
@@ -69,10 +70,9 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add transfers");
         var transferResult= await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
 
-        var senderTransaction = await GetTransactionById(transferResult[senderIndex]);
-        var recipientTransaction = await GetTransactionById(transferResult[recipientIndex]);
-
-        await _transactionProducer.NotifyTransfer(senderTransaction, recipientTransaction);
+        _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
+        await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
+                                                  await GetTransactionById(transferResult[recipientIndex]));
 
         return transferResult;
     }
