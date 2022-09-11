@@ -1,4 +1,4 @@
-﻿using T_Strore.Data;
+﻿using IncredibleBackendContracts.Enums;
 
 namespace T_Store.Models;
 

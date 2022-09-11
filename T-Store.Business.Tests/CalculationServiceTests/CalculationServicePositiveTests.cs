@@ -3,7 +3,7 @@ using Moq;
 using T_Store.Business.Tests.CaseSource;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services;
-using T_Strore.Data;
+using IncredibleBackendContracts.Enums;
 
 namespace T_Store.Business.Tests.CalculationServicePositiveTests;
 

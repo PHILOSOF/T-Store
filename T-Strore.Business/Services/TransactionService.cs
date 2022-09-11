@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 using T_Strore.Business.Exceptions;
 using T_Strore.Business.Models;
-using T_Strore.Data;
+using T_Strore.Business.Producers;
 using T_Strore.Data.Repository;
-
+using IncredibleBackendContracts.Enums;
+using T_Strore.Data;
 
 namespace T_Strore.Business.Services;
 
@@ -14,21 +16,28 @@ public class TransactionService : ITransactionService
     private readonly ICalculationService _calculationService;
     private readonly ILogger<TransactionService> _logger;
     private readonly IMapper _mapper;
-
+    private readonly ITransactionProducer _transactionProducer;
     public TransactionService(ITransactionRepository transactionRepository, ICalculationService calculationService,
-        IMapper mapper, ILogger<TransactionService> logger)
+        IMapper mapper, ILogger<TransactionService> logger, ITransactionProducer transactionProducer)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;
         _mapper = mapper;
         _logger = logger;
+        _transactionProducer = transactionProducer;
     }
 
     public async Task<long> AddDeposit(TransactionModel transaction)
     {
         transaction.TransactionType = TransactionType.Deposit;
-        _logger.LogInformation("Business layer: Query in data base for add transaction");
-        return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
+
+        _logger.LogInformation("Business layer: Query to data base for add transaction");
+        var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
+
+        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+
+        return transactionIdResult;
     }
 
     public async Task<long> Withdraw(TransactionModel transaction)
@@ -40,19 +49,32 @@ public class TransactionService : ITransactionService
         transaction.Amount *= -1;
 
         _logger.LogInformation("Business layer: Query to data base for add withdraw");
-        return await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
+        var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
+
+        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+
+        return transactionIdResult;
     }
 
     public async Task<List<long>> AddTransfer(List<TransactionModel> transfersModels)
     {
         int senderIndex = 0;
+        int recipientIndex = 1;
+
         _logger.LogInformation($"Business layer: Check balance by account id {transfersModels[senderIndex].AccountId}");
         await CheckBalance(transfersModels[senderIndex]);
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
-        
+
         _logger.LogInformation("Business layer: Query to data base for add transfers");
-        return await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
+        var transferResult= await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
+
+        _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
+        await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
+                                                  await GetTransactionById(transferResult[recipientIndex]));
+
+        return transferResult;
     }
 
     public async Task<decimal?> GetBalanceByAccountId(long accountId)

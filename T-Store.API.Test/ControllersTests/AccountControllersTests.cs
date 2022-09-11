@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IncredibleBackendContracts.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,6 @@ using T_Store.Models;
 using T_Store.Models.Responses;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services;
-using T_Strore.Data;
 
 namespace T_Store.API.Test.ControllersTests;
 public class AccountControllersTests

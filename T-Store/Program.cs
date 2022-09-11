@@ -8,7 +8,6 @@ using T_Store.Extensions;
 using T_Store.Infrastructure;
 using T_Store.MapperConfiguration;
 using T_Strore.Business.MapperConfiguration;
-using T_Strore.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +40,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidation();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
+builder.Services.AddProducers();
 builder.Services.AddAutoMapper(typeof(MapperConfigBusiness), typeof(MapperConfigAPI));
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();

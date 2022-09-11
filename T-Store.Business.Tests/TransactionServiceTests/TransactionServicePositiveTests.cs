@@ -7,6 +7,7 @@ using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using T_Strore.Data;
 using T_Strore.Data.Repository;
+using IncredibleBackendContracts.Enums;
 
 namespace T_Store.Business.Tests.TransactionServiceTests;
 
@@ -25,7 +26,7 @@ public class TransactionServicePositiveTests
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationService>();
-        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object);
+        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object, null);
     }
 
     [Test]

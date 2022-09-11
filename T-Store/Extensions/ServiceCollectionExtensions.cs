@@ -1,11 +1,16 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using IncredibleBackendContracts.Constants;
+using IncredibleBackendContracts.Responses;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Business.Consumers;
+using T_Strore.Business.MassTransit.MassTransitConfig;
+using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
+using T_Strore.Business.Services.Interfaces;
 using T_Strore.Data.Repository;
 
 namespace T_Store.Extensions
@@ -16,11 +21,17 @@ namespace T_Store.Extensions
         {
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ICalculationService, CalculationService>();
+            services.AddScoped<IRateService, RateService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+        }
+
+        public static void AddProducers(this IServiceCollection services)
+        {
+            services.AddScoped<ITransactionProducer, TransactionProducer>();
         }
 
         public static void AddFluentValidation(this IServiceCollection services)
@@ -47,18 +58,20 @@ namespace T_Store.Extensions
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<RateConsumer>();
+         
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.ReceiveEndpoint("currency-rates", c =>
                     {
-                        c.ConfigureConsumer<RateConsumer>(ctx);
+                        c.ConfigureConsumer<RateConsumer>(ctx);  
                     });
+
+                    cfg.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
+                    cfg.Publish<TransactionCreatedEvent>(t => { t.BindAlternateExchangeQueue("TransactionExchange", RabbitEndpoint.TransactionCreate);});
+                    cfg.Publish<TransferTransactionCreatedEvent>(t => { t.BindAlternateExchangeQueue("TransactionExchange", RabbitEndpoint.TransferTransactionCreate);});
+                    cfg.ConfigureEndpoints(ctx);
                 });
             });
-         
         }
-
     }
 }
-
-
