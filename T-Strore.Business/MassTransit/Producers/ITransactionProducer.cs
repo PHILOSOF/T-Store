@@ -5,5 +5,6 @@ namespace T_Strore.Business.Producers
     public interface ITransactionProducer
     {
         Task NotifyTransaction(TransactionModel model);
+        Task NotifyTransfer(TransactionModel sender, TransactionModel recipient);
     }
 }

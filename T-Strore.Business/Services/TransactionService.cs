@@ -60,13 +60,21 @@ public class TransactionService : ITransactionService
     public async Task<List<long>> AddTransfer(List<TransactionModel> transfersModels)
     {
         int senderIndex = 0;
+        int recipientIndex = 1;
         _logger.LogInformation($"Business layer: Check balance by account id {transfersModels[senderIndex].AccountId}");
         await CheckBalance(transfersModels[senderIndex]);
        
         var transfersConvert = await _calculationService.ConvertCurrency(transfersModels);
-        
+
         _logger.LogInformation("Business layer: Query to data base for add transfers");
-        return await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
+        var transferResult= await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
+
+        var senderTransaction = await GetTransactionById(transferResult[senderIndex]);
+        var recipientTransaction = await GetTransactionById(transferResult[recipientIndex]);
+
+        await _transactionProducer.NotifyTransfer(senderTransaction, recipientTransaction);
+
+        return transferResult;
     }
 
     public async Task<decimal?> GetBalanceByAccountId(long accountId)

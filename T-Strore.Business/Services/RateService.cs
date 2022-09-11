@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using T_Strore.Business.Exceptions;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services.Interfaces;
 
 namespace T_Strore.Business.Services;
@@ -7,9 +8,7 @@ namespace T_Strore.Business.Services;
 public class RateService : IRateService
 {
     private readonly ILogger<RateService> _logger;
-
     private readonly object _locker = new object();
-    public Dictionary<(string, string), decimal> currencyRates { get; set; }
 
     public RateService(ILogger<RateService> logger) =>_logger = logger;
 
@@ -26,17 +25,18 @@ public class RateService : IRateService
             var withOutBase = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
 
             _logger.LogInformation("Business layer: Find base currency");
-            var baseCurrency = rates.GroupBy(k => k.Key.Remove(3))
+
+            RateModel.baseCurrency = rates.GroupBy(k => k.Key.Remove(3))
                 .FirstOrDefault()!
                 .Key;
 
-            _logger.LogInformation($"Business layer: Creating result dictionary which base currency {baseCurrency}");
+            _logger.LogInformation($"Business layer: Creating result dictionary which base currency {RateModel.baseCurrency}");
             var ratesResult = withOutBase
-                .ToDictionary(t => (baseCurrency, t.Key.ToString()), b => b.Value);
+                .ToDictionary(t => (RateModel.baseCurrency, t.Key.ToString()), b => b.Value);
 
             _logger.LogInformation("Business layer: Rates result returned");
 
-            currencyRates = new(ratesResult);
+            RateModel.currencyRates = new(ratesResult);
         }
     }
 
@@ -44,13 +44,22 @@ public class RateService : IRateService
     {
         lock(_locker)
         {
-            return currencyRates;
+            return RateModel.currencyRates;
         }
     }
 
 
-    //public decimal GetExchangeCurrencies(string baseCurrency, string currencyFirst, string currensySecond)
-    //{
-    //    return decimal
-    //}
+    public decimal GetCrossCurrencyRate(string currencyRecipient, string currencyVariable)
+    {
+        var result = 1m;
+
+        if(currencyRecipient != currencyVariable)
+        {
+            var test = GetRate();
+            var recipientRate = test[(RateModel.baseCurrency, currencyRecipient)];
+            var variableRate = test[(RateModel.baseCurrency, currencyVariable)];
+            result = variableRate / recipientRate;
+        }
+        return result;
+    }
 }

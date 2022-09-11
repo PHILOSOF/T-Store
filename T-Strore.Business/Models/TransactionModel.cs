@@ -10,5 +10,4 @@ public class TransactionModel
     public TransactionType TransactionType { get; set; }
     public decimal Amount { get; set; }
     public Currency Currency { get; set; }
-    public decimal ExchangeRateToTheRuble { get; set; }
 }
