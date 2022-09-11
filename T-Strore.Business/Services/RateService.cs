@@ -36,12 +36,15 @@ public class RateService : IRateService
     {
         var result = 1m;
 
-        if(currencyFirst != currencySecond)
+        lock(_locker)
         {
-            var rates = GetRate();
-            result = rates[currencySecond] / rates[currencyFirst];
+            if (currencyFirst != currencySecond)
+            {
+                var rates = GetRate();
+                result = rates[currencySecond] / rates[currencyFirst];
+            }
+            return result;
         }
-        return result;
     }
 
     public Dictionary<string, decimal> GetRate()
