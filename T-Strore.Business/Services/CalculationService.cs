@@ -23,10 +23,10 @@ public class CalculationService : ICalculationService
         _logger.LogInformation("Business layer: Call GetCurrencyRate method");
         var crossRate = _rateService.GetCurrencyRate(transferModels[senderIndex].Currency.ToString(), transferModels[recipientIndex].Currency.ToString());
 
-        if (transferModels[0].Currency.ToString() == RateModel.baseCurrency || transferModels[1].Currency.ToString() == RateModel.baseCurrency)
+        if (transferModels[0].Currency.ToString() == RateModel.BaseCurrency || transferModels[1].Currency.ToString() == RateModel.BaseCurrency)
         {
             _logger.LogInformation($"Business layer: Converting {transferModels[senderIndex].Currency} to {transferModels[recipientIndex].Currency} amount {transferModels[senderIndex].Amount}");
-            transferModels[recipientIndex].Amount = transferModels[senderIndex].Currency.ToString() == RateModel.baseCurrency ?
+            transferModels[recipientIndex].Amount = transferModels[senderIndex].Currency.ToString() == RateModel.BaseCurrency ?
             transferModels[senderIndex].Amount * crossRate : transferModels[senderIndex].Amount / crossRate;
         }
         else

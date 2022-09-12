@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using IncredibleBackendContracts.Events;
 using T_Strore.Business.Models;
 using T_Strore.Data;
-using IncredibleBackendContracts.Responses;
 
 namespace T_Strore.Business.MapperConfiguration;
 
@@ -23,18 +23,5 @@ public class MapperConfigBusiness : Profile
             .ForMember(t => t.RecipientAccountId, act => act.MapFrom(l => l.Item2.AccountId))
             .ForMember(t => t.RecipientAmount, act => act.MapFrom(l => l.Item2.Amount))
             .ForMember(t => t.RecipientCurrency, act => act.MapFrom(l => l.Item2.Currency));
-
-
-        //CreateMap<List<TransactionModel>, TransferTransactionCreatedEvent>()
-        //    .ForMember(t => t.Id, act => act.MapFrom(l => l[0].Id))
-        //    .ForMember(t => t.AccountId, act => act.MapFrom(l => l[0].AccountId))
-        //    .ForMember(t => t.Date, act => act.MapFrom(l => l[0].Date))
-        //    .ForMember(t => t.TransactionType, act => act.MapFrom(l => l[0].TransactionType))
-        //    .ForMember(t => t.Amount, act => act.MapFrom(l => l[0].Amount))
-        //    .ForMember(t => t.Currency, act => act.MapFrom(l => l[0].Currency))
-        //    .ForMember(t => t.RecipientId, act => act.MapFrom(l => l[1].Id))
-        //    .ForMember(t => t.RecipientAccountId, act => act.MapFrom(l => l[1].AccountId))
-        //    .ForMember(t => t.RecipientAmount, act => act.MapFrom(l => l[1].Amount))
-        //    .ForMember(t => t.RecipientCurrency, act => act.MapFrom(l => l[1].Currency));
     }
 }

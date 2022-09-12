@@ -6,6 +6,7 @@ using IncredibleBackendContracts.Responses;
 using AutoMapper;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
+using IncredibleBackendContracts.Events;
 
 namespace T_Strore.Business.Producers;
 

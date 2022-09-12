@@ -2,6 +2,6 @@
 
 public static class RateModel
 {
-    public static Dictionary<string, decimal> currencyRates { get; set; }
-    public static string baseCurrency { get; set; }
+    public static Dictionary<string, decimal> CurrencyRates { get; set; }
+    public static string BaseCurrency { get; set; }
 }

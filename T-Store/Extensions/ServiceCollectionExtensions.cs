@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using IncredibleBackendContracts.Constants;
-using IncredibleBackendContracts.Responses;
+using IncredibleBackendContracts.Events;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
@@ -61,15 +61,21 @@ namespace T_Store.Extensions
          
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
-                    cfg.ReceiveEndpoint("currency-rates", c =>
+                    cfg.ReceiveEndpoint(RabbitEndpoint.CurrencyRates, c =>
                     {
                         c.ConfigureConsumer<RateConsumer>(ctx);  
                     });
 
-                    cfg.MessageTopology.SetEntityNameFormatter(new CustomEntityNameFormatter());
-                    cfg.Publish<TransactionCreatedEvent>(t => { t.BindAlternateExchangeQueue("TransactionExchange", RabbitEndpoint.TransactionCreate);});
-                    cfg.Publish<TransferTransactionCreatedEvent>(t => { t.BindAlternateExchangeQueue("TransactionExchange", RabbitEndpoint.TransferTransactionCreate);});
-                    cfg.ConfigureEndpoints(ctx);
+                    cfg.ReceiveEndpoint(RabbitEndpoint.TransactionCreate, c =>
+                    {
+                        c.Bind<TransactionCreatedEvent>();
+
+                    });
+                    cfg.ReceiveEndpoint(RabbitEndpoint.TransferTransactionCreate, c =>
+                    {
+                        c.Bind<TransferTransactionCreatedEvent>();
+
+                    });
                 });
             });
         }
