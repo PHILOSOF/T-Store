@@ -29,7 +29,9 @@ public class TransactionService : ITransactionService
 
     public async Task<long> AddDeposit(TransactionModel transaction)
     {
-        transaction.TransactionType = TransactionType.Deposit;
+        _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId); transaction.TransactionType = TransactionType.Deposit;
+
 
         _logger.LogInformation("Business layer: Query to data base for add transaction");
         var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
@@ -42,8 +44,13 @@ public class TransactionService : ITransactionService
 
     public async Task<long> Withdraw(TransactionModel transaction)
     {
-        _logger.LogInformation($"Business layer: Check balance by accoint id {transaction.AccountId}");
+        _logger.LogInformation($"Business layer: Check balance for account id {transaction.AccountId}");
         await CheckBalance(transaction);
+
+        _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId);
+
+        Thread.Sleep(1000); // for test
 
         transaction.TransactionType = TransactionType.Withdraw;
         transaction.Amount *= -1;
@@ -123,5 +130,12 @@ public class TransactionService : ITransactionService
         {
             throw new BalanceExceedException($"You have not a enough money on balance");
         }
+    }
+
+    private async Task<DateTime> GetDateLastTransaction(long accointId)
+    {
+        _logger.LogInformation("Business layer: Query in data base for received last transaction");
+        var lastTransaction = await _transactionRepository.GetLastTransactionByAccountId(accointId);
+        return lastTransaction.Date;
     }
 }

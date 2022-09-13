@@ -7,4 +7,7 @@
     [Currency]        SMALLINT      NOT NULL, 
     CONSTRAINT [PK_Transaction] PRIMARY KEY ([Id])
 );
+GO
+CREATE INDEX idx_AccountId ON [dbo].[Transaction] ([AccountId]) INCLUDE ([Amount],[Date])
+GO
 
