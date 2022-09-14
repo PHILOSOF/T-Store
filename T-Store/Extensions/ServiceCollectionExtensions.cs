@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using IncredibleBackend.Rmq;
 using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
@@ -66,16 +67,8 @@ namespace T_Store.Extensions
                         c.ConfigureConsumer<RateConsumer>(ctx);  
                     });
 
-                    cfg.ReceiveEndpoint(RabbitEndpoint.TransactionCreate, c =>
-                    {
-                        c.Bind<TransactionCreatedEvent>();
-
-                    });
-                    cfg.ReceiveEndpoint(RabbitEndpoint.TransferTransactionCreate, c =>
-                    {
-                        c.Bind<TransferTransactionCreatedEvent>();
-
-                    });
+                    MassTransitProducer<TransactionCreatedEvent>.GetConfigurationForProducer(cfg, RabbitEndpoint.TransactionCreate);
+                    MassTransitProducer<TransferTransactionCreatedEvent>.GetConfigurationForProducer(cfg, RabbitEndpoint.TransferTransactionCreate);
                 });
             });
         }
