@@ -5,17 +5,21 @@
 	@Amount decimal (11,4),
 	@Currency smallint
 as
-begin 
+begin
+begin transaction -- ?
+
 
 	declare @lastDate datetime
 	set @lastDate = (select [Date] 
 					from [dbo].[Transaction]
+					with (tablock, holdlock) -- ????
 					where [Date] = (select max([Date])
 					from [dbo].[Transaction]
 					where AccountId = @AccountId))
-					
-	if @Date <> (select convert (varchar, @lastDate, 113))
-		raiserror ('Eror transaction duplicate', 16, 1)	
+	
+	if @lastDate != @Date
+		raiserror ('Error Transaction duplicate', 16, 1)	
+
 	else 
 		insert into [dbo].[Transaction]
 		(
@@ -35,4 +39,9 @@ begin
 			@Currency
 		)
 		select scope_identity() 					
+commit --?
 end
+
+
+
+	

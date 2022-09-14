@@ -37,8 +37,12 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add transaction");
         var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
-        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+            await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        }
+        
 
         return transactionIdResult;
     }
@@ -49,8 +53,8 @@ public class TransactionService : ITransactionService
         await CheckBalance(transaction);
 
         _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
-        transaction.Date = await GetDateLastTransaction(transaction.AccountId);
-
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId); // for test ??? 
+     
         Thread.Sleep(1000); // for test
 
         transaction.TransactionType = TransactionType.Withdraw;
@@ -59,8 +63,12 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add withdraw");
         var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
-        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+            await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        }
+        
 
         return transactionIdResult;
     }
