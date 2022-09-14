@@ -1,6 +1,6 @@
 ﻿
+using IncredibleBackendContracts.Enums;
 using System.Collections;
-using T_Strore.Data;
 
 namespace T_Store.Business.Tests.CaseSource;
 
@@ -14,6 +14,7 @@ public class PairsBesidesUsdSource : IEnumerable
         Currency.AMD,
         Currency.BGN,
         Currency.RSD,
+        Currency.CNY
     };
 
     public IEnumerator GetEnumerator()
@@ -23,10 +24,14 @@ public class PairsBesidesUsdSource : IEnumerable
 
             foreach (Currency curSecond in currencies)
             {
-                yield return new object[]
+                if(curFirst != curSecond)
                 {
-                     curFirst,curSecond
-                };
+                    yield return new object[]
+                    {
+                         curFirst,curSecond
+                    };
+                }
+                
             }
         }
     }
