@@ -22,10 +22,10 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
                   param: new
                   {
                       transaction.AccountId,
+                      transaction.Date,
                       transaction.TransactionType,
                       transaction.Amount,
-                      transaction.Currency,
-                      transaction.Date
+                      transaction.Currency  
                   },
                   commandType: CommandType.StoredProcedure);
 

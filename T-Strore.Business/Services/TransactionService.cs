@@ -30,7 +30,8 @@ public class TransactionService : ITransactionService
     public async Task<long> AddDeposit(TransactionModel transaction)
     {
         _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
-        transaction.Date = await GetDateLastTransaction(transaction.AccountId); transaction.TransactionType = TransactionType.Deposit;
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId); 
+        transaction.TransactionType = TransactionType.Deposit;
 
 
         _logger.LogInformation("Business layer: Query to data base for add transaction");
