@@ -33,6 +33,11 @@ public class CustomExceptionHandlerMiddleware
             _logger.LogError(exception, $"Stopped program because of {exception}");
             await HandleExceptionAsync(context, HttpStatusCode.BadRequest, exception.Message);
         }
+        catch (ServiceUnavailableException exception)
+        {
+            _logger.LogError(exception, $"Stopped program because of {exception}");
+            await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, exception.Message);
+        }
     }
 
     private Task HandleExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)

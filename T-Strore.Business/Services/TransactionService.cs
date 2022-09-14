@@ -86,9 +86,13 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add transfers");
         var transferResult= await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
-        await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
-                                                  await GetTransactionById(transferResult[recipientIndex]));
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
+            await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
+                                                      await GetTransactionById(transferResult[recipientIndex]));
+        }
+        
 
         return transferResult;
     }

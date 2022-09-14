@@ -19,7 +19,7 @@ public class RateService : IRateService
         {
             if (rates is null)
             {
-                throw new ServiceUnavailable("Rates is epmty");
+                throw new ServiceUnavailableException("Rates is epmty");
             }
             _logger.LogInformation("Business layer: Convert to the dictionary currency rates wihtout base currency");
             RateModel.CurrencyRates = rates.ToDictionary(t => t.Key.Substring(3), t => t.Value);
@@ -40,7 +40,7 @@ public class RateService : IRateService
             var rates = GetRate();
             if(rates is null)
             {
-                throw new ServiceUnavailable("Rates is epmty");
+                throw new ServiceUnavailableException("Rates is epmty");
             }
             if(currencyFirst != currencySecond)
             {
