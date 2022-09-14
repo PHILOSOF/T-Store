@@ -17,16 +17,17 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
     public async Task<long> AddTransaction(TransactionDto transaction)
     {
         _logger.LogInformation("Data layer: Connection to data base");
+        var parameters = new DynamicParameters(new {
+            transaction.AccountId,
+            transaction.TransactionType,
+            transaction.Amount,
+            transaction.Currency
+        });
+        parameters.Add("@Date", transaction.Date, DbType.DateTime2);
+
         var id = await _dbConnection.QueryFirstOrDefaultAsync<long>(
                   TransactionStoredProcedure.Transaction_Insert,
-                  param: new
-                  {
-                      transaction.AccountId,
-                      transaction.Date,
-                      transaction.TransactionType,
-                      transaction.Amount,
-                      transaction.Currency  
-                  },
+                  param: parameters,
                   commandType: CommandType.StoredProcedure);
 
         _logger.LogInformation($"Data layer: Transaction {transaction.TransactionType} id {id} created");

@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using IncredibleBackend.Rmq;
+using IncredibleBackend.Messaging;
 using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Business.Consumers;
-using T_Strore.Business.MassTransit.MassTransitConfig;
 using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
@@ -54,22 +54,21 @@ namespace T_Store.Extensions
             });
         }
 
-        public static void AddMassTransit(this IServiceCollection services)
+        public static void ConfigureMessaging(this IServiceCollection services)
         {
-            services.AddMassTransit(config =>
+            services.RegisterConsumersAndProducers((config) =>
             {
                 config.AddConsumer<RateConsumer>();
-         
-                config.UsingRabbitMq((ctx, cfg) =>
+            }, (cfg, ctx) =>
+            {
+                cfg.ReceiveEndpoint(RabbitEndpoint.CurrencyRates, c =>
                 {
-                    cfg.ReceiveEndpoint(RabbitEndpoint.CurrencyRates, c =>
-                    {
-                        c.ConfigureConsumer<RateConsumer>(ctx);  
-                    });
-
-                    MassTransitProducer<TransactionCreatedEvent>.GetConfigurationForProducer(cfg, RabbitEndpoint.TransactionCreate);
-                    MassTransitProducer<TransferTransactionCreatedEvent>.GetConfigurationForProducer(cfg, RabbitEndpoint.TransferTransactionCreate);
+                    c.ConfigureConsumer<RateConsumer>(ctx);
                 });
+            }, (cfg) =>
+            {
+                cfg.RegisterProducer<TransactionCreatedEvent>(RabbitEndpoint.TransactionCreate);
+                cfg.RegisterProducer<TransferTransactionCreatedEvent>(RabbitEndpoint.TransferTransactionCreate);
             });
         }
     }
