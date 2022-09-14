@@ -32,7 +32,8 @@ public class CalculationService : ICalculationService
         else
         {
             _logger.LogInformation($"Business layer: Converting {transferModels[0].Currency} to {transferModels[recipientIndex].Currency} amount {transferModels[senderIndex].Amount}");
-            transferModels[recipientIndex].Amount =Math.Round((transferModels[senderIndex].Amount * crossRate), 4, MidpointRounding.ToNegativeInfinity);
+            transferModels[recipientIndex].Amount =Math.Round((transferModels[senderIndex].Amount * crossRate),
+                                                                       4, MidpointRounding.ToNegativeInfinity);
         }
         transferModels[senderIndex].Amount *= -1;
 

@@ -14,7 +14,7 @@ public class PairsBesidesUsdSource : IEnumerable
         Currency.AMD,
         Currency.BGN,
         Currency.RSD,
-        Currency.CNY
+        Currency.CNY,
     };
 
     public IEnumerator GetEnumerator()
@@ -31,7 +31,6 @@ public class PairsBesidesUsdSource : IEnumerable
                          curFirst,curSecond
                     };
                 }
-                
             }
         }
     }
