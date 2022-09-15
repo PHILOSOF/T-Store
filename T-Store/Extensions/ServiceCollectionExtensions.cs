@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using IncredibleBackend.Messaging;
+using IncredibleBackend.Messaging.Extentions;
+using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
@@ -33,6 +34,7 @@ namespace T_Store.Extensions
         public static void AddProducers(this IServiceCollection services)
         {
             services.AddScoped<ITransactionProducer, TransactionProducer>();
+            services.AddScoped<IMessageProducer, MessageProducer>();
         }
 
         public static void AddFluentValidation(this IServiceCollection services)

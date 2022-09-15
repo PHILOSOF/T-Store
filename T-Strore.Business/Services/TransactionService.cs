@@ -53,9 +53,7 @@ public class TransactionService : ITransactionService
         await CheckBalance(transaction);
 
         _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
-        transaction.Date = await GetDateLastTransaction(transaction.AccountId); // for test ??? 
-     
-        Thread.Sleep(1000); // for test
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId); 
 
         transaction.TransactionType = TransactionType.Withdraw;
         transaction.Amount *= -1;

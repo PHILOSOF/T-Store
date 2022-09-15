@@ -6,12 +6,13 @@
 	@Currency smallint
 as
 begin
+
 	declare @lastDate datetime2(7)
 	set @lastDate = (select top 1 [Date] 
 					from [dbo].[Transaction]
 					where AccountId = @AccountId
 					order by [Date] desc)
-	
+
 	if @lastDate != @Date
 		raiserror ('Error Transaction duplicate', 16, 1)	
 

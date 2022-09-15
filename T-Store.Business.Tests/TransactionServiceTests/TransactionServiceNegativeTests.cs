@@ -19,6 +19,7 @@ public class TransactionServiceNegativeTests
     private Mock<ILogger<TransactionService>> _logger;
     private IMapper _mapper;
 
+
     [SetUp]
     public void Setup()
     {
