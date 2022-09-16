@@ -10,4 +10,15 @@ public class TransactionModel
     public TransactionType TransactionType { get; set; }
     public decimal Amount { get; set; }
     public Currency Currency { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is TransactionModel model &&
+            Id == model.Id &&
+            AccountId == model.AccountId &&
+            Date == model.Date &&
+            TransactionType == model.TransactionType &&
+            Amount == model.Amount &&
+            Currency == model.Currency;
+    }
 }

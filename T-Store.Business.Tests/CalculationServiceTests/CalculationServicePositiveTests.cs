@@ -72,6 +72,7 @@ public class CalculationServicesPositiveTests
 
         var senderAmountExpected = 0 - transferModel[0].Amount;
         var recipientAmountExpected = transferModel[0].Amount * ratesDictionary[transferModel[1].Currency.ToString()];
+
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 
@@ -135,7 +136,7 @@ public class CalculationServicesPositiveTests
         var recipientAmountExpected = transferModel[0].Amount / ratesDictionary[sender.ToString()];
 
         //when
-     var actual = await _sut.ConvertCurrency(transferModel);
+        var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
         Assert.AreEqual(transferModel[0].Id, transferModel[0].Id);
