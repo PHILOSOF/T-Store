@@ -50,10 +50,10 @@ public class TransactionService : ITransactionService
     public async Task<long> Withdraw(TransactionModel transaction)
     {
         _logger.LogInformation($"Business layer: Check balance for account id {transaction.AccountId}");
-        await CheckBalance(transaction);
+        await CheckBalance(transaction);//
 
         _logger.LogInformation($"Business layer: Call GetDateLastTransaction method for {transaction.AccountId}");
-        transaction.Date = await GetDateLastTransaction(transaction.AccountId); 
+        transaction.Date = await GetDateLastTransaction(transaction.AccountId); //
 
         transaction.TransactionType = TransactionType.Withdraw;
         transaction.Amount *= -1;

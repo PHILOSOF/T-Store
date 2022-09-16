@@ -25,7 +25,7 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         });
         parameters.Add("@Date", transaction.Date, DbType.DateTime2);
 
-        var id = await _dbConnection.QueryFirstOrDefaultAsync<long>(
+        var id =await _dbConnection.QueryFirstOrDefaultAsync<long>(
                   TransactionStoredProcedure.Transaction_Insert,
                   param: parameters,
                   commandType: CommandType.StoredProcedure);
