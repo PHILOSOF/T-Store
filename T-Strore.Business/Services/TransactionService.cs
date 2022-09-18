@@ -83,8 +83,6 @@ public class TransactionService : ITransactionService
             await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
                                                       await GetTransactionById(transferResult[recipientIndex]));
         }
-        
-
         return transferResult;
     }
 
@@ -135,5 +133,4 @@ public class TransactionService : ITransactionService
             throw new BalanceExceedException($"You have not a enough money on balance");
         }
     }
-
 }
