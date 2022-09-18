@@ -9,6 +9,7 @@ using T_Strore.Data;
 using T_Strore.Data.Repository;
 using IncredibleBackendContracts.Enums;
 using T_Strore.Business.Producers;
+using System.Transactions;
 
 namespace T_Store.Business.Tests.TransactionServiceTests;
 
@@ -30,10 +31,20 @@ public class TransactionServicePositiveTests
         _calculationService = new Mock<ICalculationService>();
         _transactionProducer = new Mock<ITransactionProducer>();
         _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object, _transactionProducer.Object);
+        RateModel.CurrencyRates = new Dictionary<string, decimal>()
+        {
+            { "EUR", 0.9958m },
+            { "RUB", 60.47m },
+            { "JPY", 142.47m },
+            { "AMD", 405.3m },
+            { "BGN", 1.95m },
+            { "RSD", 116.74m },
+            { "CNY", 6.92m },
+        };
     }
 
     [Test]
-    public async Task AddDeposit_ValidRequestPassed_AddTransactionAndIdReturned()
+    public async Task AddDeposit_ValidRequestPassed_AddTransactionIdReturnedAndNotifyQueueTransaction()
     {
         //given
         var expectedId = 2;
@@ -47,26 +58,19 @@ public class TransactionServicePositiveTests
 
         };
 
-        var lastTransaction = new TransactionDto()
-        {
-            Id = 1,
-            AccountId = 1,
-            Amount = 10,
-            Currency = Currency.USD,
-            Date = DateTime.UtcNow
-        };
-
-
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
+        _transactionRepositoryMock.Setup(t => t.GetTransactionById(transaction.Id))
+        .ReturnsAsync(_mapper.Map<TransactionDto>(transaction));
+
 
 
         //when
         var actualId = await _sut.AddDeposit(transaction);
 
         //then
-
-        Assert.AreEqual(actualId, expectedId);
+        Assert.That(expectedId, Is.EqualTo(actualId));
+        _transactionRepositoryMock.Verify(t => t.GetTransactionById(expectedId), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(c =>
         c.Id == transaction.Id &&
         c.Currency == transaction.Currency &&
@@ -77,11 +81,10 @@ public class TransactionServicePositiveTests
 
 
     [Test]
-    public async Task WithdrawDeposit_ValidRequestPassed_WithdrawAndIdReturned()
+    public async Task WithdrawDeposit_ValidRequestPassed_WithdrawIdReturnedAndNotifyQueueTransaction()
     {
         //given
-
-
+        var expectedId = 1;
         var transaction = new TransactionModel()
         {
             Id = 1,
@@ -90,25 +93,19 @@ public class TransactionServicePositiveTests
             Currency = Currency.EUR
         };
 
-        var lastTransaction = new TransactionDto()
-        {
-            Id = 1,
-            AccountId = 1,
-            Amount = 10,
-            Currency = Currency.USD,
-            Date = DateTime.UtcNow
-        };
-
         _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transaction.AccountId))
          .ReturnsAsync(100);
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
+        _transactionRepositoryMock.Setup(t => t.GetTransactionById(transaction.Id))
+        .ReturnsAsync(_mapper.Map<TransactionDto>(transaction));
 
         //when
         var actual = await _sut.Withdraw(transaction);
 
         //then
-        Assert.AreEqual(actual, transaction.Id);
+        Assert.That(transaction.Id, Is.EqualTo(actual));
+        _transactionRepositoryMock.Verify(t => t.GetTransactionById(expectedId), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.Is<TransactionDto>(t =>
         t.Id == transaction.Id &&
         t.Currency == transaction.Currency &&
@@ -119,7 +116,7 @@ public class TransactionServicePositiveTests
     }
 
     [Test]
-    public async Task AddTransfer_ValidRequestPassed_AddTransferAndIdReturned()
+    public async Task AddTransfer_ValidRequestPassed_AddTransferIdReturnedAndNotifyQueueTransactions()
     {
         //given
         var expectedIds = new List<long> { 1, 2 };
@@ -172,11 +169,18 @@ public class TransactionServicePositiveTests
         _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transfers[0].AccountId))
         .ReturnsAsync(100);
 
+        _transactionRepositoryMock.Setup(t => t.GetTransactionById(convertModels[0].Id))
+        .ReturnsAsync(_mapper.Map<TransactionDto>(convertModels[0]));
+        _transactionRepositoryMock.Setup(t => t.GetTransactionById(convertModels[1].Id))
+        .ReturnsAsync(_mapper.Map<TransactionDto>(convertModels[1]));
+
         //when
         var actual = await _sut.AddTransfer(transfers);
 
         //then
         Assert.AreEqual(expectedIds, actual);
+        _transactionRepositoryMock.Verify(t => t.GetTransactionById(convertModels[0].Id), Times.Once);
+        _transactionRepositoryMock.Verify(t => t.GetTransactionById(convertModels[1].Id), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransferTransactions(It.Is<List<TransactionDto>>(c =>
         c[0].Id == convertModels[0].Id &&
         c[0].Currency == convertModels[0].Currency &&
