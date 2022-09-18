@@ -7,16 +7,7 @@
 as
 begin
 begin transaction
-	--declare @lastDate datetime2(7)
-	--set @lastDate = (select top 1 [Date] 
-	--				from [dbo].[Transaction]
-	--				where AccountId = @AccountId
-	--				order by [Date] desc)
 
-	--if @lastDate != @Date
-	--	raiserror ('Error Transaction duplicate', 16, 1)	
-
-	--else 
 		insert into [dbo].[Transaction] with (tablock, holdlock) 
 		(
 			[AccountId],
@@ -25,7 +16,6 @@ begin transaction
 			[Amount],
 			[Currency]
 		)
-
 		values 
 		(
 			@AccountId, 
@@ -34,16 +24,19 @@ begin transaction
 			@Amount, 
 			@Currency
 		)
-		declare @actualBalance decimal
+
+		declare @actualBalance decimal (11,4)
 		set @actualBalance = (select coalesce(sum([Amount]),0)
 							  from [dbo].[Transaction] with (tablock, holdlock) 
 							  where [AccountId] = @AccountId)
+
 		if @actualBalance<0
 		rollback
 
 		else		
 		select scope_identity()
-commit
+
+commit transaction
 end
 
 

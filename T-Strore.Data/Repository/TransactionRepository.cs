@@ -90,16 +90,4 @@ public class TransactionRepository : BaseRepository, ITransactionRepository
         _logger.LogInformation($"Data layer: Transactions by account id {accountId} returned to business");
         return transactions;
     }
-
-    public async Task<TransactionDto?> GetLastTransactionByAccountId(long accountId)
-    {
-        _logger.LogInformation("Data layer: Connection to data base");
-        var transaction = await _dbConnection.QueryFirstOrDefaultAsync<TransactionDto>(
-                 TransactionStoredProcedure.Transaction_GetLastTransactionByAccountId,
-                 param: new { accountId },
-                 commandType: CommandType.StoredProcedure);
-
-        _logger.LogInformation($"Data layer: Last transaction {transaction.Id} by account id {accountId} returned to business");
-        return transaction;
-    }
 }

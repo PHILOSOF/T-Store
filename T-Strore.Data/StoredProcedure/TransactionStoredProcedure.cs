@@ -8,5 +8,4 @@ public class TransactionStoredProcedure
     public const string Transaction_SelectById = "Transaction_SelectById";
     public const string Transaction_InsertTransfer = "Transaction_InsertTransfer";
     public const string Transaction_GetAllTransactionsByAccountId = "Transaction_GetAllTransactionsByAccountId";
-    public const string Transaction_GetLastTransactionByAccountId = "Transaction_GetLastTransactionByAccountId";
 }
