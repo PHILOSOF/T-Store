@@ -24,7 +24,7 @@ public class RateConsumerTests
     }
 
     [Test]
-    public async Task Consume__ValidRequestPassed_CurrencyRateSave()
+    public async Task Consume_ValidRequestPassed_CurrencyRateSave()
     {
         //given
         var rates = new Dictionary <string, decimal>()

@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using IncredibleBackend.Messaging;
 using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
-using MassTransit;
-using Microsoft.Extensions.Logging;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services.Interfaces;
 
@@ -14,13 +11,11 @@ namespace T_Strore.Business.Producers;
 public class TransactionProducer : ITransactionProducer 
 {
     private readonly IMessageProducer _messageProducer;
-    private readonly ILogger<TransactionProducer> _logger;
     private readonly IMapper _mapper;
     private readonly IRateService _rateService;
-    public TransactionProducer(IMessageProducer messageProducer, ILogger<TransactionProducer> logger, IMapper mapper, IRateService rateService)
+    public TransactionProducer(IMessageProducer messageProducer, IMapper mapper, IRateService rateService)
     {
         _messageProducer = messageProducer;
-        _logger = logger;
         _mapper = mapper;
         _rateService = rateService;
     }
