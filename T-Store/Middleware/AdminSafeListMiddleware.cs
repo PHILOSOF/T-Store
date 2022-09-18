@@ -4,7 +4,7 @@ using System.Net;
 
 namespace T_Store.Middleware;
 
-[ExcludeFromCodeCoverage]
+
 public class AdminSafeListMiddleware
 {
     private readonly RequestDelegate _next;

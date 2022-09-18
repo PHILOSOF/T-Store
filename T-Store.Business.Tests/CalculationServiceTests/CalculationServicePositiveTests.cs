@@ -15,8 +15,6 @@ public class CalculationServicesPositiveTests
     private Mock<ILogger<CalculationService>> _logger;
     private Mock<IRateService> _rateServiceMock;
  
-
-
     [SetUp]
     public void Setup()
     {

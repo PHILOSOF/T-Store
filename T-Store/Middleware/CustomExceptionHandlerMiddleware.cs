@@ -5,7 +5,7 @@ using T_Strore.Business.Exceptions;
 
 namespace T_Store.Middleware;
 
-[ExcludeFromCodeCoverage]
+
 public class CustomExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;

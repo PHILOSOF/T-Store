@@ -35,7 +35,7 @@ public class RateService : IRateService
     {
         var result = 1m;
 
-        lock(_locker)
+        lock (_locker)
         {
             var rates = GetRate();
             if(rates is null)
