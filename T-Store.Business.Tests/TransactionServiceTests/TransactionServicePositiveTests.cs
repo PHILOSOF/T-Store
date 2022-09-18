@@ -8,6 +8,7 @@ using T_Strore.Business.Services;
 using T_Strore.Data;
 using T_Strore.Data.Repository;
 using IncredibleBackendContracts.Enums;
+using T_Strore.Business.Producers;
 
 namespace T_Store.Business.Tests.TransactionServiceTests;
 
@@ -17,6 +18,7 @@ public class TransactionServicePositiveTests
     private Mock<ITransactionRepository> _transactionRepositoryMock;
     private Mock<ICalculationService> _calculationService;
     private Mock<ILogger<TransactionService>> _logger;
+    private Mock<ITransactionProducer> _transactionProducer;
     private IMapper _mapper;
 
     [SetUp]
@@ -26,27 +28,38 @@ public class TransactionServicePositiveTests
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationService>();
-        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object, null);
+        _transactionProducer = new Mock<ITransactionProducer>();
+        _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object, _transactionProducer.Object);
     }
 
     [Test]
     public async Task AddDeposit_ValidRequestPassed_AddTransactionAndIdReturned()
     {
         //given
-        var expectedId = 1;
+        var expectedId = 2;
 
         var transaction = new TransactionModel()
         {
-            Id = 1,
+            Id = 2,
             AccountId = 1,
             Amount = 10,
             Currency = Currency.USD
 
         };
 
+        var lastTransaction = new TransactionDto()
+        {
+            Id = 1,
+            AccountId = 1,
+            Amount = 10,
+            Currency = Currency.USD,
+            Date = DateTime.UtcNow
+        };
+
 
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
-        .ReturnsAsync(1);
+        .ReturnsAsync(transaction.Id);
+
 
         //when
         var actualId = await _sut.AddDeposit(transaction);
@@ -77,11 +90,19 @@ public class TransactionServicePositiveTests
             Currency = Currency.EUR
         };
 
-        _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transaction.Id))
+        var lastTransaction = new TransactionDto()
+        {
+            Id = 1,
+            AccountId = 1,
+            Amount = 10,
+            Currency = Currency.USD,
+            Date = DateTime.UtcNow
+        };
+
+        _transactionRepositoryMock.Setup(t => t.GetBalanceByAccountId(transaction.AccountId))
          .ReturnsAsync(100);
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
-
 
         //when
         var actual = await _sut.Withdraw(transaction);

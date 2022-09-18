@@ -4,6 +4,8 @@ using T_Store.Business.Tests.CaseSource;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using IncredibleBackendContracts.Enums;
+using T_Strore.Business.Services.Interfaces;
+
 
 namespace T_Store.Business.Tests.CalculationServicePositiveTests;
 
@@ -11,13 +13,17 @@ public class CalculationServicesPositiveTests
 {
     private CalculationService _sut;
     private Mock<ILogger<CalculationService>> _logger;
+    private Mock<IRateService> _rateServiceMock;
+ 
 
 
     [SetUp]
     public void Setup()
     {
         _logger = new Mock<ILogger<CalculationService>>();
-        _sut = new CalculationService(_logger.Object);
+        _rateServiceMock = new Mock<IRateService>();
+        _sut = new CalculationService(_logger.Object, _rateServiceMock.Object);
+        RateModel.BaseCurrency = Currency.USD.ToString();
     }
 
     [TestCase(Currency.EUR)]
@@ -26,22 +32,20 @@ public class CalculationServicesPositiveTests
     [TestCase(Currency.AMD)]
     [TestCase(Currency.BGN)]
     [TestCase(Currency.RSD)]
+    [TestCase(Currency.CNY)]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverUsdToCurrency(Currency recipient)
     {
         //given
-        var ratesList = new List<decimal>()
+        var ratesDictionary = new Dictionary<string,decimal>()
         {
-            0.98m,  //EUR
-            61.88m, //RUB
-            1,      //USD
-            134.61m,//JPY
-            406.61m,//AMD
-            1.92m,  //BGN
-            115.02m //RSD
+            { "EUR", 0.9958m },
+            { "RUB", 60.47m },
+            { "JPY", 142.47m },
+            { "AMD", 405.3m },
+            { "BGN", 1.95m },
+            { "RSD", 116.74m },
+            { "CNY", 6.92m },
         };
-        var ratesResult = Enum.GetValues(typeof(Currency))
-             .Cast<Currency>()
-             .ToDictionary(t => (Currency.USD, t), b => ratesList[(int)b - 1]);
 
         var transferModel = new List<TransactionModel>()
         {
@@ -63,8 +67,12 @@ public class CalculationServicesPositiveTests
 
             }
         };
+        _rateServiceMock.Setup(t => t.GetCurrencyRate(transferModel[0].Currency.ToString(), transferModel[1].Currency.ToString()))
+            .Returns(ratesDictionary[recipient.ToString()]);
+
         var senderAmountExpected = 0 - transferModel[0].Amount;
-        var recipientAmountExpected = transferModel[0].Amount * ratesResult[(Currency.USD, recipient)];
+        var recipientAmountExpected = transferModel[0].Amount * ratesDictionary[transferModel[1].Currency.ToString()];
+
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 
@@ -80,29 +88,26 @@ public class CalculationServicesPositiveTests
         Assert.AreEqual(actual[0].Date, actual[1].Date);
     }
 
-
     [TestCase(Currency.EUR)]
     [TestCase(Currency.RUB)]
     [TestCase(Currency.JPY)]
     [TestCase(Currency.AMD)]
     [TestCase(Currency.BGN)]
     [TestCase(Currency.RSD)]
+    [TestCase(Currency.CNY)]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverСurrencyToUsd(Currency sender)
     {
         //given
-        var ratesList = new List<decimal>()
+        var ratesDictionary = new Dictionary<string, decimal>()
         {
-            0.98m,  //EUR
-            61.88m, //RUB
-            1,      //USD
-            134.61m,//JPY
-            406.61m,//AMD
-            1.92m,  //BGN
-            115.02m //RSD
+            { "EUR", 0.9958m },
+            { "RUB", 60.47m },
+            { "JPY", 142.47m },
+            { "AMD", 405.3m },
+            { "BGN", 1.95m },
+            { "RSD", 116.74m },
+            { "CNY", 6.92m },
         };
-        var ratesResult = Enum.GetValues(typeof(Currency))
-             .Cast<Currency>()
-             .ToDictionary(t => (Currency.USD, t), b => ratesList[(int)b - 1]);
 
         var transferModel = new List<TransactionModel>()
         {
@@ -111,7 +116,7 @@ public class CalculationServicesPositiveTests
                 Id = 1,
                 AccountId = 1,
                 Date = new DateTime(2022, 05, 05),
-                Amount = 100,
+                Amount = 10,
                 Currency = sender
 
             },
@@ -124,8 +129,11 @@ public class CalculationServicesPositiveTests
 
             }
         };
+        _rateServiceMock.Setup(t => t.GetCurrencyRate(transferModel[0].Currency.ToString(), transferModel[1].Currency.ToString()))
+            .Returns(ratesDictionary[sender.ToString()]);
+
         var senderAmountExpected = 0 - transferModel[0].Amount;
-        var recipientAmountExpected = transferModel[0].Amount / ratesResult[(Currency.USD, sender)];
+        var recipientAmountExpected = transferModel[0].Amount / ratesDictionary[sender.ToString()];
 
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
@@ -147,20 +155,16 @@ public class CalculationServicesPositiveTests
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverPairsBesidesUsd(Currency sender, Currency recipient)
     {
         //given
-        var ratesList = new List<decimal>()
+        var ratesDictionary = new Dictionary<string, decimal>()
         {
-            0.98m,  //EUR
-            61.88m, //RUB
-            1,      //USD
-            134.61m,//JPY
-            406.61m,//AMD
-            1.92m,  //BGN
-            115.02m //RSD
+            { "EUR", 0.9958m },
+            { "RUB", 60.47m },
+            { "JPY", 142.47m },
+            { "AMD", 405.3m },
+            { "BGN", 1.95m },
+            { "RSD", 116.74m },
+            { "CNY", 6.92m },
         };
-        var ratesResult = Enum.GetValues(typeof(Currency))
-             .Cast<Currency>()
-             .ToDictionary(t => (Currency.USD, t), b => ratesList[(int)b - 1]);
-
 
         var transferModel = new List<TransactionModel>()
         {
@@ -182,8 +186,12 @@ public class CalculationServicesPositiveTests
 
             }
         };
+        _rateServiceMock.Setup(t => t.GetCurrencyRate(transferModel[0].Currency.ToString(), transferModel[1].Currency.ToString()))
+            .Returns(ratesDictionary[recipient.ToString()]/ ratesDictionary[sender.ToString()]);
+
         var senderAmountExpected = 0 - transferModel[0].Amount;
-        var recipientAmountExpected = transferModel[0].Amount / ratesResult[(Currency.USD, sender)] * ratesResult[(Currency.USD, recipient)];
+        var recipientAmountExpected = Math.Round(transferModel[0].Amount / ratesDictionary[sender.ToString()] * ratesDictionary[recipient.ToString()],
+            4, MidpointRounding.ToNegativeInfinity);
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 

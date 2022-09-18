@@ -4,7 +4,7 @@ using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Data;
 using FluentValidation.TestHelper;
-
+using IncredibleBackendContracts.Enums;
 
 namespace T_Store.API.Test.RequestValidationsTests.TransactionRequestValidations;
 

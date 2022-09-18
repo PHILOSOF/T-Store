@@ -34,15 +34,18 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add transaction");
         var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
-        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
-
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+            await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        }
+        
         return transactionIdResult;
     }
 
     public async Task<long> Withdraw(TransactionModel transaction)
     {
-        _logger.LogInformation($"Business layer: Check balance by accoint id {transaction.AccountId}");
+        _logger.LogInformation($"Business layer: Check balance for account id {transaction.AccountId}");
         await CheckBalance(transaction);
 
         transaction.TransactionType = TransactionType.Withdraw;
@@ -51,8 +54,12 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add withdraw");
         var transactionIdResult = await _transactionRepository.AddTransaction(_mapper.Map<TransactionDto>(transaction));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
-        await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransaction method for transaction id {transactionIdResult}");
+            await _transactionProducer.NotifyTransaction(await GetTransactionById(transactionIdResult));
+        }
+        
 
         return transactionIdResult;
     }
@@ -70,9 +77,13 @@ public class TransactionService : ITransactionService
         _logger.LogInformation("Business layer: Query to data base for add transfers");
         var transferResult= await _transactionRepository.AddTransferTransactions(_mapper.Map<List<TransactionModel>, List<TransactionDto>>(transfersConvert));
 
-        _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
-        await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
-                                                  await GetTransactionById(transferResult[recipientIndex]));
+        if(RateModel.CurrencyRates is not null)
+        {
+            _logger.LogInformation($"Business layer: Call NotifyTransfer method for transfer ids {transferResult[senderIndex]},{transferResult[recipientIndex]}");
+            await _transactionProducer.NotifyTransfer(await GetTransactionById(transferResult[senderIndex]),
+                                                      await GetTransactionById(transferResult[recipientIndex]));
+        }
+        
 
         return transferResult;
     }
@@ -124,4 +135,5 @@ public class TransactionService : ITransactionService
             throw new BalanceExceedException($"You have not a enough money on balance");
         }
     }
+
 }

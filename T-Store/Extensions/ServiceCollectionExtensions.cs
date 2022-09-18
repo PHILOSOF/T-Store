@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using IncredibleBackend.Messaging;
+using IncredibleBackend.Messaging.Extentions;
+using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
@@ -7,7 +10,6 @@ using Microsoft.OpenApi.Models;
 using T_Store.CustomValidations.FluentValidators;
 using T_Store.Models;
 using T_Strore.Business.Consumers;
-using T_Strore.Business.MassTransit.MassTransitConfig;
 using T_Strore.Business.Producers;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
@@ -32,6 +34,7 @@ namespace T_Store.Extensions
         public static void AddProducers(this IServiceCollection services)
         {
             services.AddScoped<ITransactionProducer, TransactionProducer>();
+            services.AddScoped<IMessageProducer, MessageProducer>();
         }
 
         public static void AddFluentValidation(this IServiceCollection services)
@@ -53,30 +56,21 @@ namespace T_Store.Extensions
             });
         }
 
-        public static void AddMassTransit(this IServiceCollection services)
+        public static void ConfigureMessaging(this IServiceCollection services)
         {
-            services.AddMassTransit(config =>
+            services.RegisterConsumersAndProducers((config) =>
             {
                 config.AddConsumer<RateConsumer>();
-         
-                config.UsingRabbitMq((ctx, cfg) =>
+            }, (cfg, ctx) =>
+            {
+                cfg.ReceiveEndpoint(RabbitEndpoint.CurrencyRates, c =>
                 {
-                    cfg.ReceiveEndpoint(RabbitEndpoint.CurrencyRates, c =>
-                    {
-                        c.ConfigureConsumer<RateConsumer>(ctx);  
-                    });
-
-                    cfg.ReceiveEndpoint(RabbitEndpoint.TransactionCreate, c =>
-                    {
-                        c.Bind<TransactionCreatedEvent>();
-
-                    });
-                    cfg.ReceiveEndpoint(RabbitEndpoint.TransferTransactionCreate, c =>
-                    {
-                        c.Bind<TransferTransactionCreatedEvent>();
-
-                    });
+                    c.ConfigureConsumer<RateConsumer>(ctx);
                 });
+            }, (cfg) =>
+            {
+                cfg.RegisterProducer<TransactionCreatedEvent>(RabbitEndpoint.TransactionCreate);
+                cfg.RegisterProducer<TransferTransactionCreatedEvent>(RabbitEndpoint.TransferTransactionCreate);
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using IncredibleBackendContracts.Enums;
+using System.Collections;
 using T_Store.Infrastructure;
 using T_Store.Models;
 using T_Strore.Data;
