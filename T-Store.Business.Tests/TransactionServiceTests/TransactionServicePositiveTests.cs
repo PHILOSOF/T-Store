@@ -59,8 +59,7 @@ public class TransactionServicePositiveTests
 
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
-        _transactionRepositoryMock.Setup(t => t.GetLastTransactionByAccountId(lastTransaction.AccountId))
-        .ReturnsAsync(lastTransaction);
+
 
         //when
         var actualId = await _sut.AddDeposit(transaction);
@@ -104,8 +103,6 @@ public class TransactionServicePositiveTests
          .ReturnsAsync(100);
         _transactionRepositoryMock.Setup(t => t.AddTransaction(It.Is<TransactionDto>(t => t.Id == transaction.Id)))
         .ReturnsAsync(transaction.Id);
-        _transactionRepositoryMock.Setup(t => t.GetLastTransactionByAccountId(transaction.AccountId))
-        .ReturnsAsync(lastTransaction);
 
         //when
         var actual = await _sut.Withdraw(transaction);
