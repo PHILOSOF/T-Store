@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using T_Store.Models;
-using T_Strore.Business.Models;
 using IncredibleBackendContracts.Enums;
+using IncredibleBackendContracts.Requests;
+using T_Strore.Business.Models;
 
 namespace T_Store.MapperConfiguration;
 

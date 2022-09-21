@@ -1,5 +1,7 @@
 using AutoMapper;
 using IncredibleBackendContracts.Enums;
+using IncredibleBackendContracts.Requests;
+using IncredibleBackendContracts.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 using T_Store.Controllers;
 using T_Store.MapperConfiguration;
-using T_Store.Models;
 using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 

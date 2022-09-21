@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using T_Store.Models;
-using T_Store.Models.Responses;
+using IncredibleBackendContracts.Responses;
 using T_Strore.Business.Models;
 
 namespace T_Store.MapperConfiguration;

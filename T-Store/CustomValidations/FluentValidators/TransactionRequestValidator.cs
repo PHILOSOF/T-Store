@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using IncredibleBackendContracts.Requests;
 using T_Store.Infrastructure;
-using T_Store.Models;
 
 namespace T_Store.CustomValidations.FluentValidators;
 

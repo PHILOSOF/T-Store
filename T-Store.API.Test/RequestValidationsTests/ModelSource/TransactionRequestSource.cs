@@ -1,8 +1,7 @@
 ﻿using IncredibleBackendContracts.Enums;
+using IncredibleBackendContracts.Requests;
 using System.Collections;
 using T_Store.Infrastructure;
-using T_Store.Models;
-using T_Strore.Data;
 
 namespace T_Store.API.Test.RequestValidationsTests.ModelSource;
 

@@ -1,8 +1,8 @@
 ﻿using FluentValidation.TestHelper;
+using IncredibleBackendContracts.Requests;
 using NUnit.Framework;
 using T_Store.API.Test.RequestValidationsTests.ModelSource;
 using T_Store.CustomValidations.FluentValidators;
-using T_Store.Models;
 
 namespace T_Store.API.Test.RequestValidationsTests.TransactionRequestValidations;
 
