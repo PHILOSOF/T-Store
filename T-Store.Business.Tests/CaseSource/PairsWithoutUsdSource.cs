@@ -1,10 +1,9 @@
-﻿
-using IncredibleBackendContracts.Enums;
+﻿using IncredibleBackendContracts.Enums;
 using System.Collections;
 
 namespace T_Store.Business.Tests.CaseSource;
 
-public class PairsBesidesUsdSource : IEnumerable
+public class PairsWithoutUsdSource : IEnumerable
 {
     List<Currency> currencies = new()
     {

@@ -33,7 +33,7 @@ namespace T_Store.Extensions
 
         public static void AddProducers(this IServiceCollection services)
         {
-            services.AddScoped<ITransactionProducer, TransactionProducer>();
+            services.AddScoped<IProcessorForProducer, ProcessorForProducer>();
             services.AddScoped<IMessageProducer, MessageProducer>();
         }
 

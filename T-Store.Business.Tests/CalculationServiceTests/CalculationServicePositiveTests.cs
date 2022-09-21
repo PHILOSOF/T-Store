@@ -24,13 +24,8 @@ public class CalculationServicesPositiveTests
         RateModel.BaseCurrency = Currency.USD.ToString();
     }
 
-    [TestCase(Currency.EUR)]
-    [TestCase(Currency.RUB)]
-    [TestCase(Currency.JPY)]
-    [TestCase(Currency.AMD)]
-    [TestCase(Currency.BGN)]
-    [TestCase(Currency.RSD)]
-    [TestCase(Currency.CNY)]
+
+    [TestCaseSource(typeof(PairsWithUsdSource))]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverUsdToCurrency(Currency recipient)
     {
         //given
@@ -86,13 +81,8 @@ public class CalculationServicesPositiveTests
         Assert.AreEqual(actual[0].Date, actual[1].Date);
     }
 
-    [TestCase(Currency.EUR)]
-    [TestCase(Currency.RUB)]
-    [TestCase(Currency.JPY)]
-    [TestCase(Currency.AMD)]
-    [TestCase(Currency.BGN)]
-    [TestCase(Currency.RSD)]
-    [TestCase(Currency.CNY)]
+
+    [TestCaseSource(typeof(PairsWithUsdSource))]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverСurrencyToUsd(Currency sender)
     {
         //given
@@ -149,7 +139,8 @@ public class CalculationServicesPositiveTests
 
     }
 
-    [TestCaseSource(typeof(PairsBesidesUsdSource))]
+
+    [TestCaseSource(typeof(PairsWithoutUsdSource))]
     public async Task ConvertCurrency_ValidRequestPassed_ListTransferModelReturnedWereConverPairsBesidesUsd(Currency sender, Currency recipient)
     {
         //given

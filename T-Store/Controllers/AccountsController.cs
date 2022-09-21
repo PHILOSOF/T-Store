@@ -26,6 +26,7 @@ public class AccountsController : ControllerBase
     public async Task<ActionResult<decimal>> GetBalanceByAccountId([FromRoute] long id)
     {
         _logger.LogInformation($"Controller: Call method GetBalanceByAccountId {id}");
+      
         return Ok( await _transactionServices.GetBalanceByAccountId(id));
     }
 

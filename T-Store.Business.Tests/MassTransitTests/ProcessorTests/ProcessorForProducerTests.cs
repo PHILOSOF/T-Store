@@ -10,9 +10,9 @@ using T_Strore.Business.Services.Interfaces;
 
 namespace T_Store.Business.Tests.MassTransitTests.ProducerTests;
 
-public class TransactionProducerTests
+public class ProcessorForProducerTests
 {
-    private TransactionProducer _sut;
+    private ProcessorForProducer _sut;
     private Mock<IMessageProducer> _messageProducer;
     private IMapper _mapper;
     private Mock<IRateService> _rateServiceMock;
@@ -23,7 +23,7 @@ public class TransactionProducerTests
         _messageProducer = new Mock<IMessageProducer>();
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigBusiness>()));
         _rateServiceMock = new Mock<IRateService>();
-        _sut = new TransactionProducer(_messageProducer.Object, _mapper, _rateServiceMock.Object);
+        _sut = new ProcessorForProducer(_messageProducer.Object, _mapper, _rateServiceMock.Object);
     }
 
     [Test]
@@ -38,7 +38,6 @@ public class TransactionProducerTests
             Amount = 10,
             AccountId = 1,
             Currency = Currency.EUR
-
         };
 
         //when

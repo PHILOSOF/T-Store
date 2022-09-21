@@ -7,6 +7,7 @@
 	@CurrencyRecipient smallint
 as
 begin 	
+begin transaction
 
 	declare @Date datetime2(7) = sysdatetime()
 	declare @TransactionTransfer int = 3
@@ -47,8 +48,21 @@ begin
 		@CurrencyRecipient
 	)
 
-	declare @RecipientId int= scope_identity()
+
+
+	--
+	declare @actualBalance decimal (11,4)
+	set @actualBalance = (select coalesce(sum([Amount]),0)
+						  from [dbo].[Transaction] with (tablock, holdlock) 
+						  where [AccountId] = @AccountIdRecipient)
+
+	if @actualBalance<0
+	rollback
+
+	else		
+		declare @RecipientId int= scope_identity()
 
 	select @SenderId union all select  @RecipientId
 
+commit transaction
 end

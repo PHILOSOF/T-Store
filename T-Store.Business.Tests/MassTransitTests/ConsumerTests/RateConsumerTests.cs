@@ -20,7 +20,6 @@ public class RateConsumerTests
         _logger = new Mock<ILogger<RateConsumer>>();
         _rateServiceMock = new Mock<IRateService>();
         _sut = new RateConsumer(_logger.Object, _rateServiceMock.Object);
-
     }
 
     [Test]

@@ -16,9 +16,9 @@ public class TransactionService : ITransactionService
     private readonly ICalculationService _calculationService;
     private readonly ILogger<TransactionService> _logger;
     private readonly IMapper _mapper;
-    private readonly ITransactionProducer _transactionProducer;
+    private readonly IProcessorForProducer _transactionProducer;
     public TransactionService(ITransactionRepository transactionRepository, ICalculationService calculationService,
-        IMapper mapper, ILogger<TransactionService> logger, ITransactionProducer transactionProducer)
+        IMapper mapper, ILogger<TransactionService> logger, IProcessorForProducer transactionProducer)
     {
         _transactionRepository = transactionRepository;
         _calculationService = calculationService;

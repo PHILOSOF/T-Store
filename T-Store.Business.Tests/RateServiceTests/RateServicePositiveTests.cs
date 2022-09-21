@@ -67,7 +67,8 @@ public class RateServicePositiveTests
         Assert.That(expectedRates, Is.EqualTo(RateModel.CurrencyRates));
     }
 
-    [TestCaseSource(typeof(PairsBesidesUsdSource))]
+
+    [TestCaseSource(typeof(PairsWithoutUsdSource))]
     public async Task GetCurrencyRate_ValidRequestPassedConvertWithoutBaseCurrency_CurrencyRateReturned(Currency first, Currency second)
     {
         //given
@@ -76,7 +77,7 @@ public class RateServicePositiveTests
         var currencySecond = second.ToString();
 
         var expectedRate = RateModel.CurrencyRates[currencySecond] / RateModel.CurrencyRates[currencyFirst];
-                                    // exemple calculating the cross rate,  SEK / JPY / = [USD / JPY] / [USD / SEK], if base USD
+                                    // exemple calculating the cross rate,  EURJPY / = [USD / JPY] / [USD / EUR], if base USD
         //when
         var actualRate = _sut.GetCurrencyRate(currencyFirst, currencySecond);
 
@@ -86,13 +87,7 @@ public class RateServicePositiveTests
     }
 
 
-    [TestCase(Currency.EUR)]
-    [TestCase(Currency.RUB)]
-    [TestCase(Currency.JPY)]
-    [TestCase(Currency.AMD)]
-    [TestCase(Currency.BGN)]
-    [TestCase(Currency.RSD)]
-    [TestCase(Currency.CNY)]
+    [TestCaseSource(typeof(PairsWithUsdSource))]
     public async Task GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencySecond_CurrencyRateReturned(Currency first)
     {
         //given
@@ -107,13 +102,8 @@ public class RateServicePositiveTests
         Assert.That(actualRate, Is.EqualTo(expectedRate));
     }
 
-    [TestCase(Currency.EUR)]
-    [TestCase(Currency.RUB)]
-    [TestCase(Currency.JPY)]
-    [TestCase(Currency.AMD)]
-    [TestCase(Currency.BGN)]
-    [TestCase(Currency.RSD)]
-    [TestCase(Currency.CNY)]
+
+    [TestCaseSource(typeof(PairsWithUsdSource))]
     public async Task GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencyFirst_CurrencyRateReturned(Currency second)
     {
         //given

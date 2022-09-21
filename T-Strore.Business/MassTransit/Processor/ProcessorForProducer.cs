@@ -8,12 +8,12 @@ using T_Strore.Business.Services.Interfaces;
 
 namespace T_Strore.Business.Producers;
 
-public class TransactionProducer : ITransactionProducer 
+public class ProcessorForProducer : IProcessorForProducer 
 {
     private readonly IMessageProducer _messageProducer;
     private readonly IMapper _mapper;
     private readonly IRateService _rateService;
-    public TransactionProducer(IMessageProducer messageProducer, IMapper mapper, IRateService rateService)
+    public ProcessorForProducer(IMessageProducer messageProducer, IMapper mapper, IRateService rateService)
     {
         _messageProducer = messageProducer;
         _mapper = mapper;
@@ -26,7 +26,7 @@ public class TransactionProducer : ITransactionProducer
         var crossRateResult = _rateService.GetCurrencyRate(model.Currency.ToString(), Currency.RUB.ToString());
         modelForEvent.Rate = crossRateResult;
         var messageForLogger = $"Business layer: Transaction id {modelForEvent.Id} published";
-
+        
         await _messageProducer.ProduceMessage(modelForEvent, messageForLogger);
     }
 

@@ -19,7 +19,7 @@ public class TransactionServiceNegativeTests
     private Mock<ICalculationService> _calculationService;
     private Mock<ILogger<TransactionService>> _logger;
     private IMapper _mapper;
-    private Mock<ITransactionProducer> _producerMock;
+    private Mock<IProcessorForProducer> _producerMock;
 
 
     [SetUp]
@@ -29,10 +29,11 @@ public class TransactionServiceNegativeTests
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationService>();
-        _producerMock = new Mock<ITransactionProducer>();
+        _producerMock = new Mock<IProcessorForProducer>();
         _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object,
                                                         _mapper, _logger.Object, _producerMock.Object);
     }
+
 
     [Test]
     public async Task WithdrawDeposit_BalanceLessRequested_ThrowBalanceExceedException()
@@ -56,6 +57,7 @@ public class TransactionServiceNegativeTests
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transactionWithdraw.Id), Times.Once);
         _transactionRepositoryMock.Verify(t => t.AddTransaction(It.IsAny<TransactionDto>()), Times.Never);
     }
+
 
     [Test]
     public async Task AddTransfer_BalanceLessRequested_ThrowBadRequestException()
@@ -92,6 +94,7 @@ public class TransactionServiceNegativeTests
 
     }
 
+
     [Test]
     public async Task GetTransactionById_TransactionIsNull_ThrowEntityNotFoundException()
     {
@@ -102,7 +105,5 @@ public class TransactionServiceNegativeTests
         Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetTransactionById(transactionId));
 
         _transactionRepositoryMock.Verify(t => t.GetTransactionById(transactionId), Times.Once);
-    }
-
-    
+    } 
 }

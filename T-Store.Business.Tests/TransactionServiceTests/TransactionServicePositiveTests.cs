@@ -19,7 +19,7 @@ public class TransactionServicePositiveTests
     private Mock<ITransactionRepository> _transactionRepositoryMock;
     private Mock<ICalculationService> _calculationService;
     private Mock<ILogger<TransactionService>> _logger;
-    private Mock<ITransactionProducer> _transactionProducer;
+    private Mock<IProcessorForProducer> _transactionProducer;
     private IMapper _mapper;
 
     [SetUp]
@@ -29,7 +29,7 @@ public class TransactionServicePositiveTests
         _logger = new Mock<ILogger<TransactionService>>();
         _transactionRepositoryMock = new Mock<ITransactionRepository>();
         _calculationService = new Mock<ICalculationService>();
-        _transactionProducer = new Mock<ITransactionProducer>();
+        _transactionProducer = new Mock<IProcessorForProducer>();
         _sut = new TransactionService(_transactionRepositoryMock.Object, _calculationService.Object, _mapper, _logger.Object, _transactionProducer.Object);
         RateModel.CurrencyRates = new Dictionary<string, decimal>()
         {
@@ -42,6 +42,7 @@ public class TransactionServicePositiveTests
             { "CNY", 6.92m },
         };
     }
+
 
     [Test]
     public async Task AddDeposit_ValidRequestPassed_AddTransactionIdReturnedAndNotifyQueueTransaction()
@@ -114,6 +115,7 @@ public class TransactionServicePositiveTests
         t.Amount == transaction.Amount)), Times.Once);
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transaction.Id), Times.Once);
     }
+
 
     [Test]
     public async Task AddTransfer_ValidRequestPassed_AddTransferIdReturnedAndNotifyQueueTransactions()
@@ -196,6 +198,7 @@ public class TransactionServicePositiveTests
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(transfers[0].AccountId), Times.Once);
     }
 
+
     [Test]
     public async Task GetBalanceByAccountId_ValidRequestPassed_BalanceReturned()
     {
@@ -214,6 +217,7 @@ public class TransactionServicePositiveTests
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(expectedAcoountId), Times.Once);
     }
 
+
     [Test]
     public async Task GetBalanceByAccountId_BalanceIsZerro_ZeroReturned()
     {
@@ -229,6 +233,7 @@ public class TransactionServicePositiveTests
         Assert.AreEqual(expectedBalance, actual);
         _transactionRepositoryMock.Verify(t => t.GetBalanceByAccountId(expectedAcoountId), Times.Once);
     }
+
 
     [Test]
     public async Task GetTransactionById_ValidRequestPassed_TransactionReturned()
