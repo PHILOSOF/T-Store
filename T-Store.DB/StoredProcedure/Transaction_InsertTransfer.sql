@@ -49,8 +49,6 @@ begin transaction
 	)
 
 
-
-	--
 	declare @actualBalance decimal (11,4)
 	set @actualBalance = (select coalesce(sum([Amount]),0)
 						  from [dbo].[Transaction] with (tablock, holdlock) 

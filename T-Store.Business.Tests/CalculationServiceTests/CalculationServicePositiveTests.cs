@@ -63,22 +63,14 @@ public class CalculationServicesPositiveTests
         _rateServiceMock.Setup(t => t.GetCurrencyRate(transferModel[0].Currency.ToString(), transferModel[1].Currency.ToString()))
             .Returns(ratesDictionary[recipient.ToString()]);
 
-        var senderAmountExpected = 0 - transferModel[0].Amount;
-        var recipientAmountExpected = transferModel[0].Amount * ratesDictionary[transferModel[1].Currency.ToString()];
+        transferModel[0].Amount = 0 - transferModel[0].Amount;
+        transferModel[1].Amount = transferModel[0].Amount * ratesDictionary[transferModel[1].Currency.ToString()];
 
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.AreEqual(transferModel[0].Id, transferModel[0].Id);
-        Assert.AreEqual(transferModel[0].Date, transferModel[0].Date);
-        Assert.AreEqual(transferModel[0].Currency, transferModel[0].Currency);
-        Assert.AreEqual(transferModel[1].Id, transferModel[1].Id);
-        Assert.AreEqual(transferModel[1].Date, transferModel[1].Date);
-        Assert.AreEqual(transferModel[1].Currency, transferModel[1].Currency);
-        Assert.AreEqual(actual[0].Amount, senderAmountExpected);
-        Assert.AreEqual(actual[1].Amount, recipientAmountExpected);
-        Assert.AreEqual(actual[0].Date, actual[1].Date);
+        Assert.That(actual, Is.EqualTo(transferModel));
     }
 
 
@@ -127,16 +119,7 @@ public class CalculationServicesPositiveTests
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.AreEqual(transferModel[0].Id, transferModel[0].Id);
-        Assert.AreEqual(transferModel[0].Date, transferModel[0].Date);
-        Assert.AreEqual(transferModel[0].Currency, transferModel[0].Currency);
-        Assert.AreEqual(transferModel[1].Id, transferModel[1].Id);
-        Assert.AreEqual(transferModel[1].Date, transferModel[1].Date);
-        Assert.AreEqual(transferModel[1].Currency, transferModel[1].Currency);
-        Assert.AreEqual(actual[0].Amount, senderAmountExpected);
-        Assert.AreEqual(actual[1].Amount, recipientAmountExpected);
-        Assert.AreEqual(actual[0].Date, actual[1].Date);
-
+        Assert.That(actual, Is.EqualTo(transferModel));
     }
 
 
@@ -178,22 +161,13 @@ public class CalculationServicesPositiveTests
         _rateServiceMock.Setup(t => t.GetCurrencyRate(transferModel[0].Currency.ToString(), transferModel[1].Currency.ToString()))
             .Returns(ratesDictionary[recipient.ToString()]/ ratesDictionary[sender.ToString()]);
 
-        var senderAmountExpected = 0 - transferModel[0].Amount;
-        var recipientAmountExpected = Math.Round(transferModel[0].Amount / ratesDictionary[sender.ToString()] * ratesDictionary[recipient.ToString()],
+        transferModel[0].Amount = 0 - transferModel[0].Amount;
+        transferModel[1].Amount = Math.Round(transferModel[0].Amount / ratesDictionary[sender.ToString()] * ratesDictionary[recipient.ToString()],
             4, MidpointRounding.ToNegativeInfinity);
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.AreEqual(transferModel[0].Id, transferModel[0].Id);
-        Assert.AreEqual(transferModel[0].Date, transferModel[0].Date);
-        Assert.AreEqual(transferModel[0].Currency, transferModel[0].Currency);
-        Assert.AreEqual(transferModel[1].Id, transferModel[1].Id);
-        Assert.AreEqual(transferModel[1].Date, transferModel[1].Date);
-        Assert.AreEqual(transferModel[1].Currency, transferModel[1].Currency);
-        Assert.AreEqual(actual[0].Amount, senderAmountExpected);
-        Assert.AreEqual(actual[1].Amount, recipientAmountExpected);
-        Assert.AreEqual(actual[0].Date, actual[1].Date);
-
+        Assert.That(actual, Is.EqualTo(transferModel));
     }
 }

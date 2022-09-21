@@ -1,5 +1,7 @@
 ﻿using IncredibleBackendContracts.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.QualityTools.Testing.Fakes;
+using Microsoft.QualityTools.Testing.Fakes.Shims;
 using Moq;
 using T_Store.Business.Tests.CaseSource;
 using T_Strore.Business.Models;
@@ -17,6 +19,8 @@ public class RateServicePositiveTests
     {
         _logger = new Mock<ILogger<RateService>>();
         _sut = new RateService(_logger.Object);
+
+       
         RateModel.CurrencyRates = new Dictionary<string, decimal>()
         {
             { "EUR", 0.9958m },
@@ -34,6 +38,7 @@ public class RateServicePositiveTests
     [Test]
     public async Task SaveCurrencyRate_ValidRequestPassed_CurrencyRateSaveInClass()
     {
+
         //given
         RateModel.CurrencyRates = null;
         RateModel.BaseCurrency = null;

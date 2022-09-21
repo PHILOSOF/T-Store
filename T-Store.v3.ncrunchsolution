@@ -3,6 +3,8 @@
     <AllowParallelTestExecution>False</AllowParallelTestExecution>
     <MetricsExclusionList>
       <Value>TransactionsCreater\FakeTransactionsCreater.csproj</Value>
+      <Value>T-Store.API.Test\T-Store.API.Test.csproj</Value>
+      <Value>T-Store.Business.Tests\T-Store.Business.Tests.csproj</Value>
     </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
