@@ -37,16 +37,20 @@ public class RateService : IRateService
 
         lock (_locker)
         {
+            _logger.LogInformation("Business layer: Call method GetRate");
+
             var rates = GetRate();
          
             if(currencyFirst != currencySecond)
             {
                 if (RateModel.BaseCurrency == currencyFirst || RateModel.BaseCurrency == currencySecond)
                 {
+                    _logger.LogInformation("Business layer: Calculate currency rate");
                     result = rates.ContainsKey(currencyFirst) is true ? rates[currencyFirst] : rates[currencySecond];
                 }
                 else
                 {
+                    _logger.LogInformation("Business layer: Calculate currency rate");
                     result = rates[currencySecond] / rates[currencyFirst];
                 }
             }
@@ -60,6 +64,8 @@ public class RateService : IRateService
         {
             throw new ServiceUnavailableException("Rates is epmty");
         }
+        _logger.LogInformation("Business layer: Currency rates returned");
+
         return RateModel.CurrencyRates;
     }
 }
