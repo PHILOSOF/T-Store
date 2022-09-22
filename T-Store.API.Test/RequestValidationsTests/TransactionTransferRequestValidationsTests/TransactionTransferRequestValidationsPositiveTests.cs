@@ -17,7 +17,7 @@ public class TransactionTransferRequestValidationsPositiveTests
     }
 
     [Test]
-    public async Task TransactionTransferRequest_SendingCorrectData_NoErrorReceived()
+    public void TransactionTransferRequest_SendingCorrectData_NoErrorReceived()
     {
         //given
         var client = new TransactionTransferRequest()

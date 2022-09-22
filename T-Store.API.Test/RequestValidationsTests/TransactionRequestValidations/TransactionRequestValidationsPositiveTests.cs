@@ -17,7 +17,7 @@ public class TransactionRequestValidationsTests
     }
 
     [Test]
-    public async Task TransactionRequest_SendingCorrectData_NoErrorReceived()
+    public void TransactionRequest_SendingCorrectData_NoErrorReceived()
     {
         //given
         var client = new TransactionRequest()

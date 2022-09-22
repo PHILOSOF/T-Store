@@ -33,6 +33,7 @@ public class TransactionControllersTests
     public async Task AddDeposit_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
+        var expectedId = 1;
         var transaction = new TransactionRequest()
         {
             AccountId = 1,
@@ -47,8 +48,8 @@ public class TransactionControllersTests
         // then
         var actualResult = actual.Result as CreatedResult;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
-        Assert.AreEqual(actualResult.Value, 1);
+        Assert.AreEqual(StatusCodes.Status201Created, actualResult.StatusCode);
+        Assert.AreEqual(expectedId, actualResult.Value);
         _transactionServiceMock.Verify(o => o.AddDeposit(
             It.Is<TransactionModel>
             (t => t.AccountId == transaction.AccountId &&
@@ -82,8 +83,8 @@ public class TransactionControllersTests
         // then
         var actualResult = actual.Result as CreatedResult;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
-        Assert.AreEqual(actualResult.Value, expectedIds);
+        Assert.AreEqual(StatusCodes.Status201Created, actualResult.StatusCode);
+        Assert.AreEqual(expectedIds, actualResult.Value);
         _transactionServiceMock.Verify(o => o.AddTransfer(
             It.Is<List<TransactionModel>>
             (t => t[0].AccountId == transfer.AccountId &&
@@ -98,6 +99,7 @@ public class TransactionControllersTests
     public async Task WithdrawDeposit_WhenValidRequestPassed_ThenCreatedResultRecived()
     {
         // given
+        var resultExpected = 1;
         var transaction = new TransactionRequest()
         {
             AccountId = 1,
@@ -112,8 +114,8 @@ public class TransactionControllersTests
         // then
         var actualResult = actual.Result as CreatedResult;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status201Created);
-        Assert.AreEqual(actualResult.Value, 1);
+        Assert.AreEqual(StatusCodes.Status201Created, actualResult.StatusCode);
+        Assert.AreEqual(resultExpected, actualResult.Value);
         _transactionServiceMock.Verify(o => o.Withdraw(
             It.Is<TransactionModel>
             (t => t.AccountId == transaction.AccountId &&
@@ -144,13 +146,13 @@ public class TransactionControllersTests
         var actualResult = actual.Result as ObjectResult;
         var actualTransaction = actualResult.Value as TransactionResponse;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status200OK);
-        Assert.AreEqual(actualTransaction.Id, expectedTransaction.Id);
-        Assert.AreEqual(actualTransaction.AccountId, expectedTransaction.AccountId);
-        Assert.AreEqual(actualTransaction.Currency, expectedTransaction.Currency);
-        Assert.AreEqual(actualTransaction.Amount, expectedTransaction.Amount);
-        Assert.AreEqual(actualTransaction.Date, expectedTransaction.Date);
-        Assert.AreEqual(actualTransaction.TransactionType, expectedTransaction.TransactionType);
+        Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+        Assert.AreEqual(expectedTransaction.Id, actualTransaction.Id);
+        Assert.AreEqual(expectedTransaction.AccountId, actualTransaction.AccountId);
+        Assert.AreEqual(expectedTransaction.Currency, actualTransaction.Currency);
+        Assert.AreEqual(expectedTransaction.Amount, actualTransaction.Amount);
+        Assert.AreEqual(expectedTransaction.Date, actualTransaction.Date);
+        Assert.AreEqual(expectedTransaction.TransactionType, actualTransaction.TransactionType);
 
         _transactionServiceMock.Verify(o => o.GetTransactionById(expectedTransaction.Id), Times.Once);
     }

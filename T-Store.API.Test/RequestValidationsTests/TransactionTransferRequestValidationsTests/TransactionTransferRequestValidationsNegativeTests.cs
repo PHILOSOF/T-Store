@@ -17,7 +17,7 @@ public class TransactionTransferRequestValidationsNegativeTests
     }
 
     [TestCaseSource(typeof(TransactionTransferRequestSource))]
-    public async Task TransactionTransferRequest_SendingIncorrectData_GetErrorMessage(TransactionTransferRequest transfer, string errorMessage)
+    public void TransactionTransferRequest_SendingIncorrectData_GetErrorMessage(TransactionTransferRequest transfer, string errorMessage)
     {
         //given,when
         var isValid = _validator.TestValidate(transfer);

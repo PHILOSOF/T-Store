@@ -36,7 +36,7 @@ public class RateServicePositiveTests
 
 
     [Test]
-    public async Task SaveCurrencyRate_ValidRequestPassed_CurrencyRateSaveInClass()
+    public void SaveCurrencyRate_ValidRequestPassed_CurrencyRateSaveInClass()
     {
 
         //given
@@ -68,13 +68,13 @@ public class RateServicePositiveTests
         _sut.SaveCurrencyRate(ratesDictionary);
 
         //then
-        Assert.That(Currency.USD.ToString(), Is.EqualTo(RateModel.BaseCurrency));
-        Assert.That(expectedRates, Is.EqualTo(RateModel.CurrencyRates));
+        Assert.AreEqual(Currency.USD.ToString(), RateModel.BaseCurrency);
+        Assert.AreEqual(expectedRates, RateModel.CurrencyRates);
     }
 
 
     [TestCaseSource(typeof(PairsWithoutUsdSource))]
-    public async Task GetCurrencyRate_ValidRequestPassedConvertWithoutBaseCurrency_CurrencyRateReturned(Currency first, Currency second)
+    public void GetCurrencyRate_ValidRequestPassedConvertWithoutBaseCurrency_CurrencyRateReturned(Currency first, Currency second)
     {
         //given
 
@@ -87,13 +87,12 @@ public class RateServicePositiveTests
         var actualRate = _sut.GetCurrencyRate(currencyFirst, currencySecond);
 
         //then
-        Assert.That(actualRate, Is.EqualTo(expectedRate));
-
+        Assert.AreEqual(expectedRate, actualRate);
     }
 
 
     [TestCaseSource(typeof(PairsWithUsdSource))]
-    public async Task GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencySecond_CurrencyRateReturned(Currency first)
+    public void GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencySecond_CurrencyRateReturned(Currency first)
     {
         //given
         var currencyFirst = first.ToString();
@@ -104,25 +103,23 @@ public class RateServicePositiveTests
         var actualRate = _sut.GetCurrencyRate(currencyFirst, currencySecondBase);
 
         //then
-        Assert.That(actualRate, Is.EqualTo(expectedRate));
+        Assert.AreEqual(expectedRate, actualRate);
     }
 
 
     [TestCaseSource(typeof(PairsWithUsdSource))]
-    public async Task GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencyFirst_CurrencyRateReturned(Currency second)
+    public void GetCurrencyRate_ValidRequestPassedConvertWithBaseCurrencyFirst_CurrencyRateReturned(Currency second)
     {
         //given
-
         var currencySecond = second.ToString();
         var currencyFirstBase = Currency.USD.ToString();
 
-        var expectedRate = RateModel.CurrencyRates[currencySecond.ToString()];
+        var expected = RateModel.CurrencyRates[currencySecond.ToString()];
 
         //when
-        var actualRate = _sut.GetCurrencyRate(currencyFirstBase, currencySecond);
+        var actual = _sut.GetCurrencyRate(currencyFirstBase, currencySecond);
 
         //then
-        Assert.That(actualRate, Is.EqualTo(expectedRate));
-
+        Assert.AreEqual(expected, actual);
     }
 }
