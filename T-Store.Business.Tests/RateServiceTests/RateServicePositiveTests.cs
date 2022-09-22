@@ -1,7 +1,5 @@
 ﻿using IncredibleBackendContracts.Enums;
 using Microsoft.Extensions.Logging;
-using Microsoft.QualityTools.Testing.Fakes;
-using Microsoft.QualityTools.Testing.Fakes.Shims;
 using Moq;
 using T_Store.Business.Tests.CaseSource;
 using T_Strore.Business.Models;

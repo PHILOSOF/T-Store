@@ -38,10 +38,7 @@ public class RateService : IRateService
         lock (_locker)
         {
             var rates = GetRate();
-            if(rates is null)
-            {
-                throw new ServiceUnavailableException("Rates is epmty");
-            }
+         
             if(currencyFirst != currencySecond)
             {
                 if (RateModel.BaseCurrency == currencyFirst || RateModel.BaseCurrency == currencySecond)
@@ -59,6 +56,10 @@ public class RateService : IRateService
 
     public Dictionary<string, decimal> GetRate()
     {
+        if (RateModel.CurrencyRates is null || RateModel.CurrencyRates.Count == 0)
+        {
+            throw new ServiceUnavailableException("Rates is epmty");
+        }
         return RateModel.CurrencyRates;
     }
 }
