@@ -256,12 +256,7 @@ public class TransactionServicePositiveTests
         var actual = await _sut.GetTransactionById(transaction.Id);
 
         //then
-        Assert.AreEqual(actual.Id, transaction.Id);
-        Assert.AreEqual(actual.AccountId, transaction.AccountId);
-        Assert.AreEqual(actual.Date, transaction.Date);
-        Assert.AreEqual(actual.Amount, transaction.Amount);
-        Assert.AreEqual(actual.TransactionType, transaction.TransactionType);
-        Assert.AreEqual(actual.Currency, transaction.Currency);
+        Assert.AreEqual(transaction, actual);
         _transactionRepositoryMock.Verify(t => t.GetTransactionById(transactionDto.Id), Times.Once);
     }
 
@@ -313,10 +308,10 @@ public class TransactionServicePositiveTests
         .ReturnsAsync(transactionDtos);
 
         //when
-        var actual = _sut.GetTransactionsByAccountId(transactions[0].AccountId);
-        var actualWithdraw = actual.Result[transactions[3].Date];
-        var actualDeposit = actual.Result[transactions[2].Date];
-        var actualTransfer = actual.Result[transactions[1].Date];
+        var actual = await _sut.GetTransactionsByAccountId(transactions[0].AccountId);
+        var actualWithdraw = actual[transactions[3].Date];
+        var actualDeposit = actual[transactions[2].Date];
+        var actualTransfer = actual[transactions[1].Date];
 
         //then
         Assert.AreEqual(actualWithdraw[0], transactions[3]);

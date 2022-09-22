@@ -50,9 +50,9 @@ public class AccountControllersTests
         // then
         var actualResult = actual.Result as ObjectResult;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status200OK);
+        Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode );
         Assert.AreEqual(expected, actualResult.Value);
-        Assert.AreEqual(actualResult.Value.GetType(), expected.GetType());
+        Assert.AreEqual(expected.GetType(), actualResult.Value.GetType());
         _transactionServiceMock.Verify(o => o.GetBalanceByAccountId(expectedTransaction.Id), Times.Once);
     }
 
@@ -119,23 +119,23 @@ public class AccountControllersTests
         var actualTransfer = actualListResponses[0] as TransferResponse;
         var actualTransaction = actualListResponses[1] as TransactionResponse;
 
-        Assert.AreEqual(actualResult.StatusCode, StatusCodes.Status200OK);
-        Assert.AreEqual(actualTransfer.Id, transferExpected[0].Id);
-        Assert.AreEqual(actualTransfer.AccountId, transferExpected[0].AccountId);
-        Assert.AreEqual(actualTransfer.Date, transferExpected[0].Date);
-        Assert.AreEqual(actualTransfer.TransactionType, transferExpected[0].TransactionType);
-        Assert.AreEqual(actualTransfer.Amount, transferExpected[0].Amount);
-        Assert.AreEqual(actualTransfer.Currency, transferExpected[0].Currency);
-        Assert.AreEqual(actualTransfer.RecipientAccountId, transferExpected[1].AccountId);
-        Assert.AreEqual(actualTransfer.RecipientAmount, transferExpected[1].Amount);
-        Assert.AreEqual(actualTransfer.RecipientCurrency, transferExpected[1].Currency);
-        Assert.AreEqual(actualTransfer.RecipientId, transferExpected[1].Id);
-        Assert.AreEqual(actualTransaction.Id, transactionExpected[0].Id);
-        Assert.AreEqual(actualTransaction.AccountId, transactionExpected[0].AccountId);
-        Assert.AreEqual(actualTransaction.Currency, transactionExpected[0].Currency);
-        Assert.AreEqual(actualTransaction.Amount, transactionExpected[0].Amount);
-        Assert.AreEqual(actualTransaction.Date, transactionExpected[0].Date);
-        Assert.AreEqual(actualTransaction.TransactionType, transactionExpected[0].TransactionType);
+        Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+        Assert.AreEqual(transferExpected[0].Id, actualTransfer.Id);
+        Assert.AreEqual(transferExpected[0].AccountId, actualTransfer.AccountId);
+        Assert.AreEqual(transferExpected[0].Date, actualTransfer.Date);
+        Assert.AreEqual(transferExpected[0].TransactionType, actualTransfer.TransactionType);
+        Assert.AreEqual(transferExpected[0].Amount, actualTransfer.Amount);
+        Assert.AreEqual(transferExpected[0].Currency, actualTransfer.Currency);
+        Assert.AreEqual(transferExpected[1].AccountId, actualTransfer.RecipientAccountId);
+        Assert.AreEqual(transferExpected[1].Amount, actualTransfer.RecipientAmount);
+        Assert.AreEqual(transferExpected[1].Currency, actualTransfer.RecipientCurrency);
+        Assert.AreEqual(transferExpected[1].Id, actualTransfer.RecipientId);
+        Assert.AreEqual(transactionExpected[0].Id, actualTransaction.Id);
+        Assert.AreEqual(transactionExpected[0].AccountId, actualTransaction.AccountId);
+        Assert.AreEqual(transactionExpected[0].Currency, actualTransaction.Currency);
+        Assert.AreEqual(transactionExpected[0].Amount, actualTransaction.Amount);
+        Assert.AreEqual(transactionExpected[0].Date, actualTransaction.Date);
+        Assert.AreEqual(transactionExpected[0].TransactionType, actualTransaction.TransactionType);
 
         _transactionServiceMock.Verify(o => o.GetTransactionsByAccountId(expectedAccountId), Times.Once);
     }

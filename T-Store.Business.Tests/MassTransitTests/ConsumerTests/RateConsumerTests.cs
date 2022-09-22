@@ -28,12 +28,13 @@ public class RateConsumerTests
         //given
         var rates = new Dictionary <string, decimal>()
         {
-            {"USDRUB",1}
+            {"USDRUB",1},
+            {"USDEUR",2}
         };
         var context = Mock.Of<ConsumeContext<NewRatesEvent>>(c=>c.Message.Rates == rates);
 
         //when
-        _sut.Consume(context);
+        await _sut.Consume(context);
 
         //then
         _rateServiceMock.Verify(r => r.SaveCurrencyRate(context.Message.Rates), Times.Once);

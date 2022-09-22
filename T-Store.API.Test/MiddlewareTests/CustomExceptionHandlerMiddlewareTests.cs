@@ -55,7 +55,7 @@ public class CustomExceptionHandlerMiddlewareTests
         await  exceptionHandlingMiddleware.Invoke(_context);
 
         //then
-         Assert.That(_context.Response.StatusCode, Is.EqualTo(400));
+         Assert.AreEqual(400, _context.Response.StatusCode);
     }
 
     [Test]
@@ -74,7 +74,7 @@ public class CustomExceptionHandlerMiddlewareTests
         await exceptionHandlingMiddleware.Invoke(_context);
 
         //then
-        Assert.That(_context.Response.StatusCode, Is.EqualTo(404));
+        Assert.AreEqual(404, _context.Response.StatusCode);
     }
 
     [Test]
@@ -93,7 +93,7 @@ public class CustomExceptionHandlerMiddlewareTests
         await exceptionHandlingMiddleware.Invoke(_context);
 
         //then
-        Assert.That(_context.Response.StatusCode, Is.EqualTo(503));
+        Assert.AreEqual(503, _context.Response.StatusCode);
     }
 }
 

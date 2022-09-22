@@ -46,7 +46,7 @@ public class TransactionsController : Controller
     {
         var transferModels = _mapper.Map<List<TransactionModel>>(transferModel);
 
-        _logger.LogInformation($"Controller: Call method AddTransfer. Sender: Account id {transferModel.AccountId}, amount {transferModel.Amount}, {transferModel.Currency}. Recipient: account id {transferModel.RecipientAccountId}, {transferModel.RecipientCurrency}");
+        _logger.LogInformation($"Controller: Call method AddTransfer. Sender: Account id {transferModel.AccountId}, Recipient: account id {transferModel.RecipientAccountId}");
         var id = await _transactionServices.AddTransfer(transferModels);
  
         _logger.LogInformation($"Controller: Transfer ids {id[0]},{id[1]} returned");

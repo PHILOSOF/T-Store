@@ -70,7 +70,7 @@ public class CalculationServicesPositiveTests
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.That(actual, Is.EqualTo(transferModel));
+        Assert.AreEqual(transferModel, actual);
     }
 
 
@@ -119,7 +119,7 @@ public class CalculationServicesPositiveTests
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.That(actual, Is.EqualTo(transferModel));
+        Assert.AreEqual(transferModel, actual);
     }
 
 
@@ -164,10 +164,11 @@ public class CalculationServicesPositiveTests
         transferModel[0].Amount = 0 - transferModel[0].Amount;
         transferModel[1].Amount = Math.Round(transferModel[0].Amount / ratesDictionary[sender.ToString()] * ratesDictionary[recipient.ToString()],
             4, MidpointRounding.ToNegativeInfinity);
+
         //when
         var actual = await _sut.ConvertCurrency(transferModel);
 
         //then
-        Assert.That(actual, Is.EqualTo(transferModel));
+        Assert.AreEqual(transferModel, actual); 
     }
 }

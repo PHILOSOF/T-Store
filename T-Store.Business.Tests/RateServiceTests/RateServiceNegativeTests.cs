@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using T_Strore.Business.Exceptions;
+using T_Strore.Business.Models;
 using T_Strore.Business.Services;
 using T_Strore.Business.Services.Interfaces;
 
@@ -37,11 +38,9 @@ public class RateServiceNegativeTests
     public void GetCurrencyRate_RateModelIsEmpty_ThrowServiceUnavailableException()
     {
         //given
-        Dictionary<string, decimal> ratesDictionary = null;
+        RateModel.CurrencyRates = null;       
         var currencyFirst = Currency.USD.ToString();
         var currencySecond = Currency.RUB.ToString();
-
-        _mockRateService.Setup(r => r.GetRate()).Returns(ratesDictionary);
 
         //when, then
         Assert.Throws<ServiceUnavailableException>(() => _sut.GetCurrencyRate(currencyFirst, currencySecond));
